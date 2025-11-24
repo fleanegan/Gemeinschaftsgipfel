@@ -11,4 +11,7 @@ public class DatabaseContextApplication(DbContextOptions<DatabaseContextApplicat
     public DbSet<SupportTask> SupportTasks => Set<SupportTask>();
     public DbSet<SupportPromise> SupportPromises => Set<SupportPromise>();
     public DbSet<TopicComment> TopicComments => Set<TopicComment>();
+    public DbSet<RideShare> RideShares => Set<RideShare>();
+    public DbSet<RideShareReservation> RideShareReservations => Set<RideShareReservation>();
+    public DbSet<RideShareComment> RideShareComments => Set<RideShareComment>();
 }

@@ -162,6 +162,9 @@ builder.Services.AddScoped<TopicCommentRepository, TopicCommentRepository>();
 builder.Services.AddScoped<VoteRepository, VoteRepository>();
 builder.Services.AddScoped<SupportPromiseRepository, SupportPromiseRepository>();
 builder.Services.AddScoped<SupportTaskRepository, SupportTaskRepository>();
+builder.Services.AddScoped<RideShareRepository, RideShareRepository>();
+builder.Services.AddScoped<RideShareReservationRepository, RideShareReservationRepository>();
+builder.Services.AddScoped<RideShareCommentRepository, RideShareCommentRepository>();
 builder.Services.AddScoped<ITopicService>(provider =>
 {
     var allowedPresentationDurations = Environment.GetEnvironmentVariable("VITE_LEGAL_PRESENTATION_DURATIONS")
@@ -177,6 +180,7 @@ builder.Services.AddScoped<ITopicService>(provider =>
         );
 });
 builder.Services.AddScoped<ISupportTaskService, SupportTaskService>();
+builder.Services.AddScoped<IRideShareService, RideShareService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddSingleton<JwtGenerationService>();
 var app = builder.Build();

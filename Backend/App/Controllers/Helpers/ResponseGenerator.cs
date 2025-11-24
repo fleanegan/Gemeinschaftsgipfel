@@ -38,4 +38,44 @@ public abstract class ResponseGenerator
                 task.SupportPromises.Select(supporter => supporter.Supporter.UserName.ToLower()).Distinct().ToList()))
             .ToList();
     }
+
+    public static List<OwnRideShareResponseModel> GenerateOwnRideShareResponses(IEnumerable<RideShare> rideShares)
+    {
+        return rideShares
+            .Select(rideShare => new OwnRideShareResponseModel(
+                rideShare.Id, 
+                rideShare.Title, 
+                rideShare.AvailableSeats, 
+                rideShare.From, 
+                rideShare.To, 
+                rideShare.DepartureTime, 
+                rideShare.Description, 
+                rideShare.Stops, 
+                rideShare.Driver.UserName,
+                rideShare.Reservations.Count,
+                rideShare.Status))
+            .ToList();
+    }
+
+    public static List<ForeignRideShareResponseModel> GenerateForeignRideShareResponses(
+        IEnumerable<RideShare> rideShares, string loggedInUserName)
+    {
+        return rideShares
+            .Select(rideShare =>
+                new ForeignRideShareResponseModel(
+                    rideShare.Id,
+                    rideShare.Title,
+                    rideShare.AvailableSeats,
+                    rideShare.From,
+                    rideShare.To,
+                    rideShare.DepartureTime,
+                    rideShare.Description,
+                    rideShare.Stops,
+                    rideShare.Driver.UserName,
+                    rideShare.Reservations.Count(r => r.Passenger.UserName.ToLower() == loggedInUserName.ToLower()) > 0,
+                    rideShare.Status
+                )
+            )
+            .ToList();
+    }
 }
