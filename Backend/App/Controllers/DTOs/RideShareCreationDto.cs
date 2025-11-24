@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 namespace Gemeinschaftsgipfel.Controllers.DTOs;
 
 public class RideShareCreationDto(
-    string title,
     int availableSeats,
     string from,
     string to,
@@ -11,9 +10,6 @@ public class RideShareCreationDto(
     string? description,
     string? stops)
 {
-    [Required] 
-    public string Title { get; } = title;
-
     [Required]
     [Range(1, int.MaxValue)]
     public int AvailableSeats { get; } = availableSeats;

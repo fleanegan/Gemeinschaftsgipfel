@@ -13,7 +13,6 @@ export interface RideShareComment {
 
 export interface RideShare {
   id: string;
-  title: string;
   availableSeats: number;
   from: string;
   to: string;

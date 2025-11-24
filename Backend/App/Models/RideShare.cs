@@ -8,17 +8,15 @@ public class RideShare
 {
     internal RideShare()
     {
-        Title = "";
         Description = "";
         From = "";
         To = "";
         Driver = new User();
     }
 
-    public RideShare(string title, string description, int availableSeats, string from, string to, 
+    public RideShare(string description, int availableSeats, string from, string to, 
         DateTime departureTime, string? stops, User driver, ICollection<RideShareReservation> reservations)
     {
-        Title = title;
         Description = description;
         AvailableSeats = availableSeats;
         From = from;
@@ -32,10 +30,6 @@ public class RideShare
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string Id { get; set; } = null!;
-
-    [StringLength(Constants.MaxLengthTitle, ErrorMessage = Constants.MaxLengthTitleErrorMessage)]
-    [Required(ErrorMessage = Constants.EmptyTitleErrorMessage)]
-    public string Title { get; set; }
 
     [StringLength(Constants.MaxLengthDescription, ErrorMessage = Constants.MaxLengthDescriptionErrorMessage)]
     public string Description { get; set; }
@@ -62,12 +56,11 @@ public class RideShare
 
     public ICollection<RideShareReservation> Reservations { get; set; } = [];
 
-    public static RideShare Create(string title, string description, int availableSeats, 
+    public static RideShare Create(string description, int availableSeats, 
         string from, string to, DateTime departureTime, string? stops, User driver)
     {
         var model = new RideShare 
         { 
-            Title = title, 
             Description = description, 
             AvailableSeats = availableSeats,
             From = from,

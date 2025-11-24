@@ -2,8 +2,9 @@ using Gemeinschaftsgipfel.Models;
 
 namespace Gemeinschaftsgipfel.Controllers.DTOs;
 
-public class RideShareResponseModel(
+public class ForeignRideShareResponseModel(
     string id,
+    string title,
     int availableSeats,
     string from,
     string to,
@@ -12,11 +13,11 @@ public class RideShareResponseModel(
     string? stops,
     string driverUserName,
     bool didIReserve,
-    int reservationCount,
     RideShareStatus status,
     List<string> passengerUserNames)
 {
     public string Id { get; } = id;
+    public string Title { get; } = title;
     public int AvailableSeats { get; } = availableSeats;
     public string From { get; } = from;
     public string To { get; } = to;
@@ -25,7 +26,6 @@ public class RideShareResponseModel(
     public string? Stops { get; } = stops;
     public string DriverUserName { get; } = driverUserName;
     public bool DidIReserve { get; } = didIReserve;
-    public int ReservationCount { get; } = reservationCount;
     public RideShareStatus Status { get; } = status;
     public List<string> PassengerUserNames { get; } = passengerUserNames;
 }

@@ -3,6 +3,7 @@ using System;
 using Gemeinschaftsgipfel.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gemeinschaftsgipfel.Migrations
 {
     [DbContext(typeof(DatabaseContextApplication))]
-    partial class DatabaseContextApplicationModelSnapshot : ModelSnapshot
+    [Migration("20251124214443_RemoveRideShareTitle")]
+    partial class RemoveRideShareTitle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -46,6 +49,11 @@ namespace Gemeinschaftsgipfel.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Stops")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("To")

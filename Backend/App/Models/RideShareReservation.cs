@@ -6,7 +6,7 @@ namespace Gemeinschaftsgipfel.Models;
 public class RideShareReservation(RideShare rideShare, User passenger)
 {
     internal RideShareReservation() : this(
-        RideShare.Create("title", "", 1, "from", "to", DateTime.Now, null, new User()), 
+        RideShare.Create("", 1, "from", "to", DateTime.Now, null, new User()), 
         new User())
     {
     }

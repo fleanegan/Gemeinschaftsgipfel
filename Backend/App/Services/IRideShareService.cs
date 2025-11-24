@@ -12,6 +12,7 @@ public interface IRideShareService
     Task<IEnumerable<RideShare>> FetchAllOfLoggedIn(string userName);
     Task RemoveRideShare(string id, string userName);
     Task CancelRideShare(string id, string userName);
+    Task UncancelRideShare(string id, string userName);
     Task AddReservation(string rideShareId, string userName);
     Task RemoveReservation(string rideShareId, string userName);
     Task CommentOnRideShare(string rideShareId, string content, string userName);

@@ -14,21 +14,20 @@ public class RideShareServiceTest
     private static readonly DateTime DefaultDepartureTime = new(2025, 12, 31, 10, 0, 0);
 
     [Theory]
-    [InlineData("Berlin to Munich", "", 3, "Berlin", "Munich")]
-    [InlineData("Road Trip", null, 1, "Hamburg", "Frankfurt")]
-    [InlineData("Weekend Trip", "Fun ride with music", 5, "Cologne", "Dusseldorf")]
-    public async Task Test_add_GIVEN_correct_input_THEN_store_in_db(string title, string? description, int availableSeats, string from, string to)
+    [InlineData("", 3, "Berlin", "Munich")]
+    [InlineData(null, 1, "Hamburg", "Frankfurt")]
+    [InlineData("Fun ride with music", 5, "Cologne", "Dusseldorf")]
+    public async Task Test_add_GIVEN_correct_input_THEN_store_in_db(string? description, int availableSeats, string from, string to)
     {
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
 
         await instance.Service.AddRideShare(
-            new RideShareCreationDto(title, availableSeats, from, to, DefaultDepartureTime, description, null),
+            new RideShareCreationDto(availableSeats, from, to, DefaultDepartureTime, description, null),
             loggedInUserName);
 
         var result = (await instance.Repository.GetAll()).ToArray()[0];
         Assert.NotNull(result);
-        Assert.Equal(title, result.Title);
         Assert.Equal(description ?? "", result.Description);
         Assert.Equal(availableSeats, result.AvailableSeats);
         Assert.Equal(from, result.From);
@@ -57,14 +56,13 @@ public class RideShareServiceTest
     {
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
-        var dto = new RideShareCreationDto("Berlin to Munich", 3, "Berlin", "Munich", DefaultDepartureTime, "description", null);
+        var dto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "description", null);
         var expectedResult = await instance.Service.AddRideShare(dto, loggedInUserName);
 
         var actualResult = await instance.Service.GetRideShareById(expectedResult.Id);
 
         Assert.Equal(expectedResult.Id, actualResult.Id);
         Assert.Equal(expectedResult.Description, actualResult.Description);
-        Assert.Equal(expectedResult.Title, actualResult.Title);
     }
 
     [Fact]
@@ -72,7 +70,7 @@ public class RideShareServiceTest
     {
         const string loggedInUserName = "Fake User";
         var nonExistingId = "the original ride share does not exist";
-        var updatedRideShare = new RideShareUpdateDto(nonExistingId, "title", 3, "Berlin", "Munich", DefaultDepartureTime, "description", null);
+        var updatedRideShare = new RideShareUpdateDto(nonExistingId, 3, "Berlin", "Munich", DefaultDepartureTime, "description", null);
         var instance = await CreateInstance([loggedInUserName]);
 
         async Task Action()
@@ -89,9 +87,9 @@ public class RideShareServiceTest
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
         var originalRideShare = await instance.Service.AddRideShare(
-            new RideShareCreationDto("original title", 3, "Berlin", "Munich", DefaultDepartureTime, "", null),
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "", null),
             "anotherUserName");
-        var updatedRideShare = new RideShareUpdateDto(originalRideShare.Id, "updated title", 5, "Hamburg", "Frankfurt", DefaultDepartureTime, "updated description", null);
+        var updatedRideShare = new RideShareUpdateDto(originalRideShare.Id, 5, "Hamburg", "Frankfurt", DefaultDepartureTime, "updated description", null);
 
         async Task Action()
         {
@@ -102,25 +100,24 @@ public class RideShareServiceTest
     }
 
     [Theory]
-    [InlineData("New title", "")]
-    [InlineData("New title", null)]
-    [InlineData("New title", "New description")]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData("New description")]
     public async Task Test_update_GIVEN_authorized_user_and_existing_ride_share_WHEN_passing_with_new_values_THEN_update(
-        string newTitle, string? newDescription)
+        string? newDescription)
     {
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
         var originalRideShare = await instance.Service.AddRideShare(
-            new RideShareCreationDto("original title", 3, "Berlin", "Munich", DefaultDepartureTime, "", null),
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "", null),
             loggedInUserName);
         var newDepartureTime = DefaultDepartureTime.AddDays(1);
-        var updatedRideShare = new RideShareUpdateDto(originalRideShare.Id, newTitle, 5, "Hamburg", "Frankfurt", newDepartureTime, newDescription, "Stop in Hannover");
+        var updatedRideShare = new RideShareUpdateDto(originalRideShare.Id, 5, "Hamburg", "Frankfurt", newDepartureTime, newDescription, "Stop in Hannover");
 
         await instance.Service.UpdateRideShare(updatedRideShare, loggedInUserName);
 
         var result = await instance.Repository.FetchBy(originalRideShare.Id);
-        Assert.Equal(updatedRideShare.Title, result!.Title);
-        Assert.Equal(updatedRideShare.AvailableSeats, result.AvailableSeats);
+        Assert.Equal(updatedRideShare.AvailableSeats, result!.AvailableSeats);
         Assert.Equal(updatedRideShare.From, result.From);
         Assert.Equal(updatedRideShare.To, result.To);
         Assert.Equal(newDepartureTime, result.DepartureTime);
@@ -142,8 +139,8 @@ public class RideShareServiceTest
     public async Task Test_fetchAllExceptLoggedIn_GIVEN_two_ride_shares_by_other_users_THEN_return_them_all()
     {
         var otherUserName = "otherUserName";
-        var firstDto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
-        var secondDto = new RideShareCreationDto("second title", 2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
+        var firstDto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var secondDto = new RideShareCreationDto(2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
         var instance = await CreateInstance([otherUserName]);
         await instance.Service.AddRideShare(firstDto, otherUserName);
         await instance.Service.AddRideShare(secondDto, otherUserName);
@@ -152,8 +149,8 @@ public class RideShareServiceTest
 
         var enumerable = result as RideShare[] ?? result.ToArray();
         Assert.Equal(2, enumerable.Length);
-        Assert.Contains(enumerable, rs => rs.Title == firstDto.Title && rs.Description == firstDto.Description);
-        Assert.Contains(enumerable, rs => rs.Title == secondDto.Title && rs.Description == secondDto.Description);
+        Assert.Contains(enumerable, rs => rs.Description == firstDto.Description);
+        Assert.Contains(enumerable, rs => rs.Description == secondDto.Description);
     }
 
     [Fact]
@@ -162,7 +159,7 @@ public class RideShareServiceTest
         var nameDuringCreation = "loggedInUserName";
         var nameDuringRetrieval = "LOGGEDINUSERNAME";
         var instance = await CreateInstance([nameDuringCreation]);
-        var ownRideShare = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var ownRideShare = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         await instance.Service.AddRideShare(ownRideShare, nameDuringCreation);
 
         var result = await instance.Service.FetchAllExceptLoggedIn(nameDuringRetrieval);
@@ -177,17 +174,17 @@ public class RideShareServiceTest
         var loggedInUserName = "loggedInUserName";
         var otherUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, otherUserName]);
-        var firstDto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var firstDto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         await instance.Service.AddRideShare(firstDto, otherUserName);
-        var secondDto = new RideShareCreationDto("second title", 2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
+        var secondDto = new RideShareCreationDto(2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
         await instance.Service.AddRideShare(secondDto, loggedInUserName);
 
         var result = await instance.Service.FetchAllExceptLoggedIn(loggedInUserName);
 
         var collection = result as RideShare[] ?? result.ToArray();
         Assert.Single(collection);
-        Assert.Contains(collection, rs => rs.Title == firstDto.Title && rs.Description == firstDto.Description);
-        Assert.DoesNotContain(collection, rs => rs.Title == secondDto.Title && rs.Description == secondDto.Description);
+        Assert.Contains(collection, rs => rs.Description == firstDto.Description);
+        Assert.DoesNotContain(collection, rs => rs.Description == secondDto.Description);
     }
 
     [Fact]
@@ -205,8 +202,8 @@ public class RideShareServiceTest
     public async Task Test_fetchAllOfLoggedIn_GIVEN_two_ride_shares_by_other_users_THEN_return_empty()
     {
         var otherUserName = "otherUserName";
-        var firstDto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
-        var secondDto = new RideShareCreationDto("second title", 2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
+        var firstDto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var secondDto = new RideShareCreationDto(2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
         var instance = await CreateInstance([otherUserName]);
         await instance.Service.AddRideShare(firstDto, otherUserName);
         await instance.Service.AddRideShare(secondDto, otherUserName);
@@ -223,17 +220,17 @@ public class RideShareServiceTest
         var loggedInUserName = "loggedInUserName";
         var otherUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, otherUserName]);
-        var firstDto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var firstDto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         await instance.Service.AddRideShare(firstDto, otherUserName);
-        var secondDto = new RideShareCreationDto("second title", 2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
+        var secondDto = new RideShareCreationDto(2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
         await instance.Service.AddRideShare(secondDto, loggedInUserName);
 
         var result = await instance.Service.FetchAllOfLoggedIn(loggedInUserName);
 
         var collection = result as RideShare[] ?? result.ToArray();
         Assert.Single(collection);
-        Assert.DoesNotContain(collection, rs => rs.Title == firstDto.Title && rs.Description == firstDto.Description);
-        Assert.Contains(collection, rs => rs.Title == secondDto.Title && rs.Description == secondDto.Description);
+        Assert.DoesNotContain(collection, rs => rs.Description == firstDto.Description);
+        Assert.Contains(collection, rs => rs.Description == secondDto.Description);
     }
 
     [Fact]
@@ -242,17 +239,17 @@ public class RideShareServiceTest
         var loggedInUserName = "loggedInUserName";
         var otherUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, otherUserName]);
-        var firstDto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var firstDto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         await instance.Service.AddRideShare(firstDto, otherUserName);
-        var secondDto = new RideShareCreationDto("second title", 2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
+        var secondDto = new RideShareCreationDto(2, "Hamburg", "Frankfurt", DefaultDepartureTime, "second description", null);
         await instance.Service.AddRideShare(secondDto, loggedInUserName);
 
         var result = await instance.Service.FetchAllOfLoggedIn(loggedInUserName.ToUpper());
 
         var collection = result as RideShare[] ?? result.ToArray();
         Assert.Single(collection);
-        Assert.DoesNotContain(collection, rs => rs.Title == firstDto.Title && rs.Description == firstDto.Description);
-        Assert.Contains(collection, rs => rs.Title == secondDto.Title && rs.Description == secondDto.Description);
+        Assert.DoesNotContain(collection, rs => rs.Description == firstDto.Description);
+        Assert.Contains(collection, rs => rs.Description == secondDto.Description);
     }
 
     [Fact]
@@ -277,7 +274,7 @@ public class RideShareServiceTest
         const string creatorUserName = "creatorUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
         var rideShareToDelete = await instance.Service.AddRideShare(
-            new RideShareCreationDto("title", 3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
             creatorUserName);
 
         async Task Action()
@@ -295,7 +292,7 @@ public class RideShareServiceTest
         const string loggedInUserName = "loggedInUserName";
         var instance = await CreateInstance([loggedInUserName]);
         var rideShareToDelete = await instance.Service.AddRideShare(
-            new RideShareCreationDto("title", 3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
             loggedInUserName);
 
         await instance.Service.RemoveRideShare(rideShareToDelete.Id, loggedInUserName);
@@ -325,7 +322,7 @@ public class RideShareServiceTest
         const string creatorUserName = "creatorUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
         var rideShareToCancel = await instance.Service.AddRideShare(
-            new RideShareCreationDto("title", 3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
             creatorUserName);
 
         async Task Action()
@@ -342,7 +339,7 @@ public class RideShareServiceTest
         const string loggedInUserName = "loggedInUserName";
         var instance = await CreateInstance([loggedInUserName]);
         var rideShareToCancel = await instance.Service.AddRideShare(
-            new RideShareCreationDto("title", 3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
             loggedInUserName);
 
         await instance.Service.CancelRideShare(rideShareToCancel.Id, loggedInUserName);
@@ -350,6 +347,57 @@ public class RideShareServiceTest
         var result = await instance.Repository.FetchBy(rideShareToCancel.Id);
         Assert.NotNull(result);
         Assert.Equal(RideShareStatus.Canceled, result.Status);
+    }
+
+    [Fact]
+    public async Task Test_uncanceling_ride_share_GIVEN_non_existing_id_THEN_throw_error()
+    {
+        const string loggedInUserName = "loggedInUserName";
+        const string nonExistingId = "nonExistingId";
+        var instance = await CreateInstance([loggedInUserName]);
+
+        async Task Action()
+        {
+            await instance.Service.UncancelRideShare(nonExistingId, loggedInUserName);
+        }
+
+        await Assert.ThrowsAsync<RideShareNotFoundException>(Action);
+    }
+
+    [Fact]
+    public async Task Test_uncanceling_ride_share_GIVEN_someone_else_s_ride_share_THEN_throw_error()
+    {
+        const string loggedInUserName = "loggedInUserName";
+        const string creatorUserName = "creatorUserName";
+        var instance = await CreateInstance([loggedInUserName, creatorUserName]);
+        var rideShareToUncancel = await instance.Service.AddRideShare(
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
+            creatorUserName);
+        await instance.Service.CancelRideShare(rideShareToUncancel.Id, creatorUserName);
+
+        async Task Action()
+        {
+            await instance.Service.UncancelRideShare(rideShareToUncancel.Id, loggedInUserName);
+        }
+
+        await Assert.ThrowsAsync<UnauthorizedRideShareModificationException>(Action);
+    }
+
+    [Fact]
+    public async Task Test_uncanceling_ride_share_GIVEN_one_s_own_canceled_ride_share_THEN_change_status_to_active()
+    {
+        const string loggedInUserName = "loggedInUserName";
+        var instance = await CreateInstance([loggedInUserName]);
+        var rideShareToUncancel = await instance.Service.AddRideShare(
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "description", null),
+            loggedInUserName);
+        await instance.Service.CancelRideShare(rideShareToUncancel.Id, loggedInUserName);
+
+        await instance.Service.UncancelRideShare(rideShareToUncancel.Id, loggedInUserName);
+
+        var result = await instance.Repository.FetchBy(rideShareToUncancel.Id);
+        Assert.NotNull(result);
+        Assert.Equal(RideShareStatus.Active, result.Status);
     }
 
     [Fact]
@@ -373,7 +421,7 @@ public class RideShareServiceTest
         const string loggedInUserName = "loggedInUserName";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
-        var dto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var dto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         var rideShare = await instance.Service.AddRideShare(dto, creatorUserName);
 
         await instance.Service.AddReservation(rideShare.Id, loggedInUserName);
@@ -388,7 +436,7 @@ public class RideShareServiceTest
         const string loggedInUserName = "loggedInUserName";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
-        var dto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var dto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         var rideShare = await instance.Service.AddRideShare(dto, creatorUserName);
 
         await instance.Service.AddReservation(rideShare.Id, loggedInUserName);
@@ -410,7 +458,7 @@ public class RideShareServiceTest
         const string passenger2 = "passenger2";
         const string creatorUserName = "driver";
         var instance = await CreateInstance([passenger1, passenger2, creatorUserName]);
-        var dto = new RideShareCreationDto("first title", 1, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var dto = new RideShareCreationDto(1, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         var rideShare = await instance.Service.AddRideShare(dto, creatorUserName);
         await instance.Service.AddReservation(rideShare.Id, passenger1);
 
@@ -445,7 +493,7 @@ public class RideShareServiceTest
         const string loggedInUserName = "loggedInUserName";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
-        var dto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var dto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         var rideShare = await instance.Service.AddRideShare(dto, creatorUserName);
         await instance.Service.AddReservation(rideShare.Id, loggedInUserName);
 
@@ -462,7 +510,7 @@ public class RideShareServiceTest
         const string loggedInUserNameForReservationRemoval = "LOGGEDINUSERNAME";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserNameForReservationCreation, loggedInUserNameForReservationRemoval]);
-        var dto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var dto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         var rideShare = await instance.Service.AddRideShare(dto, creatorUserName);
         await instance.Service.AddReservation(rideShare.Id, loggedInUserNameForReservationCreation);
 
@@ -478,7 +526,7 @@ public class RideShareServiceTest
         const string loggedInUserName = "loggedInUserName";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
-        var dto = new RideShareCreationDto("first title", 3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
+        var dto = new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "first description", null);
         var rideShare = await instance.Service.AddRideShare(dto, creatorUserName);
 
         await instance.Service.RemoveReservation(rideShare.Id, loggedInUserName);
@@ -508,7 +556,7 @@ public class RideShareServiceTest
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
         var rideShare = await instance.Service.AddRideShare(
-            new RideShareCreationDto("Test RideShare", 3, "Berlin", "Munich", DefaultDepartureTime, "Test Description", null),
+            new RideShareCreationDto(3, "Berlin", "Munich", DefaultDepartureTime, "Test Description", null),
             loggedInUserName);
 
         await instance.Service.CommentOnRideShare(rideShare.Id, "Test comment content", loggedInUserName);

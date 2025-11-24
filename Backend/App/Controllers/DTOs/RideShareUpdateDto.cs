@@ -4,7 +4,6 @@ namespace Gemeinschaftsgipfel.Controllers.DTOs;
 
 public class RideShareUpdateDto(
     string id,
-    string title,
     int availableSeats,
     string from,
     string to,
@@ -14,9 +13,6 @@ public class RideShareUpdateDto(
 {
     [Required]
     public string Id { get; } = id;
-
-    [Required] 
-    public string Title { get; } = title;
 
     [Required]
     [Range(1, int.MaxValue)]

@@ -46,7 +46,6 @@ public abstract class ResponseGenerator
             .Select(rideShare =>
                 new RideShareResponseModel(
                     rideShare.Id,
-                    rideShare.Title,
                     rideShare.AvailableSeats,
                     rideShare.From,
                     rideShare.To,

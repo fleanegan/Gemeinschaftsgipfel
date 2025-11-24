@@ -75,9 +75,10 @@
 
 .topic_card_details_owner_actions {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-content: center;
     align-items: center;
+    gap: 0.5rem;
 }
 
 .topic_card_details_owner_actions button {

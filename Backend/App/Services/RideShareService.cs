@@ -24,7 +24,6 @@ public class RideShareService(
     {
         var user = await userManager.FindByNameAsync(userName);
         var newRideShare = RideShare.Create(
-            dto.Title,
             dto.Description ?? "",
             dto.AvailableSeats,
             dto.From,
@@ -43,7 +42,6 @@ public class RideShareService(
         if (userName != rideShareToChange.Driver.UserName)
             throw new UnauthorizedRideShareModificationException(rideShareToChange.Id);
         
-        rideShareToChange.Title = dto.Title;
         rideShareToChange.AvailableSeats = dto.AvailableSeats;
         rideShareToChange.From = dto.From;
         rideShareToChange.To = dto.To;
@@ -114,6 +112,18 @@ public class RideShareService(
             throw new UnauthorizedRideShareModificationException(id);
         
         rideShare.Status = RideShareStatus.Canceled;
+        await rideShareRepository.Update(rideShare);
+    }
+
+    public async Task UncancelRideShare(string id, string userName)
+    {
+        var rideShare = await rideShareRepository.FetchBy(id);
+        if (rideShare == null)
+            throw new RideShareNotFoundException(id);
+        if (rideShare.Driver.UserName != userName)
+            throw new UnauthorizedRideShareModificationException(id);
+        
+        rideShare.Status = RideShareStatus.Active;
         await rideShareRepository.Update(rideShare);
     }
 

@@ -40,11 +40,14 @@
       >
         <template #actions>
           <div class="topic_card_details_owner_actions">
-            <button class="action_button" style="margin-bottom: 0.25rem;" @click="removeRideShare(item.id)">
+            <button class="action_button" @click="removeRideShare(item.id)">
               <img alt="Delete" src="/empty_delete.svg">
             </button>
-            <button class="action_button" style="margin-bottom: 0.25rem;" @click="cancelRideShare(item.id)">
+            <button v-if="item.status !== 1" class="action_button" @click="cancelRideShare(item.id)">
               <img alt="Cancel" src="/empty_delete.svg" title="Absagen">
+            </button>
+            <button v-if="item.status === 1" class="action_button" @click="uncancelRideShare(item.id)">
+              <img alt="Uncancel" src="/empty_edit_no_border.svg" title="Reaktivieren">
             </button>
             <button class="action_button" @click="editRideShare(item.id)">
               <img alt="Edit" src="/empty_edit_no_border.svg">
@@ -65,6 +68,7 @@
           v-for="(item, index) in foreignRideShares"
           :key="item.id"
           :ride-share="item"
+          :show-driver="true"
           @toggle-details="toggleDetails(foreignRideShares, index)"
           @comment-sent="handleCommentSent"
       >
@@ -178,6 +182,10 @@ export default defineComponent({
     },
     async cancelRideShare(rideShareId: string) {
       await axios.post('api/rideshare/cancel/' + rideShareId);
+      await this.fetchData();
+    },
+    async uncancelRideShare(rideShareId: string) {
+      await axios.post('api/rideshare/uncancel/' + rideShareId);
       await this.fetchData();
     },
     addNewRideShare() {

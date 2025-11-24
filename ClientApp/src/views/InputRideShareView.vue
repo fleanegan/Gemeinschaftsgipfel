@@ -2,11 +2,6 @@
   <h1>{{ isEditing ? 'Fahrt bearbeiten' : 'Neue Fahrt anbieten' }}</h1>
   <form @submit.prevent="submitData">
     <div class="form-group">
-      <label for="title">Titel der Fahrt</label>
-      <input id="title" v-model="title" class="form-input" type="text" required/>
-      <p v-if="isTitleEmpty" class="title-error">Der Titel muss zwischen 1 und 150 Zeichen lang sein</p>
-    </div>
-    <div class="form-group">
       <label for="from">Von (Startort)</label>
       <input id="from" v-model="from" class="form-input" type="text" required/>
     </div>
@@ -44,7 +39,6 @@ import axios from "axios";
 export default defineComponent({
   data() {
     return {
-      title: '',
       from: '',
       to: '',
       departureTime: '',
@@ -58,14 +52,10 @@ export default defineComponent({
       return this.$props['rideShareId'] !== undefined && this.$props['rideShareId'] !== null;
     },
     async submitData() {
-      if (this.isTitleEmpty) {
-        return;
-      }
       try {
         if (this.isEditing) {
           await axios.put('/api/rideshare/update', {
             "Id": this.$props["rideShareId"],
-            "Title": this.title,
             "From": this.from,
             "To": this.to,
             "DepartureTime": this.departureTime,
@@ -75,7 +65,6 @@ export default defineComponent({
           });
         } else {
           await axios.post('/api/rideshare/addnew', {
-            "Title": this.title,
             "From": this.from,
             "To": this.to,
             "DepartureTime": this.departureTime,
@@ -95,9 +84,6 @@ export default defineComponent({
     }
   },
   computed: {
-    isTitleEmpty() {
-      return this.title.length === 0
-    },
     isEditing() {
       return this.isRideShareIdSet();
     },
@@ -106,7 +92,6 @@ export default defineComponent({
     if (this.$props['rideShareId'] !== undefined && this.$props['rideShareId'] !== null) {
       try {
         const existingRideShare = await axios.get('/api/rideshare/getone/' + this.$props["rideShareId"]);
-        this.title = existingRideShare.data["title"];
         this.from = existingRideShare.data["from"];
         this.to = existingRideShare.data["to"];
         this.departureTime = existingRideShare.data["departureTime"];

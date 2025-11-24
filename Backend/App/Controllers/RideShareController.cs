@@ -20,7 +20,6 @@ public class RideShareController(IRideShareService service) : AbstractController
             var result = await service.AddRideShare(userInput, userName);
             return Ok(new RideShareResponseModel(
                 result.Id, 
-                result.Title, 
                 result.AvailableSeats, 
                 result.From, 
                 result.To, 
@@ -49,7 +48,6 @@ public class RideShareController(IRideShareService service) : AbstractController
             var rideShare = await service.GetRideShareById(id);
             return Ok(new RideShareResponseModel(
                 rideShare.Id, 
-                rideShare.Title, 
                 rideShare.AvailableSeats, 
                 rideShare.From, 
                 rideShare.To, 
@@ -101,7 +99,6 @@ public class RideShareController(IRideShareService service) : AbstractController
             var result = await service.UpdateRideShare(userInput, userName);
             return Ok(new RideShareResponseModel(
                 result.Id, 
-                result.Title, 
                 result.AvailableSeats, 
                 result.From, 
                 result.To, 
@@ -132,6 +129,26 @@ public class RideShareController(IRideShareService service) : AbstractController
         try
         {
             await service.CancelRideShare(id, userName);
+            return Ok();
+        }
+        catch (RideShareNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (UnauthorizedRideShareModificationException)
+        {
+            return Forbid(new AuthenticationProperties());
+        }
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Uncancel(string id)
+    {
+        var userName = GetUserNameFromAuthorization();
+        try
+        {
+            await service.UncancelRideShare(id, userName);
             return Ok();
         }
         catch (RideShareNotFoundException e)

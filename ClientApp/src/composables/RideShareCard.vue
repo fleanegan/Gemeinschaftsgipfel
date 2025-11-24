@@ -4,7 +4,10 @@
       <button class="action_button" @click="$emit('toggle-details')">
         <img :src="rideShare.expanded ? 'collapse.svg' : '/expand.svg'" alt="Expand">
       </button>
-      <h4 :class="{ topic_card_header_toggled: rideShare.expanded }">{{ rideShare.title }}</h4>
+      <div class="ride-header-info">
+        <span class="ride-route">{{ rideShare.from }} → {{ rideShare.to }}</span>
+        <span v-if="showDriver" class="ride-driver">({{ rideShare.driverUserName }})</span>
+      </div>
       <slot name="action-button"></slot>
     </div>
     <div v-if="rideShare.expanded" class="topic-card-details">
@@ -85,6 +88,10 @@ export default defineComponent({
     rideShare: {
       type: Object as PropType<RideShare>,
       required: true
+    },
+    showDriver: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['toggle-details', 'comment-sent'],
@@ -244,5 +251,23 @@ export default defineComponent({
 
 .comment-send-button {
   color: var(--color-primary);
+}
+
+.ride-header-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+  flex: 1;
+}
+
+.ride-route {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.ride-driver {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
 }
 </style>
