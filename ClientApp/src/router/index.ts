@@ -49,6 +49,26 @@ const router = createRouter({
             name: 'Thema bearbeiten',
             component: () => import('../views/InputTopicView.vue'),
             props: true
+        },
+        {
+            path: '/rideshare',
+            name: 'Fahrgemeinschaften',
+            component: () => import('../views/RideShareView.vue'),
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/rideshare/add',
+            name: 'Neue Fahrt anbieten',
+            component: () => import('../views/InputRideShareView.vue'),
+            props: false,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/rideshare/edit/:rideShareId',
+            name: 'Fahrt bearbeiten',
+            component: () => import('../views/InputRideShareView.vue'),
+            props: true,
+            meta: { requiresAuth: true }
         }
     ]
 });

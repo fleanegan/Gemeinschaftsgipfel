@@ -1,0 +1,157 @@
+<template>
+  <h1>{{ isEditing ? 'Fahrt bearbeiten' : 'Neue Fahrt anbieten' }}</h1>
+  <form @submit.prevent="submitData">
+    <div class="form-group">
+      <label for="title">Titel der Fahrt</label>
+      <input id="title" v-model="title" class="form-input" type="text" required/>
+      <p v-if="isTitleEmpty" class="title-error">Der Titel muss zwischen 1 und 150 Zeichen lang sein</p>
+    </div>
+    <div class="form-group">
+      <label for="from">Von (Startort)</label>
+      <input id="from" v-model="from" class="form-input" type="text" required/>
+    </div>
+    <div class="form-group">
+      <label for="to">Nach (Zielort)</label>
+      <input id="to" v-model="to" class="form-input" type="text" required/>
+    </div>
+    <div class="form-group">
+      <label for="departureTime">Abfahrtszeit</label>
+      <input id="departureTime" v-model="departureTime" class="form-input" type="datetime-local" required/>
+    </div>
+    <div class="form-group">
+      <label for="availableSeats">Verfügbare Plätze</label>
+      <input id="availableSeats" v-model.number="availableSeats" class="form-input" type="number" min="1" required/>
+    </div>
+    <div class="form-group">
+      <label for="stops">Zwischenstopps (optional)</label>
+      <textarea id="stops" v-model="stops" class="form-input" rows="2"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="description">Beschreibung (optional)</label>
+      <textarea id="description" v-model="description" class="form-input" rows="4"></textarea>
+    </div>
+    <div class="button-container">
+      <button class="abort-button" type="button" @click="abort">Verwerfen</button>
+      <button class="submit-button" type="submit">Abschicken</button>
+    </div>
+  </form>
+</template>
+
+<script lang="ts">
+import {defineComponent} from 'vue';
+import axios from "axios";
+
+export default defineComponent({
+  data() {
+    return {
+      title: '',
+      from: '',
+      to: '',
+      departureTime: '',
+      availableSeats: 1,
+      stops: '',
+      description: '',
+    };
+  },
+  methods: {
+    isRideShareIdSet(): boolean {
+      return this.$props['rideShareId'] !== undefined && this.$props['rideShareId'] !== null;
+    },
+    async submitData() {
+      if (this.isTitleEmpty) {
+        return;
+      }
+      try {
+        if (this.isEditing) {
+          await axios.put('/api/rideshare/update', {
+            "Id": this.$props["rideShareId"],
+            "Title": this.title,
+            "From": this.from,
+            "To": this.to,
+            "DepartureTime": this.departureTime,
+            "AvailableSeats": this.availableSeats,
+            "Stops": this.stops || undefined,
+            "Description": this.description || undefined,
+          });
+        } else {
+          await axios.post('/api/rideshare/addnew', {
+            "Title": this.title,
+            "From": this.from,
+            "To": this.to,
+            "DepartureTime": this.departureTime,
+            "AvailableSeats": this.availableSeats,
+            "Stops": this.stops || undefined,
+            "Description": this.description || undefined,
+          });
+        }
+
+        this.$router.push('/rideshare');
+      } catch (e) {
+        console.log("error while sending rideshare: ", e)
+      }
+    },
+    async abort() {
+      this.$router.push('/rideshare');
+    }
+  },
+  computed: {
+    isTitleEmpty() {
+      return this.title.length === 0
+    },
+    isEditing() {
+      return this.isRideShareIdSet();
+    },
+  },
+  async beforeCreate() {
+    if (this.$props['rideShareId'] !== undefined && this.$props['rideShareId'] !== null) {
+      try {
+        const existingRideShare = await axios.get('/api/rideshare/getone/' + this.$props["rideShareId"]);
+        this.title = existingRideShare.data["title"];
+        this.from = existingRideShare.data["from"];
+        this.to = existingRideShare.data["to"];
+        this.departureTime = existingRideShare.data["departureTime"];
+        this.availableSeats = existingRideShare.data["availableSeats"];
+        this.stops = existingRideShare.data["stops"] || '';
+        this.description = existingRideShare.data["description"] || '';
+      } catch (e) {
+        console.log("edit: could not get existing rideshare")
+      }
+    }
+  },
+  props: ['rideShareId'],
+});
+</script>
+
+<style scoped>
+.form-group {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.title-error {
+  color: red;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.submit-button {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.form-input {
+  padding: 0.5rem;
+  border: 1px solid var(--main-color-primary);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+textarea.form-input {
+  resize: vertical;
+  font-family: inherit;
+}
+</style>

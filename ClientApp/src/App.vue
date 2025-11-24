@@ -10,6 +10,8 @@
       </router-link>
       <router-link :class="{'router-link': true, 'headerless': !isStandardPage}" to="/supporttask">Mithelfen
       </router-link>
+      <router-link :class="{'router-link': true, 'headerless': !isStandardPage}" to="/rideshare">Fahrgemeinschaften
+      </router-link>
       <router-link :class="{'router-link': true, 'headerless': !isStandardPage}" to="/schedule">Ablaufplan
       </router-link>
     </nav>
