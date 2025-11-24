@@ -18,7 +18,7 @@ public class RideShareController(IRideShareService service) : AbstractController
         try
         {
             var result = await service.AddRideShare(userInput, userName);
-            return Ok(new OwnRideShareResponseModel(
+            return Ok(new RideShareResponseModel(
                 result.Id, 
                 result.Title, 
                 result.AvailableSeats, 
@@ -27,9 +27,11 @@ public class RideShareController(IRideShareService service) : AbstractController
                 result.DepartureTime, 
                 result.Description, 
                 result.Stops, 
-                userName, 
+                userName,
+                false,
                 0,
-                result.Status));
+                result.Status,
+                new List<string>()));
         }
         catch (Exception e)
         {
@@ -41,10 +43,11 @@ public class RideShareController(IRideShareService service) : AbstractController
     [Authorize]
     public async Task<IActionResult> GetOne(string id)
     {
+        var userName = GetUserNameFromAuthorization();
         try
         {
             var rideShare = await service.GetRideShareById(id);
-            return Ok(new ForeignRideShareResponseModel(
+            return Ok(new RideShareResponseModel(
                 rideShare.Id, 
                 rideShare.Title, 
                 rideShare.AvailableSeats, 
@@ -53,9 +56,11 @@ public class RideShareController(IRideShareService service) : AbstractController
                 rideShare.DepartureTime, 
                 rideShare.Description, 
                 rideShare.Stops, 
-                rideShare.Driver.UserName, 
-                false,
-                rideShare.Status));
+                rideShare.Driver.UserName,
+                rideShare.Reservations.Count(r => r.Passenger.UserName.ToLower() == userName.ToLower()) > 0,
+                rideShare.Reservations.Count,
+                rideShare.Status,
+                rideShare.Reservations.Select(r => r.Passenger.UserName).ToList()));
         }
         catch (RideShareNotFoundException e)
         {
@@ -94,7 +99,7 @@ public class RideShareController(IRideShareService service) : AbstractController
         try
         {
             var result = await service.UpdateRideShare(userInput, userName);
-            return Ok(new OwnRideShareResponseModel(
+            return Ok(new RideShareResponseModel(
                 result.Id, 
                 result.Title, 
                 result.AvailableSeats, 
@@ -104,8 +109,10 @@ public class RideShareController(IRideShareService service) : AbstractController
                 result.Description, 
                 result.Stops, 
                 userName,
+                result.Reservations.Count(r => r.Passenger.UserName.ToLower() == userName.ToLower()) > 0,
                 result.Reservations.Count,
-                result.Status));
+                result.Status,
+                result.Reservations.Select(r => r.Passenger.UserName).ToList()));
         }
         catch (RideShareNotFoundException e)
         {
@@ -143,7 +150,7 @@ public class RideShareController(IRideShareService service) : AbstractController
     {
         var userName = GetUserNameFromAuthorization();
         var result = await service.FetchAllExceptLoggedIn(userName);
-        var response = ResponseGenerator.GenerateForeignRideShareResponses(result, userName);
+        var response = ResponseGenerator.GenerateRideShareResponses(result, userName);
         return Ok(response);
     }
 
@@ -152,7 +159,7 @@ public class RideShareController(IRideShareService service) : AbstractController
     {
         var userName = GetUserNameFromAuthorization();
         var result = await service.FetchAllOfLoggedIn(userName);
-        var response = ResponseGenerator.GenerateOwnRideShareResponses(result);
+        var response = ResponseGenerator.GenerateRideShareResponses(result, userName);
         return Ok(response);
     }
 

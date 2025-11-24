@@ -39,30 +39,12 @@ public abstract class ResponseGenerator
             .ToList();
     }
 
-    public static List<OwnRideShareResponseModel> GenerateOwnRideShareResponses(IEnumerable<RideShare> rideShares)
-    {
-        return rideShares
-            .Select(rideShare => new OwnRideShareResponseModel(
-                rideShare.Id, 
-                rideShare.Title, 
-                rideShare.AvailableSeats, 
-                rideShare.From, 
-                rideShare.To, 
-                rideShare.DepartureTime, 
-                rideShare.Description, 
-                rideShare.Stops, 
-                rideShare.Driver.UserName,
-                rideShare.Reservations.Count,
-                rideShare.Status))
-            .ToList();
-    }
-
-    public static List<ForeignRideShareResponseModel> GenerateForeignRideShareResponses(
+    public static List<RideShareResponseModel> GenerateRideShareResponses(
         IEnumerable<RideShare> rideShares, string loggedInUserName)
     {
         return rideShares
             .Select(rideShare =>
-                new ForeignRideShareResponseModel(
+                new RideShareResponseModel(
                     rideShare.Id,
                     rideShare.Title,
                     rideShare.AvailableSeats,
@@ -73,7 +55,9 @@ public abstract class ResponseGenerator
                     rideShare.Stops,
                     rideShare.Driver.UserName,
                     rideShare.Reservations.Count(r => r.Passenger.UserName.ToLower() == loggedInUserName.ToLower()) > 0,
-                    rideShare.Status
+                    rideShare.Reservations.Count,
+                    rideShare.Status,
+                    rideShare.Reservations.Select(r => r.Passenger.UserName).ToList()
                 )
             )
             .ToList();
