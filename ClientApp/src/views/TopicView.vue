@@ -111,35 +111,39 @@ export default defineComponent({
       this.foreignTopics = (await axios.get('/api/topic/allExceptLoggedIn', {})).data;
     },
 async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<void> {
-  if (topic[index].isLoading) return;
+  const item = topic[index];
+  if (!item) return;
+  if (item.isLoading) return;
   try {
-    topic[index].expanded = !topic[index].expanded;
-    if (topic[index].expanded) {
-      topic[index].isLoading = true;
-      const response = await axios.get('/api/topic/comments?TopicId=' + topic[index].id);
-      topic[index].comments = response.data;
+    item.expanded = !item.expanded;
+    if (item.expanded) {
+      item.isLoading = true;
+      const response = await axios.get('/api/topic/comments?TopicId=' + item.id);
+      item.comments = response.data;
 
-      topic[index].comments.sort((a: Comment, b: Comment) => {
+      item.comments.sort((a: Comment, b: Comment) => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       });
     } else {
-      topic[index].comments = [];
+      item.comments = [];
     }
   } catch (error) {
     console.error('Error toggling details:', error);
     // Revert expanded state on error
-    topic[index].expanded = !topic[index].expanded;
+    item.expanded = !item.expanded;
   } finally {
     // Clear loading state
-    topic[index].isLoading = false;
+    item.isLoading = false;
   }
 },
     async toggleVote(index: number): Promise<void> {
-      if (!this.foreignTopics[index].didIVoteForThis)
-        await axios.post('/api/topic/addVote', {"TopicId": this.foreignTopics[index].id})
+      const topic = this.foreignTopics[index];
+      if (!topic) return;
+      if (!topic.didIVoteForThis)
+        await axios.post('/api/topic/addVote', {"TopicId": topic.id})
       else
-        await axios.delete('/api/topic/removeVote/' + this.foreignTopics[index].id)
-      this.foreignTopics[index].didIVoteForThis = !this.foreignTopics[index].didIVoteForThis;
+        await axios.delete('/api/topic/removeVote/' + topic.id)
+      topic.didIVoteForThis = !topic.didIVoteForThis;
     },
     editTopic(topicId: string): void {
       this.$router.push({
@@ -175,11 +179,12 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
     async handleCommentSent(payload: { topicId: string, comment: Comment, content: string }): Promise<void> {
       const updateTopicComments = (topics: (MyTopic | ForeignTopic)[]) => {
         const topicIndex = topics.findIndex(t => t.id === payload.topicId);
-        if (topicIndex !== -1 && topics[topicIndex].expanded) {
+        const topic = topics[topicIndex];
+        if (topicIndex !== -1 && topic && topic.expanded) {
           if (payload.comment) {
-            topics[topicIndex].comments.unshift(payload.comment);
+            topic.comments.unshift(payload.comment);
           } else {
-            this.refreshTopicComments(topics[topicIndex]);
+            this.refreshTopicComments(topic);
           }
         }
       };
@@ -201,6 +206,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
       if (!this.myTopics.length)
         return null;
       let result = this.myTopics[0]
+      if (!result) return null;
       for (const topic of this.myTopics) {
         if (topic.votes > result.votes)
           result = topic;

@@ -85,20 +85,22 @@ export default defineComponent({
       });
     },
     async toggleSupporting(tasks: SupportTask[], index: number): Promise<void> {
-      if (tasks[index].supporterUserNames.includes(this.userName!)) {
+      const task = tasks[index];
+      if (!task) return;
+      if (task.supporterUserNames.includes(this.userName!)) {
         try {
-          await axios.delete('/api/supporttask/help/' + tasks[index].id)
+          await axios.delete('/api/supporttask/help/' + task.id)
         } catch (e: any) {
           console.log(e.status, e.response)
         }
-        tasks[index].supporterUserNames = tasks[index].supporterUserNames.filter(x => x != this.userName!)
+        task.supporterUserNames = task.supporterUserNames.filter(x => x != this.userName!)
       } else {
         try {
-          await axios.post('/api/supporttask/help', {"SupportTaskId": tasks[index].id})
+          await axios.post('/api/supporttask/help', {"SupportTaskId": task.id})
         } catch (e: any) {
           console.log(e.status, e.response)
         }
-        tasks[index].supporterUserNames.push(this.userName!)
+        task.supporterUserNames.push(this.userName!)
       }
     },
     handleScroll: function () {

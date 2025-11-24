@@ -1,7 +1,6 @@
 import {defineStore} from 'pinia';
 
-export const useDataStore = defineStore({
-    id: 'data',
+export const useDataStore = defineStore('data', {
     state: () => ({
 	isLoading: false,
     }),

@@ -5,12 +5,18 @@ How to build and start the application
 2. Get ssl certificates and place them in a folder named ssl in the ClientApp (./ClientApp/ssl/my-site.crt && ./ClientApp/ssl/my-site.key) -> the file names must be exactly the same.
 3. run docker compose up --build
 
-How to run the app in dev mode
+Prepare running the app for the first time in dev mode
 -----
 - ```dotnet restore```
 - ```dotnet build```
+- ```cd Backend/App```
+- ```mkdir data```
+- ```touch data/database.db```
 - ```dotnet ef database update``` This requires the dotnet-ef package to be installed:
 - ```dotnet tool install --global dotnet-ef --version <your_dotnet_version>```
+- ```cd Client && touch /schedule.svg```
+- ```cd Backend/App && dotnet run```
+
 
 How to add and update SupportTasks
 -----
