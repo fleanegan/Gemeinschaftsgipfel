@@ -6,34 +6,7 @@
       </button>
     </div>
     <h1>Zeig uns was 'ne Harke ist!</h1>
-    <div class="instruction_container">
-      <div class="instruction_card">
-        <div class="instruction_card_content">
-          <p class="instruction_card_content_header_title" style="padding-left: 2.25rem">Inhalt ausdenken</p>
-          <p>Reite dein Steckenpferd und zeig' uns, was dich begeistert! Ob
-            Trick
-            17, dein Promotionsthema oder Haekeltipps, wir sind gespannt.</p>
-        </div>
-        <div class="instruction_card_enumerator">1.</div>
-      </div>
-      <div class="instruction_card">
-        <div class="instruction_card_content">
-          <p class="instruction_card_content_header_title" style="padding-left: 2.25rem">Entscheidung treffen</p>
-          <p>Geht es dir wie uns, du kannst dich kaum entscheiden, welches deiner vielen Herzensthemen du praesentieren
-            sollst? Trag alle Themen ein, lass die Gemeinschaft waehlen und hilf selbst mit deiner Stimme!</p>
-        </div>
-        <div class="instruction_card_enumerator">2.</div>
-      </div>
-      <div class="instruction_card">
-        <div class="instruction_card_content">
-          <p class="instruction_card_content_header_title" style="padding-left: 2.25rem">Gemeinsam staunen</p>
-          <p>Das Ziel ist es, zusammen unsere Vielfalt zu geniessen. Lass Leistungsdruck und Lampenfieber zuhause, denn
-            es
-            erwartet dich ein wohlwollendes Publikum :)</p>
-        </div>
-        <div class="instruction_card_enumerator">3.</div>
-      </div>
-    </div>
+    <InstructionCards :instructions="instructions" />
     <h2>Meine Vorschläge</h2>
     <ul class="list">
       <TopicCard
@@ -96,15 +69,30 @@ import type {ForeignTopic, MyTopic, Comment} from "@/types/TopicInterfaces";
 import TopicCard from "@/components/TopicCard.vue";
 import {formatDateTime} from '@/utils/dateFormatter';
 import {scrollToTopMixin} from '@/mixins/scrollToTop';
+import InstructionCards from '@/components/InstructionCards.vue';
 
 
 export default defineComponent({
-  components: {TopicCard},
+  components: {TopicCard, InstructionCards},
   mixins: [scrollToTopMixin],
   data() {
     return {
       foreignTopics: [] as ForeignTopic[],
       myTopics: [] as MyTopic[],
+      instructions: [
+        {
+          title: 'Inhalt ausdenken',
+          content: "Reite dein Steckenpferd und zeig' uns, was dich begeistert! Ob Trick 17, dein Promotionsthema oder Haekeltipps, wir sind gespannt."
+        },
+        {
+          title: 'Entscheidung treffen',
+          content: 'Geht es dir wie uns, du kannst dich kaum entscheiden, welches deiner vielen Herzensthemen du praesentieren sollst? Trag alle Themen ein, lass die Gemeinschaft waehlen und hilf selbst mit deiner Stimme!'
+        },
+        {
+          title: 'Gemeinsam staunen',
+          content: 'Das Ziel ist es, zusammen unsere Vielfalt zu geniessen. Lass Leistungsdruck und Lampenfieber zuhause, denn es erwartet dich ein wohlwollendes Publikum :)'
+        }
+      ]
     };
   },
   methods: {

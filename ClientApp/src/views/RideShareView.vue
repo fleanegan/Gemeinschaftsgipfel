@@ -6,29 +6,7 @@
       </button>
     </div>
     <h1>Fahrgemeinschaften</h1>
-    <div class="instruction_container">
-      <div class="instruction_card">
-        <div class="instruction_card_content">
-          <p class="instruction_card_content_header_title" style="padding-left: 2.25rem">Fahrt anbieten</p>
-          <p>Biete eine Mitfahrgelegenheit an und teile deine Route mit anderen. Gib an, wie viele Plätze verfügbar sind und wann du losfährst.</p>
-        </div>
-        <div class="instruction_card_enumerator">1.</div>
-      </div>
-      <div class="instruction_card">
-        <div class="instruction_card_content">
-          <p class="instruction_card_content_header_title" style="padding-left: 2.25rem">Platz reservieren</p>
-          <p>Finde passende Fahrten und reserviere einen Platz. Die Anzahl verfügbarer Plätze wird live aktualisiert.</p>
-        </div>
-        <div class="instruction_card_enumerator">2.</div>
-      </div>
-      <div class="instruction_card">
-        <div class="instruction_card_content">
-          <p class="instruction_card_content_header_title" style="padding-left: 2.25rem">Gemeinsam fahren</p>
-          <p>Kommuniziere mit Fahrer und Mitfahrern über die Kommentarfunktion. Spare Kosten und schone die Umwelt!</p>
-        </div>
-        <div class="instruction_card_enumerator">3.</div>
-      </div>
-    </div>
+    <InstructionCards :instructions="instructions" />
     <h2>Meine Fahrten</h2>
     <ul class="list">
       <RideShareCard
@@ -96,14 +74,29 @@ import type {RideShare} from "@/types/RideShareInterfaces";
 import type {Comment} from "@/types/TopicInterfaces";
 import RideShareCard from "@/components/RideShareCard.vue";
 import {scrollToTopMixin} from '@/mixins/scrollToTop';
+import InstructionCards from '@/components/InstructionCards.vue';
 
 export default defineComponent({
-  components: {RideShareCard},
+  components: {RideShareCard, InstructionCards},
   mixins: [scrollToTopMixin],
   data() {
     return {
       foreignRideShares: [] as RideShare[],
       myRideShares: [] as RideShare[],
+      instructions: [
+        {
+          title: 'Fahrt anbieten',
+          content: 'Biete eine Mitfahrgelegenheit an und teile deine Route mit anderen. Gib an, wie viele Plätze verfügbar sind und wann du losfährst.'
+        },
+        {
+          title: 'Platz reservieren',
+          content: 'Finde passende Fahrten und reserviere einen Platz. Die Anzahl verfügbarer Plätze wird live aktualisiert.'
+        },
+        {
+          title: 'Gemeinsam fahren',
+          content: 'Kommuniziere mit Fahrer und Mitfahrern über die Kommentarfunktion. Spare Kosten und schone die Umwelt!'
+        }
+      ]
     };
   },
   methods: {
