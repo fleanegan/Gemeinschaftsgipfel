@@ -92,16 +92,18 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import axios from "axios";
-import type {RideShare, RideShareComment} from "@/composables/RideShareInterfaces";
-import RideShareCard from "@/composables/RideShareCard.vue";
+import type {RideShare} from "@/types/RideShareInterfaces";
+import type {Comment} from "@/types/TopicInterfaces";
+import RideShareCard from "@/components/RideShareCard.vue";
+import {scrollToTopMixin} from '@/mixins/scrollToTop';
 
 export default defineComponent({
   components: {RideShareCard},
+  mixins: [scrollToTopMixin],
   data() {
     return {
       foreignRideShares: [] as RideShare[],
       myRideShares: [] as RideShare[],
-      isSticky: false,
     };
   },
   methods: {
@@ -128,7 +130,7 @@ export default defineComponent({
           const response = await axios.get('/api/rideshare/comments?RideShareId=' + item.id);
           item.comments = response.data;
 
-          item.comments.sort((a: RideShareComment, b: RideShareComment) => {
+          item.comments.sort((a: Comment, b: Comment) => {
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
           });
         } else {
@@ -191,13 +193,7 @@ export default defineComponent({
     addNewRideShare() {
       this.$router.push("/rideshare/add");
     },
-    handleScroll: function () {
-      this.isSticky = window.scrollY > 750;
-    },
-    scrollToTop() {
-      scrollTo(0, 0);
-    },
-    async handleCommentSent(payload: { rideShareId: string, comment: RideShareComment, content: string }): Promise<void> {
+    async handleCommentSent(payload: { rideShareId: string, comment: Comment, content: string }): Promise<void> {
       const updateRideShareComments = (rideShares: RideShare[]) => {
         const rideShareIndex = rideShares.findIndex(r => r.id === payload.rideShareId);
         const rideShare = rideShares[rideShareIndex];
@@ -216,7 +212,7 @@ export default defineComponent({
     async refreshRideShareComments(rideShare: RideShare): Promise<void> {
       if (rideShare.expanded) {
         rideShare.comments = (await axios.get('/api/rideshare/comments?RideShareId=' + rideShare.id)).data;
-        rideShare.comments.sort((a: RideShareComment, b: RideShareComment) => {
+        rideShare.comments.sort((a: Comment, b: Comment) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
       }
@@ -224,10 +220,6 @@ export default defineComponent({
   },
   mounted() {
     this.fetchData();
-    window.addEventListener('scroll', this.handleScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
   },
 });
 </script>

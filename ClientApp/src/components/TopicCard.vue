@@ -43,6 +43,7 @@
 import {defineComponent, type PropType} from 'vue';
 import type {MyTopic, ForeignTopic} from '@/types/TopicInterfaces';
 import axios from "axios";
+import {formatDateTime} from '@/utils/dateFormatter';
 
 export default defineComponent({
   data() {
@@ -79,16 +80,7 @@ export default defineComponent({
       }
     },
     axios,
-    formatDateTime(dateTimeString: string): string {
-      const date = new Date(dateTimeString);
-      return new Intl.DateTimeFormat('de-DE', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }).format(date);
-    }
+    formatDateTime
   }
 });
 </script>

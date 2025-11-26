@@ -1,14 +1,9 @@
+import type { Comment } from './TopicInterfaces';
+
 export enum RideShareStatus {
   Active,
   Canceled,
   Completed
-}
-
-export interface RideShareComment {
-  id: string;
-  content: string;
-  creatorUserName: string;
-  createdAt: string;
 }
 
 export interface RideShare {
@@ -25,6 +20,6 @@ export interface RideShare {
   status: RideShareStatus;
   passengerUserNames: string[];
   expanded: boolean;
-  comments: RideShareComment[];
+  comments: Comment[];
   isLoading: boolean;
 }

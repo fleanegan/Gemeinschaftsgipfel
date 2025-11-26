@@ -51,7 +51,8 @@
 import { defineComponent } from 'vue';
 import axios from "axios";
 import { useAuthStore } from '@/store/auth';
-import SupportTaskCard from './SupportTaskCard.vue';
+import SupportTaskCard from '@/components/SupportTaskCard.vue';
+import {scrollToTopMixin} from '@/mixins/scrollToTop';
 
 export interface SupportTask {
   id: string;
@@ -67,10 +68,10 @@ export default defineComponent({
   components: {
     SupportTaskCard
   },
+  mixins: [scrollToTopMixin],
   data() {
     return {
       supportTasks: [] as SupportTask[],
-      isSticky: false,
     };
   },
   methods: {
@@ -103,9 +104,6 @@ export default defineComponent({
         task.supporterUserNames.push(this.userName!)
       }
     },
-    handleScroll: function () {
-      this.isSticky = window.scrollY > 750;
-    },
   },
   computed: {
     userName() {
@@ -119,16 +117,12 @@ export default defineComponent({
     },
     allTheTaskNamesISubscribedTo() {
       return this.supportTasks
-          .filter(task => task.supporterUserNames.includes(this.userName!))
-          .map(task => task.title)
+          .filter((task: SupportTask) => task.supporterUserNames.includes(this.userName!))
+          .map((task: SupportTask) => task.title)
     }
   },
   mounted() {
     this.fetchData()
-    window.addEventListener('scroll', this.handleScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
   },
 });
 </script>

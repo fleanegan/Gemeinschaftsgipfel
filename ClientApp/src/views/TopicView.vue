@@ -92,17 +92,19 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import axios from "axios";
-import type {ForeignTopic, MyTopic, Comment} from "@/composables/TopicInterfaces";
-import TopicCard from "@/composables/TopicCard.vue";
+import type {ForeignTopic, MyTopic, Comment} from "@/types/TopicInterfaces";
+import TopicCard from "@/components/TopicCard.vue";
+import {formatDateTime} from '@/utils/dateFormatter';
+import {scrollToTopMixin} from '@/mixins/scrollToTop';
 
 
 export default defineComponent({
   components: {TopicCard},
+  mixins: [scrollToTopMixin],
   data() {
     return {
       foreignTopics: [] as ForeignTopic[],
       myTopics: [] as MyTopic[],
-      isSticky: false,
     };
   },
   methods: {
@@ -153,28 +155,13 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
         }
       });
     },
-    formatDateTime(dateTimeString: string): string {
-      const date = new Date(dateTimeString);
-      return new Intl.DateTimeFormat('de-DE', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }).format(date);
-    },
+    formatDateTime,
     async removeTopic(topicId: string) {
       await axios.delete('api/topic/delete/' + topicId);
       await this.fetchData();
     },
     addNewTopic() {
       this.$router.push("/topic/add");
-    },
-    handleScroll: function () {
-      this.isSticky = window.scrollY > 750;
-    },
-    scrollToTop() {
-      scrollTo(0, 0);
     },
     async handleCommentSent(payload: { topicId: string, comment: Comment, content: string }): Promise<void> {
       const updateTopicComments = (topics: (MyTopic | ForeignTopic)[]) => {
@@ -216,10 +203,6 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   },
   mounted() {
     this.fetchData()
-    window.addEventListener('scroll', this.handleScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
   },
 });
 </script>

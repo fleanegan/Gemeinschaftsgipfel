@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import InfoBox from "@/views/InfoBox.vue";
+import InfoBox from "@/components/InfoBox.vue";
 import axios from "axios";
 
 export default defineComponent({
