@@ -76,7 +76,7 @@ export default defineComponent({
 
         this.$router.push('/rideshare');
       } catch (e) {
-        console.log("error while sending rideshare: ", e)
+        console.error('Error submitting rideshare:', e);
       }
     },
     async abort() {

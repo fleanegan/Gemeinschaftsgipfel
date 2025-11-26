@@ -83,14 +83,14 @@ export default defineComponent({
         try {
           await supportTaskService.removeHelp(task.id);
         } catch (e: any) {
-          console.log(e.status, e.response)
+          console.error('Error removing help from support task:', e);
         }
         task.supporterUserNames = task.supporterUserNames.filter(x => x != this.userName!)
       } else {
         try {
           await supportTaskService.addHelp(task.id);
         } catch (e: any) {
-          console.log(e.status, e.response)
+          console.error('Error adding help to support task:', e);
         }
         task.supporterUserNames.push(this.userName!)
       }

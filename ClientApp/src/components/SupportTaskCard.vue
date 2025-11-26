@@ -45,7 +45,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import type {PropType} from 'vue';
-import type {SupportTask} from '@/views/SupportTaskView.vue';
+import type {SupportTask} from '@/types/SupportTaskInterfaces';
 
 export default defineComponent({
   props: {

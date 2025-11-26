@@ -36,8 +36,8 @@ export default defineComponent({
     return {
       title: '',
       description: '',
-      presentationTimeInMinutes: null,
-      legalDurations: [],
+      presentationTimeInMinutes: null as number | null,
+      legalDurations: [] as number[],
     };
   },
   methods: {
@@ -52,21 +52,21 @@ export default defineComponent({
         if (this.isEditing) {
           await topicService.updateTopic({
             title: this.title,
-            presentationTimeInMinutes: this.presentationTimeInMinutes,
+            presentationTimeInMinutes: this.presentationTimeInMinutes ?? 0,
             description: this.description,
             id: this.$props["topicId"],
           });
         } else {
           await topicService.createTopic({
             title: this.title,
-            presentationTimeInMinutes: this.presentationTimeInMinutes,
+            presentationTimeInMinutes: this.presentationTimeInMinutes ?? 0,
             description: this.description,
           });
         }
 
         this.$router.push('/topic');
       } catch (e) {
-        console.log("error while sending topic: ", e)
+        console.error('Error submitting topic:', e);
       }
     },
     async abort() {
@@ -90,11 +90,10 @@ export default defineComponent({
         this.description = existingTopic["description"];
         this.presentationTimeInMinutes = existingTopic["presentationTimeInMinutes"];
       } catch (e) {
-        console.log("edit: could not get existing topic")
+        console.error('Error loading existing topic:', e);
       }
     }
    this.legalDurations = await topicService.getLegalPresentationDurations();
-   console.log(this.legalDurations)
   },
   props: ['topicId'],
 });
