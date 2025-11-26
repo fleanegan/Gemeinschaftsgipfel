@@ -24,7 +24,7 @@
 <script lang="ts">
 import {defineComponent, type PropType} from 'vue';
 import type {Comment} from '@/types/TopicInterfaces';
-import axios from "axios";
+import {apiClient} from '@/services/api';
 import {formatDateTime} from '@/utils/dateFormatter';
 
 export default defineComponent({
@@ -54,7 +54,7 @@ export default defineComponent({
         if (!this.content) {
           return;
         }
-        const response = await axios.post(this.apiEndpoint, {
+        const response = await apiClient.post(this.apiEndpoint, {
           [this.getIdFieldName()]: this.itemId,
           Content: this.content
         });

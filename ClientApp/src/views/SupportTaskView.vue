@@ -49,20 +49,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import axios from "axios";
 import { useAuthStore } from '@/store/auth';
 import SupportTaskCard from '@/components/SupportTaskCard.vue';
 import {scrollToTopMixin} from '@/mixins/scrollToTop';
-
-export interface SupportTask {
-  id: string;
-  title: string;
-  description: string;
-  supporterUserNames: string[];
-  duration: string;
-  requiredSupporters: number;
-  showSupporter: boolean;
-}
+import type {SupportTask} from '@/types/SupportTaskInterfaces';
+import {supportTaskService} from '@/services/api';
 
 export default defineComponent({
   components: {
@@ -77,7 +68,7 @@ export default defineComponent({
   methods: {
     useAuthStore,
     async fetchData() {
-      this.supportTasks = (await axios.get('/api/supporttask/getall', {})).data.sort(function (a: SupportTask, b: SupportTask) {
+      this.supportTasks = (await supportTaskService.getAllTasks()).sort(function (a: SupportTask, b: SupportTask) {
         if (a.duration > b.duration)
           return 1;
         if (a.duration < b.duration)
@@ -90,14 +81,14 @@ export default defineComponent({
       if (!task) return;
       if (task.supporterUserNames.includes(this.userName!)) {
         try {
-          await axios.delete('/api/supporttask/help/' + task.id)
+          await supportTaskService.removeHelp(task.id);
         } catch (e: any) {
           console.log(e.status, e.response)
         }
         task.supporterUserNames = task.supporterUserNames.filter(x => x != this.userName!)
       } else {
         try {
-          await axios.post('/api/supporttask/help', {"SupportTaskId": task.id})
+          await supportTaskService.addHelp(task.id);
         } catch (e: any) {
           console.log(e.status, e.response)
         }

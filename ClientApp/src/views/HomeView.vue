@@ -23,7 +23,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import InfoBox from "@/components/InfoBox.vue";
-import axios from "axios";
+import {homeService} from '@/services/api';
 
 export default defineComponent({
   components: {InfoBox},
@@ -86,7 +86,7 @@ export default defineComponent({
     },
   },
   async mounted() {
-    this.secretData = (await axios.get('/api/home/getinfo', {})).data
+    this.secretData = await homeService.getInfo();
     this.px2rem = 1 / parseFloat(getComputedStyle(document.documentElement).fontSize)
     this.setUpActionContainer();
     this.updateCurrentScreenNumber()

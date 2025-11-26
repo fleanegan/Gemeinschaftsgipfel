@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import axios from "axios";
+import {authService} from '@/services/api';
 
 export default defineComponent({
   data() {
@@ -14,7 +14,7 @@ export default defineComponent({
   },
   methods: {
     async callRejector() {
-      await axios.get('/api/auth/rejectme', {});
+      await authService.rejectMe();
     }
   },
   computed: {}

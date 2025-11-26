@@ -69,12 +69,12 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import axios from "axios";
 import type {RideShare} from "@/types/RideShareInterfaces";
 import type {Comment} from "@/types/TopicInterfaces";
 import RideShareCard from "@/components/RideShareCard.vue";
 import {scrollToTopMixin} from '@/mixins/scrollToTop';
 import InstructionCards from '@/components/InstructionCards.vue';
+import {rideShareService} from '@/services/api';
 
 export default defineComponent({
   components: {RideShareCard, InstructionCards},
@@ -101,8 +101,8 @@ export default defineComponent({
   },
   methods: {
     async fetchData() {
-      this.myRideShares = (await axios.get('/api/rideshare/allOfLoggedIn', {})).data;
-      this.foreignRideShares = (await axios.get('/api/rideshare/allExceptLoggedIn', {})).data;
+      this.myRideShares = await rideShareService.getMyRideShares();
+      this.foreignRideShares = await rideShareService.getForeignRideShares();
       
       // Sort by departure time (upcoming first)
       const sortByDepartureTime = (a: RideShare, b: RideShare) => {
@@ -120,8 +120,7 @@ export default defineComponent({
         item.expanded = !item.expanded;
         if (item.expanded) {
           item.isLoading = true;
-          const response = await axios.get('/api/rideshare/comments?RideShareId=' + item.id);
-          item.comments = response.data;
+          item.comments = await rideShareService.getComments(item.id);
 
           item.comments.sort((a: Comment, b: Comment) => {
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -149,10 +148,10 @@ export default defineComponent({
       
       try {
         if (!rideShare.didIReserve) {
-          await axios.post('/api/rideshare/addReservation', {"RideShareId": rideShare.id});
+          await rideShareService.addReservation(rideShare.id);
           rideShare.reservationCount++;
         } else {
-          await axios.delete('/api/rideshare/removeReservation/' + rideShare.id);
+          await rideShareService.removeReservation(rideShare.id);
           rideShare.reservationCount--;
         }
         rideShare.didIReserve = !rideShare.didIReserve;
@@ -172,15 +171,15 @@ export default defineComponent({
       });
     },
     async removeRideShare(rideShareId: string) {
-      await axios.delete('api/rideshare/delete/' + rideShareId);
+      await rideShareService.deleteRideShare(rideShareId);
       await this.fetchData();
     },
     async cancelRideShare(rideShareId: string) {
-      await axios.post('api/rideshare/cancel/' + rideShareId);
+      await rideShareService.cancelRideShare(rideShareId);
       await this.fetchData();
     },
     async uncancelRideShare(rideShareId: string) {
-      await axios.post('api/rideshare/uncancel/' + rideShareId);
+      await rideShareService.uncancelRideShare(rideShareId);
       await this.fetchData();
     },
     addNewRideShare() {
@@ -204,7 +203,7 @@ export default defineComponent({
     },
     async refreshRideShareComments(rideShare: RideShare): Promise<void> {
       if (rideShare.expanded) {
-        rideShare.comments = (await axios.get('/api/rideshare/comments?RideShareId=' + rideShare.id)).data;
+        rideShare.comments = await rideShareService.getComments(rideShare.id);
         rideShare.comments.sort((a: Comment, b: Comment) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });

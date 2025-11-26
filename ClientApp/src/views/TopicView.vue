@@ -64,12 +64,12 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import axios from "axios";
 import type {ForeignTopic, MyTopic, Comment} from "@/types/TopicInterfaces";
 import TopicCard from "@/components/TopicCard.vue";
 import {formatDateTime} from '@/utils/dateFormatter';
 import {scrollToTopMixin} from '@/mixins/scrollToTop';
 import InstructionCards from '@/components/InstructionCards.vue';
+import {topicService} from '@/services/api';
 
 
 export default defineComponent({
@@ -97,8 +97,8 @@ export default defineComponent({
   },
   methods: {
     async fetchData() {
-      this.myTopics = (await axios.get('/api/topic/allOfLoggedIn', {})).data
-      this.foreignTopics = (await axios.get('/api/topic/allExceptLoggedIn', {})).data;
+      this.myTopics = await topicService.getMyTopics();
+      this.foreignTopics = await topicService.getForeignTopics();
     },
 async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<void> {
   const item = topic[index];
@@ -108,8 +108,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
     item.expanded = !item.expanded;
     if (item.expanded) {
       item.isLoading = true;
-      const response = await axios.get('/api/topic/comments?TopicId=' + item.id);
-      item.comments = response.data;
+      item.comments = await topicService.getComments(item.id);
 
       item.comments.sort((a: Comment, b: Comment) => {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -130,9 +129,9 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
       const topic = this.foreignTopics[index];
       if (!topic) return;
       if (!topic.didIVoteForThis)
-        await axios.post('/api/topic/addVote', {"TopicId": topic.id})
+        await topicService.addVote(topic.id);
       else
-        await axios.delete('/api/topic/removeVote/' + topic.id)
+        await topicService.removeVote(topic.id);
       topic.didIVoteForThis = !topic.didIVoteForThis;
     },
     editTopic(topicId: string): void {
@@ -145,7 +144,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
     },
     formatDateTime,
     async removeTopic(topicId: string) {
-      await axios.delete('api/topic/delete/' + topicId);
+      await topicService.deleteTopic(topicId);
       await this.fetchData();
     },
     addNewTopic() {
@@ -169,7 +168,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
     },
     async refreshTopicComments(topic: MyTopic | ForeignTopic): Promise<void> {
       if (topic.expanded) {
-        topic.comments = (await axios.get('/api/topic/comments?TopicId=' + topic.id)).data;
+        topic.comments = await topicService.getComments(topic.id);
         topic.comments.sort((a: Comment, b: Comment) => {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });

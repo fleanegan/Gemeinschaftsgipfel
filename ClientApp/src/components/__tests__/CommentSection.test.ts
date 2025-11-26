@@ -2,9 +2,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import CommentSection from '../CommentSection.vue';
 import type { Comment } from '@/types/TopicInterfaces';
-import axios from 'axios';
+import { apiClient } from '@/services/api';
 
-vi.mock('axios');
+vi.mock('@/services/api', () => ({
+  apiClient: {
+    post: vi.fn()
+  }
+}));
 
 describe('CommentSection', () => {
   const mockComments: Comment[] = [
@@ -99,7 +103,7 @@ describe('CommentSection', () => {
 
   it('sends comment with correct topic endpoint and data', async () => {
     const mockResponse = { data: { id: '3', content: 'New comment', creatorUserName: 'User3', createdAt: '2025-01-01T12:00:00' } };
-    vi.mocked(axios.post).mockResolvedValue(mockResponse);
+    vi.mocked(apiClient.post).mockResolvedValue(mockResponse);
 
     const wrapper = mount(CommentSection, {
       props: {
@@ -112,7 +116,7 @@ describe('CommentSection', () => {
     await wrapper.find('.comment-input').setValue('New comment');
     await wrapper.find('.comment-send-button').trigger('click');
 
-    expect(axios.post).toHaveBeenCalledWith('api/topic/CommentOnTopic/', {
+    expect(apiClient.post).toHaveBeenCalledWith('api/topic/CommentOnTopic/', {
       TopicId: 'topic-123',
       Content: 'New comment'
     });
@@ -120,7 +124,7 @@ describe('CommentSection', () => {
 
   it('sends comment with correct rideshare endpoint and data', async () => {
     const mockResponse = { data: { id: '3', content: 'New comment', creatorUserName: 'User3', createdAt: '2025-01-01T12:00:00' } };
-    vi.mocked(axios.post).mockResolvedValue(mockResponse);
+    vi.mocked(apiClient.post).mockResolvedValue(mockResponse);
 
     const wrapper = mount(CommentSection, {
       props: {
@@ -133,7 +137,7 @@ describe('CommentSection', () => {
     await wrapper.find('.comment-input').setValue('New rideshare comment');
     await wrapper.find('.comment-send-button').trigger('click');
 
-    expect(axios.post).toHaveBeenCalledWith('api/rideshare/CommentOnRideShare/', {
+    expect(apiClient.post).toHaveBeenCalledWith('api/rideshare/CommentOnRideShare/', {
       RideShareId: 'ride-456',
       Content: 'New rideshare comment'
     });
@@ -141,7 +145,7 @@ describe('CommentSection', () => {
 
   it('emits comment-sent event with correct payload', async () => {
     const mockResponse = { data: { id: '3', content: 'New comment', creatorUserName: 'User3', createdAt: '2025-01-01T12:00:00' } };
-    vi.mocked(axios.post).mockResolvedValue(mockResponse);
+    vi.mocked(apiClient.post).mockResolvedValue(mockResponse);
 
     const wrapper = mount(CommentSection, {
       props: {
@@ -165,7 +169,7 @@ describe('CommentSection', () => {
 
   it('clears input after sending comment', async () => {
     const mockResponse = { data: { id: '3', content: 'New comment', creatorUserName: 'User3', createdAt: '2025-01-01T12:00:00' } };
-    vi.mocked(axios.post).mockResolvedValue(mockResponse);
+    vi.mocked(apiClient.post).mockResolvedValue(mockResponse);
 
     const wrapper = mount(CommentSection, {
       props: {
@@ -194,13 +198,13 @@ describe('CommentSection', () => {
 
     await wrapper.find('.comment-send-button').trigger('click');
 
-    expect(axios.post).not.toHaveBeenCalled();
+    expect(apiClient.post).not.toHaveBeenCalled();
     expect(wrapper.emitted('comment-sent')).toBeFalsy();
   });
 
   it('handles API errors gracefully', async () => {
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    vi.mocked(axios.post).mockRejectedValue(new Error('Network error'));
+    vi.mocked(apiClient.post).mockRejectedValue(new Error('Network error'));
 
     const wrapper = mount(CommentSection, {
       props: {

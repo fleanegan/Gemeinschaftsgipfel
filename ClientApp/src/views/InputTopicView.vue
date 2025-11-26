@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import axios from "axios";
+import {topicService} from '@/services/api';
 
 export default defineComponent({
   data() {
@@ -50,17 +50,17 @@ export default defineComponent({
       }
       try {
         if (this.isEditing) {
-          await axios.put('/api/topic/update', {
-            "Title": this.title,
-            "PresentationTimeInMinutes": this.presentationTimeInMinutes,
-            "Description": this.description,
-            "Id": this.$props["topicId"],
+          await topicService.updateTopic({
+            title: this.title,
+            presentationTimeInMinutes: this.presentationTimeInMinutes,
+            description: this.description,
+            id: this.$props["topicId"],
           });
         } else {
-          await axios.post('/api/topic/addnew', {
-            "Title": this.title,
-            "PresentationTimeInMinutes": this.presentationTimeInMinutes,
-            "Description": this.description,
+          await topicService.createTopic({
+            title: this.title,
+            presentationTimeInMinutes: this.presentationTimeInMinutes,
+            description: this.description,
           });
         }
 
@@ -85,15 +85,15 @@ export default defineComponent({
     // why is this.isEditing not working?
     if (this.$props['topicId'] !== undefined && this.$props['topicId'] !== null) {
       try {
-        var existingTopic = await axios.get('/api/topic/getone/' + this.$props["topicId"]);
-        this.title = existingTopic.data["title"];
-        this.description = existingTopic.data["description"];
-        this.presentationTimeInMinutes = existingTopic.data["presentationTimeInMinutes"];
+        const existingTopic = await topicService.getTopic(this.$props["topicId"]);
+        this.title = existingTopic["title"];
+        this.description = existingTopic["description"];
+        this.presentationTimeInMinutes = existingTopic["presentationTimeInMinutes"];
       } catch (e) {
         console.log("edit: could not get existing topic")
       }
     }
-   this.legalDurations = (await axios.get('/api/topic/GetLegalPresentationDurations', {})).data
+   this.legalDurations = await topicService.getLegalPresentationDurations();
    console.log(this.legalDurations)
   },
   props: ['topicId'],

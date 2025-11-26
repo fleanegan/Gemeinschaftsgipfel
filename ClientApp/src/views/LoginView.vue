@@ -36,7 +36,8 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {useAuthStore} from '@/store/auth';
-import axios, {AxiosError} from "axios";
+import {AxiosError} from "axios";
+import {authService, homeService} from '@/services/api';
 
 interface ErrorResponseData {
   description: String
@@ -60,7 +61,7 @@ export default defineComponent({
         }
       },
       async mounted() {
-        this.impressum = (await axios.get('/api/home/getimpressum', {})).data
+        this.impressum = await homeService.getImpressum();
       },
       methods: {
         async submitData() {
@@ -71,20 +72,17 @@ export default defineComponent({
         },
         async handleLogin() {
           try {
-            const response = await axios.post('/api/auth/login', {
-              "UserName": this.username,
-              "Password": this.password
+            const token = await authService.login({
+              username: this.username,
+              password: this.password
             });
 
-            if (response.status >= 200 && response.status < 300) {
-              const responseData = response.data
-              useAuthStore().login(responseData, this.username);
-              let routeToPush = {path: '/'};
-              if (this.$route.query.redirect) {
-                routeToPush = {path: this.$route.query.redirect as string};
-              }
-              this.$router.push(routeToPush);
+            useAuthStore().login(token, this.username);
+            let routeToPush = {path: '/'};
+            if (this.$route.query.redirect) {
+              routeToPush = {path: this.$route.query.redirect as string};
             }
+            this.$router.push(routeToPush);
           } catch (e) {
             const r = e as AxiosError;
             if (r.response?.status == 401)
@@ -95,15 +93,11 @@ export default defineComponent({
         }
         , async handleSignup() {
           try {
-            const response = await axios.post('/api/auth/signup', {
-              "UserName": this.username,
-              "Password": this.password,
-              "EntrySecret": this.entrySecret
+            await authService.signup({
+              username: this.username,
+              password: this.password,
             });
-
-            if (response.status >= 200 && response.status < 300) {
-              await this.handleLogin()
-            }
+            await this.handleLogin();
           } catch (e: any) {
             if (e.response?.status == 429)
               this.errors = "Zu viele Versuche. Bitte in 60s noch erneut probieren."

@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import axios from "axios";
+import {rideShareService} from '@/services/api';
 
 export default defineComponent({
   data() {
@@ -54,23 +54,23 @@ export default defineComponent({
     async submitData() {
       try {
         if (this.isEditing) {
-          await axios.put('/api/rideshare/update', {
-            "Id": this.$props["rideShareId"],
-            "From": this.from,
-            "To": this.to,
-            "DepartureTime": this.departureTime,
-            "AvailableSeats": this.availableSeats,
-            "Stops": this.stops || undefined,
-            "Description": this.description || undefined,
+          await rideShareService.updateRideShare({
+            id: this.$props["rideShareId"],
+            from: this.from,
+            to: this.to,
+            departureTime: this.departureTime,
+            availableSeats: this.availableSeats,
+            stops: this.stops || undefined,
+            description: this.description || undefined,
           });
         } else {
-          await axios.post('/api/rideshare/addnew', {
-            "From": this.from,
-            "To": this.to,
-            "DepartureTime": this.departureTime,
-            "AvailableSeats": this.availableSeats,
-            "Stops": this.stops || undefined,
-            "Description": this.description || undefined,
+          await rideShareService.createRideShare({
+            from: this.from,
+            to: this.to,
+            departureTime: this.departureTime,
+            availableSeats: this.availableSeats,
+            stops: this.stops || undefined,
+            description: this.description || undefined,
           });
         }
 
@@ -91,13 +91,13 @@ export default defineComponent({
   async beforeCreate() {
     if (this.$props['rideShareId'] !== undefined && this.$props['rideShareId'] !== null) {
       try {
-        const existingRideShare = await axios.get('/api/rideshare/getone/' + this.$props["rideShareId"]);
-        this.from = existingRideShare.data["from"];
-        this.to = existingRideShare.data["to"];
-        this.departureTime = existingRideShare.data["departureTime"];
-        this.availableSeats = existingRideShare.data["availableSeats"];
-        this.stops = existingRideShare.data["stops"] || '';
-        this.description = existingRideShare.data["description"] || '';
+        const existingRideShare = await rideShareService.getRideShare(this.$props["rideShareId"]);
+        this.from = existingRideShare["from"];
+        this.to = existingRideShare["to"];
+        this.departureTime = existingRideShare["departureTime"];
+        this.availableSeats = existingRideShare["availableSeats"];
+        this.stops = existingRideShare["stops"] || '';
+        this.description = existingRideShare["description"] || '';
       } catch (e) {
         console.log("edit: could not get existing rideshare")
       }
