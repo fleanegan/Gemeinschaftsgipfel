@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ isEditing ? 'Fahrt bearbeiten' : 'Neue Fahrt anbieten' }}</h1>
+  <h1>{{ isEditing ? 'Fahrt bearbeiten' : 'Fahrt anbieten' }}</h1>
   <form @submit.prevent="submitData">
     <div class="form-group">
       <label for="from">Von (Startort)</label>

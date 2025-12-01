@@ -1,52 +1,68 @@
 <template>
   <li class="card_scroll_container">
     <div :class="{ topic_card_header: true, ride_canceled: isCanceledOrCompleted }">
-      <button class="action_button" @click="$emit('toggle-details')">
-        <img :src="rideShare.expanded ? 'collapse.svg' : '/expand.svg'" alt="Expand">
+      <button class="action_button expand-button" @click="$emit('toggle-details')">
+        <span class="expand-icon">{{ rideShare.expanded ? '−' : '+' }}</span>
       </button>
       <div class="ride-header-info">
         <span class="ride-route">{{ rideShare.from }} → {{ rideShare.to }}</span>
         <span v-if="showDriver" class="ride-driver">({{ rideShare.driverUserName }})</span>
       </div>
+      <span class="seat-badge" :class="seatBadgeClass">{{ rideShare.reservationCount }}/{{ rideShare.availableSeats }}</span>
       <slot name="action-button"></slot>
     </div>
     <div v-if="rideShare.expanded" class="topic-card-details">
       <div class="ride-info-container">
-        <div class="ride-info">
-          <p class="ride-label">Von:</p>
-          <p class="ride-value">{{ rideShare.from }}</p>
+        <!-- Route visualization -->
+        <div class="route-section">
+          <div class="route-visualization">
+            <span class="route-point">{{ rideShare.from }}</span>
+            <template v-if="parsedStops.length > 0">
+              <span v-for="(stop, index) in parsedStops" :key="index" class="route-stop">
+                <span class="route-separator">●</span>
+                <span class="route-point">{{ stop }}</span>
+              </span>
+            </template>
+            <span class="route-separator">●</span>
+            <span class="route-point route-destination">{{ rideShare.to }}</span>
+          </div>
         </div>
-        <div class="ride-info">
-          <p class="ride-label">Nach:</p>
-          <p class="ride-value">{{ rideShare.to }}</p>
+
+        <!-- Departure time -->
+        <div class="info-row">
+          <span class="info-label">ABFAHRT</span>
+          <span class="info-value">{{ formatDateTime(rideShare.departureTime) }}</span>
         </div>
-        <div class="ride-info">
-          <p class="ride-label">Abfahrt:</p>
-          <p class="ride-value">{{ formatDateTime(rideShare.departureTime) }}</p>
+
+        <!-- Seats -->
+        <div class="info-row">
+          <span class="info-label">PLÄTZE</span>
+          <span class="info-value">{{ rideShare.reservationCount }}/{{ rideShare.availableSeats }} reserviert</span>
         </div>
-        <div class="ride-info">
-          <p class="ride-label">Plätze:</p>
-          <p class="ride-value">{{ rideShare.reservationCount }}/{{ rideShare.availableSeats }} reserviert</p>
+
+        <!-- Driver -->
+        <div class="info-row">
+          <span class="info-label">FAHRER</span>
+          <span class="info-value">{{ rideShare.driverUserName }}</span>
         </div>
-        <div v-if="rideShare.stops" class="ride-info">
-          <p class="ride-label">Zwischenstopps:</p>
-          <p class="ride-value">{{ rideShare.stops }}</p>
+
+        <!-- Passengers -->
+        <div v-if="rideShare.passengerUserNames && rideShare.passengerUserNames.length > 0" class="info-row">
+          <span class="info-label">MITFAHRER</span>
+          <span class="info-value">{{ rideShare.passengerUserNames.join(', ') }}</span>
         </div>
-        <div v-if="rideShare.description" class="ride-info">
-          <p class="ride-label">Beschreibung:</p>
-          <p class="ride-value description">{{ rideShare.description }}</p>
-        </div>
-        <div class="ride-info">
-          <p class="ride-label">Fahrer:</p>
-          <p class="ride-value">{{ rideShare.driverUserName }}</p>
-        </div>
-        <div v-if="rideShare.passengerUserNames && rideShare.passengerUserNames.length > 0" class="ride-info">
-          <p class="ride-label">Mitfahrer:</p>
-          <p class="ride-value">{{ rideShare.passengerUserNames.join(', ') }}</p>
-        </div>
-        <div v-if="rideShare.status !== 0" class="ride-info">
+
+        <!-- Status badge -->
+        <div v-if="rideShare.status !== 0" class="info-row">
           <span class="status-badge" :class="statusClass">{{ statusText }}</span>
         </div>
+
+        <!-- Notes section -->
+        <div v-if="rideShare.description" class="notes-section">
+          <span class="notes-label">NOTIZEN</span>
+          <p class="notes-content">{{ rideShare.description }}</p>
+        </div>
+
         <slot name="actions"></slot>
       </div>
       <CommentSection
@@ -93,6 +109,19 @@ export default defineComponent({
       if (this.rideShare.status === 1) return 'Abgesagt';
       if (this.rideShare.status === 2) return 'Abgeschlossen';
       return '';
+    },
+    seatBadgeClass(): string {
+      const available = this.rideShare.availableSeats - this.rideShare.reservationCount;
+      if (available === 0) return 'seat-full';
+      if (available <= 1) return 'seat-almost-full';
+      return 'seat-available';
+    },
+    parsedStops(): string[] {
+      if (!this.rideShare.stops) return [];
+      return this.rideShare.stops
+        .split(',')
+        .map(stop => stop.trim())
+        .filter(stop => stop.length > 0);
     }
   },
   methods: {
@@ -111,31 +140,20 @@ export default defineComponent({
 <style scoped src="src/assets/topics.css"></style>
 <style scoped src="src/assets/instructions.css"></style>
 <style scoped>
-.ride-info-container {
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 1rem;
+/* Card container */
+.card_scroll_container {
+  background-color: var(--color-nuance-light);
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
 }
 
-.ride-info {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 0.5rem;
-  align-items: flex-start;
-}
-
-.ride-label {
-  font-weight: bold;
-  min-width: 130px;
-  margin-right: 1rem;
-}
-
-.ride-value {
-  flex: 1;
-}
-
-.ride-value.description {
-  white-space: pre-wrap;
+/* Header section */
+.topic_card_header {
+  padding: 1rem;
+  background-color: var(--color-background);
+  border-left: none;
+  min-height: auto;
 }
 
 .ride_canceled {
@@ -143,39 +161,197 @@ export default defineComponent({
   background-color: #f0f0f0;
 }
 
-.status-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.25rem;
-  font-weight: bold;
-  font-size: 0.875rem;
+/* Expand/collapse button with plus/minus */
+.expand-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 4px;
+  background-color: var(--color-nuance-light);
+  transition: background-color 0.2s ease;
 }
 
-.status-canceled {
-  background-color: #ffc107;
-  color: #000;
+.expand-button:hover {
+  background-color: var(--color-border-light);
 }
 
-.status-completed {
-  background-color: #28a745;
-  color: #fff;
+.expand-icon {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--color-main-text);
+  line-height: 1;
 }
 
+/* Header info */
 .ride-header-info {
   display: flex;
   flex-direction: column;
   margin-left: 1rem;
   flex: 1;
+  min-width: 0;
 }
 
 .ride-route {
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-primary);
 }
 
 .ride-driver {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--color-main-text);
+  margin-top: 0.125rem;
+}
+
+/* Seat availability badge */
+.seat-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  white-space: nowrap;
+}
+
+.seat-available {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.seat-almost-full {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.seat-full {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Details section */
+.topic-card-details {
+  padding: 1rem;
+  padding-left: calc(2rem + 1rem + 1rem);
+  background-color: var(--color-background);
+  border-radius: 0;
+}
+
+.ride-info-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  gap: 1rem;
+}
+
+/* Route visualization section */
+.route-section {
+  padding: 0.25rem 0 1rem 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.route-visualization {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  line-height: 1.4;
+  width: 100%;
+}
+
+.route-point {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.route-destination {
+  color: var(--color-primary);
+}
+
+.route-separator {
+  color: var(--color-main-text);
+  opacity: 0.4;
+  font-size: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.route-stop {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+/* Info rows with muted labels */
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-main-text);
+  opacity: 0.6;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+/* Notes section */
+.notes-section {
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.notes-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-main-text);
+  opacity: 0.6;
+  margin-bottom: 0.5rem;
+}
+
+.notes-content {
+  font-size: 0.9375rem;
+  color: var(--color-primary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  background-color: var(--color-nuance-light);
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  width: fit-content;
+}
+
+.status-canceled {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.status-completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
 }
 </style>

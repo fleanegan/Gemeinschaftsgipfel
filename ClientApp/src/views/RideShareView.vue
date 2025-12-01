@@ -33,13 +33,11 @@
           </div>
         </template>
       </RideShareCard>
-      <li>
-        <hr>
-        <div id="owner_action" class="my-topics-add-button-container">
-          <button class="submit-button" @click="addNewRideShare">Neue Fahrt anbieten?</button>
-        </div>
-      </li>
     </ul>
+    <hr>
+    <div id="owner_action" class="my-topics-add-button-container">
+      <button class="submit-button" @click="addNewRideShare">Fahrt anbieten?</button>
+    </div>
     <h2>Verfügbare Fahrten</h2>
     <ul class="list">
       <RideShareCard
@@ -217,6 +215,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.topic {
+  background-color: var(--color-background);
+}
+
+.list {
+  background-color: var(--color-background-soft);
+  padding: 1rem;
+  border-radius: 6px;
+}
+
 .floating_scroll_to_top_hidden {
   margin-left: auto;
   height: 3.3rem;

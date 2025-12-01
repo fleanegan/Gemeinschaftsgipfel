@@ -58,7 +58,7 @@ const router = createRouter({
         },
         {
             path: '/rideshare/add',
-            name: 'Neue Fahrt anbieten',
+            name: 'Fahrt anbieten',
             component: () => import('../views/InputRideShareView.vue'),
             props: false,
             meta: { requiresAuth: true }

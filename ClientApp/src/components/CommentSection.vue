@@ -1,21 +1,29 @@
 <template>
   <div class="comments-container">
-    <p class="comments-title">Kommentare:</p>
+    <div class="comments-header">
+      <span class="comments-label">KOMMENTARE</span>
+    </div>
     <ul class="comments-list">
-      <div v-for="comment in comments" :key="comment.createdAt" class="comment-item">
-        <div class="flex-row">
-          <p class="comment-author">{{ comment.creatorUserName }}</p>
-          <p class="comment-timestamp">({{ formatDateTime(comment.createdAt) }})</p>
+      <li v-for="comment in comments" :key="comment.createdAt" class="comment-item">
+        <div class="comment-header">
+          <span class="comment-author">{{ comment.creatorUserName }}</span>
+          <span class="comment-timestamp">{{ formatDateTime(comment.createdAt) }}</span>
         </div>
         <p class="comment-content">{{ comment.content }}</p>
-      </div>
+      </li>
     </ul>
-    <div class="flex-row" style="margin-bottom: 2rem">
+    <div class="comment-input-container">
       <input v-model="content"
              class="comment-input"
-             placeholder="Kommentar schreiben ..."/>
-      <button class="action_button comment-send-button"
-              @click="handleSendComment">Senden
+             placeholder="Kommentar schreiben..."
+             @keyup.enter="handleSendComment"/>
+      <button class="send-button"
+              @click="handleSendComment"
+              :disabled="!content.trim()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
       </button>
     </div>
   </div>
@@ -84,60 +92,120 @@ export default defineComponent({
 
 <style scoped>
 .comments-container {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-light);
 }
 
-.comments-title {
-  margin-left: 3rem;
-  margin-top: 0.1rem;
+.comments-header {
+  margin-bottom: 1rem;
+}
+
+.comments-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-main-text);
+  opacity: 0.6;
 }
 
 .comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   margin-bottom: 1rem;
-  margin-left: 0.5rem;
-  max-width: 100%;
+  list-style: none;
+  padding: 0;
 }
 
 .comment-item {
-  max-width: 90%;
-  margin-left: 0.5rem;
-  font-size: small;
-  margin-top: 0.25rem;
-  margin-bottom: 0.5rem;
+  background-color: var(--color-nuance-light);
+  padding: 0.75rem;
+  border-radius: 4px;
 }
 
-.flex-row {
+.comment-header {
   display: flex;
-  flex-direction: row;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
 }
 
 .comment-author {
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-primary);
 }
 
 .comment-timestamp {
-  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-main-text);
+  opacity: 0.6;
 }
 
 .comment-content {
-  margin-left: 1rem;
-  margin-top: 0.15rem;
+  font-size: 0.9375rem;
+  color: var(--color-primary);
+  line-height: 1.5;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  word-break: break-all;
-  max-width: 100%;
+  margin: 0;
+}
+
+.comment-input-container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .comment-input {
-  border-color: var(--main-color-primary);
-  color: var(--main-color-primary);
-  margin-left: 3rem;
-  border-style: solid;
-  border-width: 0.01rem;
-  border-radius: 0.2rem;
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  font-size: 0.9375rem;
+  color: var(--color-primary);
+  background-color: var(--color-background);
+  transition: border-color 0.2s ease;
 }
 
-.comment-send-button {
-  color: var(--color-primary);
+.comment-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.comment-input::placeholder {
+  color: var(--color-main-text);
+  opacity: 0.5;
+}
+
+.send-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.send-button:hover:not(:disabled) {
+  background-color: #005a39;
+}
+
+.send-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.send-button svg {
+  width: 18px;
+  height: 18px;
 }
 </style>
