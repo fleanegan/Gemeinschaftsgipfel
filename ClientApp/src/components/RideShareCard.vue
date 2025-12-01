@@ -12,66 +12,88 @@
       <slot name="action-button"></slot>
     </div>
     <div v-if="rideShare.expanded" class="topic-card-details">
-      <div class="ride-info-container">
-        <!-- Route visualization -->
-        <div class="route-section">
-          <div class="route-visualization">
-            <span class="route-point">{{ rideShare.from }}</span>
-            <template v-if="parsedStops.length > 0">
-              <span v-for="(stop, index) in parsedStops" :key="index" class="route-stop">
-                <span class="route-separator">●</span>
-                <span class="route-point">{{ stop }}</span>
-              </span>
-            </template>
-            <span class="route-separator">●</span>
-            <span class="route-point route-destination">{{ rideShare.to }}</span>
+      <div class="details-layout">
+        <div class="ride-info-container">
+          <!-- Route visualization -->
+          <div class="route-section">
+            <div class="route-visualization">
+              <span class="route-point">{{ rideShare.from }}</span>
+              <template v-if="parsedStops.length > 0">
+                <span v-for="(stop, index) in parsedStops" :key="index" class="route-stop">
+                  <span class="route-separator">●</span>
+                  <span class="route-point">{{ stop }}</span>
+                </span>
+              </template>
+              <span class="route-separator">●</span>
+              <span class="route-point route-destination">{{ rideShare.to }}</span>
+            </div>
           </div>
+
+          <!-- Departure time -->
+          <div class="info-row">
+            <span class="info-label">ABFAHRT</span>
+            <span class="info-value">{{ formatDateTime(rideShare.departureTime) }}</span>
+          </div>
+
+          <!-- Seats -->
+          <div class="info-row">
+            <span class="info-label">PLÄTZE</span>
+            <span class="info-value">{{ rideShare.reservationCount }}/{{ rideShare.availableSeats }} reserviert</span>
+          </div>
+
+          <!-- Driver -->
+          <div class="info-row">
+            <span class="info-label">FAHRER</span>
+            <span class="info-value">{{ rideShare.driverUserName }}</span>
+          </div>
+
+          <!-- Passengers -->
+          <div v-if="rideShare.passengerUserNames && rideShare.passengerUserNames.length > 0" class="info-row">
+            <span class="info-label">MITFAHRER</span>
+            <span class="info-value">{{ rideShare.passengerUserNames.join(', ') }}</span>
+          </div>
+
+          <!-- Status badge -->
+          <div v-if="rideShare.status !== 0" class="info-row">
+            <span class="status-badge" :class="statusClass">{{ statusText }}</span>
+          </div>
+
+          <!-- Notes section -->
+          <div v-if="rideShare.description" class="notes-section">
+            <span class="notes-label">NOTIZEN</span>
+            <p class="notes-content">{{ rideShare.description }}</p>
+          </div>
+
+          <slot name="actions"></slot>
+
+          <!-- Mobile only: Comments button -->
+          <button class="mobile-comments-button" @click="openCommentModal">
+            <span class="comments-count">{{ rideShare.comments.length }}</span>
+            Kommentare anzeigen
+          </button>
         </div>
 
-        <!-- Departure time -->
-        <div class="info-row">
-          <span class="info-label">ABFAHRT</span>
-          <span class="info-value">{{ formatDateTime(rideShare.departureTime) }}</span>
+        <!-- Desktop: Comments sidebar -->
+        <div class="comments-sidebar">
+          <CommentSection
+            :comments="rideShare.comments"
+            :item-id="rideShare.id"
+            api-endpoint="api/rideshare/CommentOnRideShare/"
+            @comment-sent="handleCommentSent"
+          />
         </div>
-
-        <!-- Seats -->
-        <div class="info-row">
-          <span class="info-label">PLÄTZE</span>
-          <span class="info-value">{{ rideShare.reservationCount }}/{{ rideShare.availableSeats }} reserviert</span>
-        </div>
-
-        <!-- Driver -->
-        <div class="info-row">
-          <span class="info-label">FAHRER</span>
-          <span class="info-value">{{ rideShare.driverUserName }}</span>
-        </div>
-
-        <!-- Passengers -->
-        <div v-if="rideShare.passengerUserNames && rideShare.passengerUserNames.length > 0" class="info-row">
-          <span class="info-label">MITFAHRER</span>
-          <span class="info-value">{{ rideShare.passengerUserNames.join(', ') }}</span>
-        </div>
-
-        <!-- Status badge -->
-        <div v-if="rideShare.status !== 0" class="info-row">
-          <span class="status-badge" :class="statusClass">{{ statusText }}</span>
-        </div>
-
-        <!-- Notes section -->
-        <div v-if="rideShare.description" class="notes-section">
-          <span class="notes-label">NOTIZEN</span>
-          <p class="notes-content">{{ rideShare.description }}</p>
-        </div>
-
-        <slot name="actions"></slot>
       </div>
-      <CommentSection
-        :comments="rideShare.comments"
-        :item-id="rideShare.id"
-        api-endpoint="api/rideshare/CommentOnRideShare/"
-        @comment-sent="handleCommentSent"
-      />
     </div>
+
+    <!-- Mobile modal for comments -->
+    <CommentModal 
+      :is-open="isCommentModalOpen"
+      :comments="rideShare.comments"
+      :item-id="rideShare.id"
+      api-endpoint="api/rideshare/CommentOnRideShare/"
+      @close="closeCommentModal"
+      @comment-sent="handleCommentSent"
+    />
   </li>
 </template>
 
@@ -80,10 +102,12 @@ import {defineComponent, type PropType} from 'vue';
 import type {RideShare, RideShareStatus} from '@/types/RideShareInterfaces';
 import {formatDateTime} from '@/utils/dateFormatter';
 import CommentSection from '@/components/CommentSection.vue';
+import CommentModal from '@/components/CommentModal.vue';
 
 export default defineComponent({
   components: {
-    CommentSection
+    CommentSection,
+    CommentModal
   },
   props: {
     rideShare: {
@@ -94,6 +118,11 @@ export default defineComponent({
       type: Boolean,
       default: false
     }
+  },
+  data() {
+    return {
+      isCommentModalOpen: false
+    };
   },
   emits: ['toggle-details', 'comment-sent'],
   computed: {
@@ -132,6 +161,12 @@ export default defineComponent({
         content: payload.content
       });
     },
+    openCommentModal() {
+      this.isCommentModalOpen = true;
+    },
+    closeCommentModal() {
+      this.isCommentModalOpen = false;
+    },
     formatDateTime
   }
 });
@@ -146,6 +181,9 @@ export default defineComponent({
   border-radius: 6px;
   margin-bottom: 0.75rem;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Header section */
@@ -154,11 +192,69 @@ export default defineComponent({
   background-color: var(--color-background);
   border-left: none;
   min-height: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .ride_canceled {
   opacity: 0.6;
   background-color: #f0f0f0;
+}
+
+/* Very small screens: Stack expand, action button, and seat badge vertically on the left */
+@media (max-width: 400px) {
+  .topic_card_header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 0.5rem;
+    align-items: start;
+    padding: 0.75rem;
+  }
+  
+  /* Left column: vertical stack of buttons and badge - all same size */
+  .expand-button {
+    grid-column: 1;
+    grid-row: 1;
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .ride-header-info {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    margin-left: 0;
+    align-self: center;
+  }
+  
+  .seat-badge {
+    grid-column: 1;
+    grid-row: 2;
+    margin-right: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+  }
+  
+  .topic_card_header :deep(.action_button:not(.expand-button)) {
+    grid-column: 1;
+    grid-row: 3;
+    margin-left: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 /* Expand/collapse button with plus/minus */
@@ -239,6 +335,25 @@ export default defineComponent({
   padding-left: calc(2rem + 1rem + 1rem);
   background-color: var(--color-background);
   border-radius: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.topic-card-details {
+    padding: 0.75rem;
+    padding-left: 1rem;
+  }
+
+/* Layout container for side-by-side on desktop */
+.details-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .ride-info-container {
@@ -246,6 +361,77 @@ export default defineComponent({
   flex-direction: column;
   padding: 0;
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Mobile: Hide comments sidebar, show button */
+.comments-sidebar {
+  display: none;
+}
+
+.mobile-comments-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.875rem;
+  background-color: var(--color-nuance-light);
+  border: 1px solid var(--color-border-light);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  transition: background-color 0.2s ease;
+}
+
+.mobile-comments-button:hover {
+  background-color: var(--color-border-light);
+}
+
+.comments-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.375rem;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Desktop: Side-by-side layout */
+@media (min-width: 1200px) {
+  .details-layout {
+    flex-direction: row;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .ride-info-container {
+    flex: 1 1 45%;
+    min-width: 0;
+  }
+
+  .comments-sidebar {
+    display: block;
+    flex: 1 1 55%;
+    min-width: 0;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--color-border-light);
+  }
+
+  .mobile-comments-button {
+    display: none;
+  }
 }
 
 /* Route visualization section */

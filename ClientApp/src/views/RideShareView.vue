@@ -1,5 +1,5 @@
 <template>
-  <div class="topic">
+  <div class="topic wide-content">
     <div :class="{'floating_scroll_to_top_hidden': true, 'floating_scroll_to_top_shown': isSticky}">
       <button class="action_button" style="margin-right: 1rem;" @click="scrollToTop">
         <img :src="'/expand.svg'" alt="Expand">
@@ -7,61 +7,69 @@
     </div>
     <h1>Fahrgemeinschaften</h1>
     <InstructionCards :instructions="instructions" />
-    <h2>Meine Fahrten</h2>
-    <ul class="list">
-      <RideShareCard
-          v-for="(item, index) in myRideShares"
-          :key="item.id"
-          :ride-share="item"
-          @toggle-details="toggleDetails(myRideShares, index)"
-          @comment-sent="handleCommentSent"
-      >
-        <template #actions>
-          <div class="topic_card_details_owner_actions">
-            <button class="action_button" @click="removeRideShare(item.id)">
-              <img alt="Delete" src="/empty_delete.svg">
-            </button>
-            <button v-if="item.status !== 1" class="action_button" @click="cancelRideShare(item.id)">
-              <img alt="Cancel" src="/empty_delete.svg" title="Absagen">
-            </button>
-            <button v-if="item.status === 1" class="action_button" @click="uncancelRideShare(item.id)">
-              <img alt="Uncancel" src="/empty_edit_no_border.svg" title="Reaktivieren">
-            </button>
-            <button class="action_button" @click="editRideShare(item.id)">
-              <img alt="Edit" src="/empty_edit_no_border.svg">
-            </button>
-          </div>
-        </template>
-      </RideShareCard>
-    </ul>
-    <hr>
-    <div id="owner_action" class="my-topics-add-button-container">
-      <button class="submit-button" @click="addNewRideShare">Fahrt anbieten?</button>
-    </div>
-    <h2>Verfügbare Fahrten</h2>
-    <ul class="list">
-      <RideShareCard
-          v-for="(item, index) in foreignRideShares"
-          :key="item.id"
-          :ride-share="item"
-          :show-driver="true"
-          @toggle-details="toggleDetails(foreignRideShares, index)"
-          @comment-sent="handleCommentSent"
-      >
-        <template #action-button>
-          <button 
-            class="action_button" 
-            @click="toggleReservation(index)"
-            :disabled="!item.didIReserve && item.availableSeats <= item.reservationCount"
+    
+    <div class="sections-container">
+      <!-- Left section: Meine Fahrten -->
+      <section class="ride-section">
+        <h2>Meine Fahrten</h2>
+        <ul class="list">
+          <RideShareCard
+              v-for="(item, index) in myRideShares"
+              :key="item.id"
+              :ride-share="item"
+              @toggle-details="toggleDetails(myRideShares, index)"
+              @comment-sent="handleCommentSent"
           >
-            <img :src="item.didIReserve ? '/full_heart.svg' : '/empty_heart.svg'" alt="Reserve">
-          </button>
-        </template>
-      </RideShareCard>
-      <li class="topic-card-details">Ende der Liste. Danke fürs Mitfahren!
-        <br style="margin-bottom: 25rem">
-      </li>
-    </ul>
+            <template #actions>
+              <div class="topic_card_details_owner_actions">
+                <button class="action_button" @click="removeRideShare(item.id)">
+                  <img alt="Delete" src="/empty_delete.svg">
+                </button>
+                <button v-if="item.status !== 1" class="action_button" @click="cancelRideShare(item.id)">
+                  <img alt="Cancel" src="/empty_delete.svg" title="Absagen">
+                </button>
+                <button v-if="item.status === 1" class="action_button" @click="uncancelRideShare(item.id)">
+                  <img alt="Uncancel" src="/empty_edit_no_border.svg" title="Reaktivieren">
+                </button>
+                <button class="action_button" @click="editRideShare(item.id)">
+                  <img alt="Edit" src="/empty_edit_no_border.svg">
+                </button>
+              </div>
+            </template>
+          </RideShareCard>
+        </ul>
+        <hr>
+        <div id="owner_action" class="my-topics-add-button-container">
+          <button class="submit-button" @click="addNewRideShare">Fahrt anbieten?</button>
+        </div>
+      </section>
+      
+      <!-- Right section: Verfügbare Fahrten -->
+      <section class="ride-section">
+        <h2>Verfügbare Fahrten</h2>
+        <ul class="list">
+          <RideShareCard
+              v-for="(item, index) in foreignRideShares"
+              :key="item.id"
+              :ride-share="item"
+              :show-driver="true"
+              @toggle-details="toggleDetails(foreignRideShares, index)"
+              @comment-sent="handleCommentSent"
+          >
+            <template #action-button>
+              <button 
+                class="action_button" 
+                @click="toggleReservation(index)"
+                :disabled="!item.didIReserve && item.availableSeats <= item.reservationCount"
+              >
+                <img :src="item.didIReserve ? '/full_heart.svg' : '/empty_heart.svg'" alt="Reserve">
+              </button>
+            </template>
+          </RideShareCard>
+          <li class="list-end-message">Ende der Liste. Danke fürs Mitfahren!</li>
+        </ul>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -214,15 +222,101 @@ export default defineComponent({
 });
 </script>
 
+<style>
+/* Override global .routed-elements width constraint */
+.routed-elements:has(.wide-content) {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+</style>
+
 <style scoped>
 .topic {
   background-color: var(--color-background);
+}
+
+/* Wide content for rideshare page only */
+.wide-content {
+  width: 100%;
+  padding: 0 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Ensure all text can wrap */
+.wide-content h1,
+.wide-content h2 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* Small screens: Reduce horizontal padding */
+@media (max-width: 400px) {
+  .wide-content {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Sections container for side-by-side layout */
+.sections-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.ride-section {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.ride-section h2 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Desktop: Sections side-by-side */
+@media (min-width: 1200px) {
+  .sections-container {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  
+  .ride-section {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
 }
 
 .list {
   background-color: var(--color-background-soft);
   padding: 1rem;
   border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Small screens: Reduce list padding */
+@media (max-width: 400px) {
+  .list {
+    padding: 0.5rem 0.5rem !important;
+    gap: 0.25rem !important;
+  }
+}
+
+.list-end-message {
+  text-align: center;
+  padding: 1rem;
+  color: var(--color-main-text);
+  opacity: 0.7;
+  font-size: 0.875rem;
 }
 
 .floating_scroll_to_top_hidden {

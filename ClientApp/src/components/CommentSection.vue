@@ -95,6 +95,8 @@ export default defineComponent({
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--color-border-light);
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .comments-header {
@@ -116,6 +118,7 @@ export default defineComponent({
   margin-bottom: 1rem;
   list-style: none;
   padding: 0;
+  max-width: 100%;
 }
 
 .comment-item {
@@ -156,10 +159,16 @@ export default defineComponent({
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .comment-input {
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--color-border-light);
   border-radius: 4px;
@@ -167,6 +176,29 @@ export default defineComponent({
   color: var(--color-primary);
   background-color: var(--color-background);
   transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Small screens: Reduce padding */
+@media (max-width: 400px) {
+  .comment-input {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .comment-input-container {
+    gap: 0.375rem;
+  }
+  
+  .send-button {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .send-button svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .comment-input:focus {
