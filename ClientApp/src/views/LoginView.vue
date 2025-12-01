@@ -96,13 +96,24 @@ export default defineComponent({
             await authService.signup({
               username: this.username,
               password: this.password,
+              entrySecret: this.entrySecret,
             });
             await this.handleLogin();
           } catch (e: any) {
-            if (e.response?.status == 429)
+            if (e.response?.status == 429) {
               this.errors = "Zu viele Versuche. Bitte in 60s noch erneut probieren."
-            var responseData = e.response?.data as [ErrorResponseData];
-            this.errors = responseData.map(object => object["description"] as string).join("\n")
+              return;
+            }
+            const responseData = e.response?.data;
+            if (Array.isArray(responseData)) {
+              this.errors = responseData
+                .map(error => error.description || error.Description || JSON.stringify(error))
+                .join("\n");
+            } else if (responseData && typeof responseData === 'object') {
+              this.errors = responseData.description || responseData.Description || JSON.stringify(responseData);
+            } else {
+              this.errors = "Ein Fehler ist aufgetreten. Bitte versuche es erneut.";
+            }
           }
         }
       },
