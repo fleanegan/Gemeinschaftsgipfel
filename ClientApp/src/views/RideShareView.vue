@@ -6,7 +6,9 @@
       </button>
     </div>
     <h1>Fahrgemeinschaften</h1>
-    <InstructionCards :instructions="instructions" />
+    <div class="instructions-wrapper">
+      <InstructionCards :instructions="instructions" />
+    </div>
     
     <div class="sections-container">
       <!-- Left section: Meine Fahrten -->
@@ -257,6 +259,11 @@ export default defineComponent({
   .wide-content {
     padding: 0 0.5rem;
   }
+}
+
+/* Constrain instruction cards width */
+.instructions-wrapper {
+  max-width: 600px;
 }
 
 /* Sections container for side-by-side layout */

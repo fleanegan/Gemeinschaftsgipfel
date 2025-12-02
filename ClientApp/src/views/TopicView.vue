@@ -1,63 +1,74 @@
 <template>
-  <div class="topic">
+  <div class="topic wide-content">
     <div :class="{'floating_scroll_to_top_hidden': true, 'floating_scroll_to_top_shown': isSticky}">
       <button class="action_button" style="margin-right: 1rem;" @click="scrollToTop">
         <img :src="'/expand.svg'" alt="Expand">
       </button>
     </div>
     <h1>Zeig uns was 'ne Harke ist!</h1>
-    <InstructionCards :instructions="instructions" />
-    <h2>Meine Vorschläge</h2>
-    <ul class="list">
-      <TopicCard
-          v-for="(item, index) in myTopics"
-          :key="item.id"
-          :topic="item"
-          :isHighlighted="item === mostLikedTopic && mostLikedTopic?.votes > 0"
-          @toggle-details="toggleDetails(myTopics, index)"
-          @comment-sent="handleCommentSent"
-      >
-        <template #actions>
-          <div class="topic_card_details_owner_actions">
-            <button class="action_button" style="margin-bottom: 0.25rem;" @click="removeTopic(item.id)">
-              <img alt="Delete" src="/empty_delete.svg">
-            </button>
-            <button class="action_button" @click="editTopic(item.id)">
-              <img alt="Edit" src="/empty_edit_no_border.svg">
-            </button>
-          </div>
-        </template>
-      </TopicCard>
-      <li>
+    <div class="instructions-wrapper">
+      <InstructionCards :instructions="instructions" />
+    </div>
+    
+    <div class="sections-container">
+      <!-- Left section: Meine Vorschläge -->
+      <section class="topic-section">
+        <h2>Meine Vorschläge</h2>
+        <ul class="list">
+          <TopicCard
+              v-for="(item, index) in myTopics"
+              :key="item.id"
+              :topic="item"
+              :isHighlighted="item === mostLikedTopic && mostLikedTopic?.votes > 0"
+              @toggle-details="toggleDetails(myTopics, index)"
+              @comment-sent="handleCommentSent"
+          >
+            <template #action-button>
+              <div class="topic_card_details_owner_actions">
+                <button class="action_button" @click="removeTopic(item.id)">
+                  <img alt="Delete" src="/empty_delete.svg">
+                </button>
+                <button class="action_button" @click="editTopic(item.id)">
+                  <img alt="Edit" src="/empty_edit_no_border.svg">
+                </button>
+              </div>
+            </template>
+          </TopicCard>
+        </ul>
         <hr>
         <div id="owner_action" class="my-topics-add-button-container">
           <button class="submit-button" @click="addNewTopic">Neue Idee?</button>
         </div>
-      </li>
-    </ul>
-    <h2>Ideen der Anderen</h2>
-    <ul class="list">
-      <TopicCard
-          v-for="(item, index) in foreignTopics"
-          :key="item.id"
-          :topic="item"
-          :isHighlighted="false"
-          @toggle-details="toggleDetails(foreignTopics, index)"
-          @comment-sent="handleCommentSent"
-      >
-        <template #action-button>
-          <button class="action_button" @click="toggleVote(index)">
-            <img :src="item.didIVoteForThis ? '/full_heart.svg' : '/empty_heart.svg'" alt="Vote">
-          </button>
-        </template>
-        <template #presenter>
-          <p class="presenter">{{ item.presenterUserName }}</p>
-        </template>
-      </TopicCard>
-      <li class="topic-card-details">Ende der Liste. Danke fürs Abstimmen!
-        <br style="margin-bottom: 25rem">
-      </li>
-    </ul>
+      </section>
+      
+      <!-- Right section: Ideen der Anderen -->
+      <section class="topic-section">
+        <h2>Ideen der Anderen</h2>
+        <ul class="list">
+          <TopicCard
+              v-for="(item, index) in foreignTopics"
+              :key="item.id"
+              :topic="item"
+              :isHighlighted="false"
+              @toggle-details="toggleDetails(foreignTopics, index)"
+              @comment-sent="handleCommentSent"
+          >
+            <template #vote-button>
+              <button class="action_button" @click="toggleVote(index)">
+                <img :src="item.didIVoteForThis ? '/full_heart.svg' : '/empty_heart.svg'" alt="Vote">
+              </button>
+            </template>
+            <template #presenter>
+              <div class="info-row">
+                <span class="info-label">VORTRAGENDER</span>
+                <span class="info-value">{{ item.presenterUserName }}</span>
+              </div>
+            </template>
+          </TopicCard>
+          <li class="list-end-message">Ende der Liste. Danke fürs Abstimmen!</li>
+        </ul>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -220,8 +231,159 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   }
 }
 
+.topic {
+  background-color: var(--color-background);
+}
+
+/* Wide content for topic page only */
+.wide-content {
+  width: 100%;
+  padding: 0 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Small screens: Reduce horizontal padding */
+@media (max-width: 400px) {
+  .wide-content {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Constrain instruction cards width */
+.instructions-wrapper {
+  max-width: 600px;
+}
+
+/* Sections container for side-by-side layout */
+.sections-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.topic-section {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Desktop: Sections side-by-side */
+@media (min-width: 1200px) {
+  .sections-container {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  
+  .topic-section {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+}
+
+.list {
+  background-color: var(--color-background-soft);
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+}
+
+/* Small screens: Reduce list padding */
+@media (max-width: 400px) {
+  .list {
+    padding: 0.5rem 0.5rem !important;
+    gap: 0.25rem !important;
+  }
+}
+
+.list-end-message {
+  text-align: center;
+  padding: 1rem;
+  color: var(--color-main-text);
+  opacity: 0.7;
+  font-size: 0.875rem;
+}
+
+/* Info rows for presenter slot */
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-main-text);
+  opacity: 0.6;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+/* Action button styling */
+.action_button {
+  cursor: pointer;
+  background: none;
+  border-style: none;
+  border-radius: 0.2rem;
+  font-weight: bold;
+  display: flex;
+  place-items: center;
+}
+
+.topic_card_details_owner_actions {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.topic_card_details_owner_actions button {
+  margin-left: 0.5rem;
+}
+
+.my-topics-add-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.submit-button {
+  margin-top: 0;
+  margin-left: auto;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-right: 0;
+  white-space: nowrap;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  width: auto;
+}
+
 </style>
-<style scoped src="src/assets/topics.css"></style>
 <style scoped src="src/assets/instructions.css">
+</style>
+
+<!-- Override global .routed-elements width constraint -->
+<style>
+.routed-elements:has(.wide-content) {
+  width: 100% !important;
+  max-width: 100% !important;
+}
 </style>
 

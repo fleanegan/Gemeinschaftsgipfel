@@ -32,6 +32,18 @@ own variables
     --main-color-nuance-light: #f8f8f8;
     --main-color-highlight: #87cdec;
     --main-color-secondary: #ffbb14; /*//#ffbb14;*/
+
+    /* Category badge colors */
+    --category-workshop-bg: #e3f2fd;
+    --category-workshop-text: #1565c0;
+    --category-vortrag-bg: #e8f5e9;
+    --category-vortrag-text: #2e7d32;
+    --category-sport-bg: #fff3e0;
+    --category-sport-text: #e65100;
+    --category-diskussion-bg: #f3e5f5;
+    --category-diskussion-text: #7b1fa2;
+    --category-sonstiges-bg: #f5f5f5;
+    --category-sonstiges-text: #616161;
 }
 
 /* semantic color variables for this project */

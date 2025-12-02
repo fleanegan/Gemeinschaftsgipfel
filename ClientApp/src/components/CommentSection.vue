@@ -1,6 +1,6 @@
 <template>
   <div class="comments-container">
-    <div class="comments-header">
+    <div class="comments-header" style="padding-top: 0.5rem;">
       <span class="comments-label">KOMMENTARE</span>
     </div>
     <ul class="comments-list">
@@ -94,13 +94,13 @@ export default defineComponent({
 .comments-container {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--color-border-light);
   max-width: 100%;
   overflow: hidden;
 }
 
 .comments-header {
   margin-bottom: 1rem;
+  padding-left: 1rem;
 }
 
 .comments-label {
@@ -118,7 +118,9 @@ export default defineComponent({
   margin-bottom: 1rem;
   list-style: none;
   padding: 0;
+  padding-left: 1rem;
   max-width: 100%;
+  border-left: 1px solid var(--color-border-light);
 }
 
 .comment-item {
@@ -198,6 +200,12 @@ export default defineComponent({
   .send-button svg {
     width: 16px;
     height: 16px;
+  }
+}
+
+@media (max-width: px) {
+  .comments-list{
+      border-left: none;
   }
 }
 

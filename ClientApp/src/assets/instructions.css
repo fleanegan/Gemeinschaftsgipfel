@@ -13,6 +13,8 @@
     position: relative;
     margin-right: 0.25rem;
     margin-bottom: 0.25rem;
+    flex-shrink: 0;
+    max-width: 100%;
 }
 
 .instruction_card_content_header_title {

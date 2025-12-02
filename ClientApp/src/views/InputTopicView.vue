@@ -7,8 +7,29 @@
       <p v-if="isTitleEmpty" class="title-error">Der Titel muss zwischen 1 und 150 Zeichen lang sein</p>
     </div>
     <div class="form-group">
-      <label for="description">Details und benötigtes Material</label>
-      <input id="description" v-model="description" class="form-input"/>
+      <label for="category">Kategorie</label>
+      <select id="category" v-model="category" class="form-input" required>
+        <option value="" disabled selected>Bitte wähle eine Kategorie</option>
+        <option value="Workshop">Workshop</option>
+        <option value="Vortrag">Vortrag</option>
+        <option value="Sport">Sport</option>
+        <option value="Diskussion">Diskussion</option>
+        <option value="Sonstiges">Sonstiges</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="description">Beschreibung</label>
+      <textarea id="description" v-model="description" class="form-input" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="material">Benötigtes Material (optional)</label>
+      <textarea 
+        id="material" 
+        v-model="material" 
+        class="form-input"
+        placeholder="z.B. Laptop, Beamer, Flipchart..."
+        rows="2"
+      ></textarea>
     </div>
     <div class="form-group">
       <label for="presentationTimeInMinutes">Wie lange dauert dein Beitrag in etwa? Du musst die Zeit nicht ausfüllen.</label>
@@ -30,6 +51,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {topicService} from '@/services/api';
+import type {TopicCategory} from '@/types/TopicInterfaces';
 
 export default defineComponent({
   data() {
@@ -37,6 +59,8 @@ export default defineComponent({
       title: '',
       description: '',
       presentationTimeInMinutes: null as number | null,
+      category: '' as TopicCategory | '',
+      material: '' as string,
       legalDurations: [] as number[],
     };
   },
@@ -55,12 +79,16 @@ export default defineComponent({
             presentationTimeInMinutes: this.presentationTimeInMinutes ?? 0,
             description: this.description,
             id: this.$props["topicId"],
+            category: this.category || 'Sonstiges',
+            material: this.material,
           });
         } else {
           await topicService.createTopic({
             title: this.title,
             presentationTimeInMinutes: this.presentationTimeInMinutes ?? 0,
             description: this.description,
+            category: this.category || 'Sonstiges',
+            material: this.material,
           });
         }
 
@@ -89,6 +117,9 @@ export default defineComponent({
         this.title = existingTopic["title"];
         this.description = existingTopic["description"];
         this.presentationTimeInMinutes = existingTopic["presentationTimeInMinutes"];
+        // TODO: Remove dummy value when backend provides category/material
+        this.category = (existingTopic as any)["category"] || 'Sonstiges';
+        this.material = (existingTopic as any)["material"] || '';
       } catch (e) {
         console.error('Error loading existing topic:', e);
       }
