@@ -344,6 +344,7 @@ export default defineComponent({
 .topic-card-details {
     padding: 0.75rem;
     padding-left: 1rem;
+    padding-right: 1rem;
   }
 
 /* Layout container for side-by-side on desktop */
@@ -412,21 +413,20 @@ export default defineComponent({
 @media (min-width: 1200px) {
   .details-layout {
     flex-direction: row;
-    gap: 1.5rem;
+    gap: 0;
     align-items: flex-start;
   }
 
   .ride-info-container {
     flex: 1 1 45%;
     min-width: 0;
+    padding-right: 1rem;
   }
 
   .comments-sidebar {
     display: block;
     flex: 1 1 55%;
     min-width: 0;
-    padding-left: 1.5rem;
-    border-left: 1px solid var(--color-border-light);
   }
 
   .mobile-comments-button {
@@ -497,8 +497,6 @@ export default defineComponent({
 /* Notes section */
 .notes-section {
   margin-top: 0.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border-light);
 }
 
 .notes-label {
