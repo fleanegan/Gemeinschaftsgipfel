@@ -6,8 +6,11 @@
       </button>
     </div>
     <h1>Zeig uns was 'ne Harke ist!</h1>
-    <div class="instructions-wrapper">
-      <InstructionCards :instructions="instructions" />
+    <div class="instructions-formats-row">
+      <div class="instructions-wrapper">
+        <InstructionCards :instructions="instructions" />
+      </div>
+      <TopicTypeExplanationStack />
     </div>
     
     <div class="sections-container">
@@ -80,11 +83,12 @@ import TopicCard from "@/components/TopicCard.vue";
 import {formatDateTime} from '@/utils/dateFormatter';
 import {scrollToTopMixin} from '@/mixins/scrollToTop';
 import InstructionCards from '@/components/InstructionCards.vue';
+import TopicTypeExplanationStack from '@/components/TopicTypeExplanationStack.vue';
 import {topicService} from '@/services/api';
 
 
 export default defineComponent({
-  components: {TopicCard, InstructionCards},
+  components: {TopicCard, InstructionCards, TopicTypeExplanationStack},
   mixins: [scrollToTopMixin],
   data() {
     return {
@@ -254,6 +258,34 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 /* Constrain instruction cards width */
 .instructions-wrapper {
   max-width: 600px;
+}
+
+/* Instructions and format explanation row */
+.instructions-formats-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Desktop: Side-by-side layout */
+@media (min-width: 1200px) {
+  .instructions-formats-row {
+    flex-direction: row;
+    gap: 3rem;
+    align-items: flex-start;
+  }
+  
+  .instructions-formats-row .instructions-wrapper {
+    flex-shrink: 0;
+  }
+}
+
+/* Tablet: Stack with less gap */
+@media (min-width: 785px) and (max-width: 1199px) {
+  .instructions-formats-row {
+    gap: 1.5rem;
+  }
 }
 
 /* Sections container for side-by-side layout */
