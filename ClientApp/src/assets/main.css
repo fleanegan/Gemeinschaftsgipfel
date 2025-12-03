@@ -84,7 +84,7 @@ a,
 .routed-elements {
     width: 500px;
     max-width: 900px;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     z-index: 4;

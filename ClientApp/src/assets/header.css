@@ -7,13 +7,11 @@
     z-index: 999;
     background-color: rgba(255, 255, 255, 0);
     pointer-events: none;
+    transition: background-color 0.6s ease;
 }
 
-@media (max-width: 900px) {
-    .nav_header_sticky {
-        background-color: rgba(255, 255, 255, 90);
-        transition: background-color 0.6s ease;
-    }
+.nav_header.nav_header_sticky {
+    background-color: #ffffff;
 }
 
 .router-link {

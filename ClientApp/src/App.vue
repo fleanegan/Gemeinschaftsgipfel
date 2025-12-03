@@ -42,14 +42,18 @@ export default defineComponent({
       this.backgroundGradient = `linear-gradient(to bottom, #ffffff, #000000) 0% 0% / 100% ${contentHeight}`;
     }
   },
+  created() {
+    const currentRoute = useRoute();
+    this.isStandardPage = currentRoute.path !== '/';
+    watch(() => currentRoute.path, (newPath) => {
+      this.isStandardPage = newPath !== '/';
+    });
+  },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.updateBackgroundGradient);
-
-    const currentRoute = useRoute();
-    watch(currentRoute, (to, _) => {
-      this.isStandardPage = to.path !== '/';
-    });
+    // Set initial scroll state
+    this.handleScroll();
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -58,4 +62,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped src="./assets/header.css"></style>
+<style src="./assets/header.css"></style>
