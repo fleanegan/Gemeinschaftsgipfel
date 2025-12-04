@@ -19,7 +19,7 @@ public class TopicController(ITopicService service) : AbstractController
         {
             var result = await service.AddTopic(userInput, userName);
 
-            return Ok(new OwnTopicResponseModel(result.Id, result.Title, result.PresentationTimeInMinutes, result.Description, userName, 0));
+            return Ok(new OwnTopicResponseModel(result.Id, result.Title, result.PresentationTimeInMinutes, result.Description, userName, 0, result.Category, result.Material));
         }
         catch (Exception e)
         {
@@ -35,7 +35,7 @@ public class TopicController(ITopicService service) : AbstractController
         {
             var topicById = await service.GetTopicById(id);
             return Ok(new ForeignTopicResponseModel(topicById.Id, topicById.Title, topicById.PresentationTimeInMinutes, topicById.Description,
-                topicById.User.UserName, false));
+                topicById.User.UserName, false, topicById.Category, topicById.Material));
         }
         catch (TopicNotFoundException e)
         {
@@ -75,7 +75,7 @@ public class TopicController(ITopicService service) : AbstractController
         {
             var result = await service.UpdateTopic(userInput, userName);
             return Ok(new OwnTopicResponseModel(result.Id, result.Title, result.PresentationTimeInMinutes, result.Description, userName,
-                result.Votes.Count));
+                result.Votes.Count, result.Category, result.Material));
         }
         catch (TopicNotFoundException e)
         {

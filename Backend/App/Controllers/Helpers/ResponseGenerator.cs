@@ -9,7 +9,7 @@ public abstract class ResponseGenerator
     {
         return fetchAllExceptLoggedIn
             .Select(topic => new OwnTopicResponseModel(topic.Id, topic.Title, topic.PresentationTimeInMinutes, topic.Description, topic.User.UserName,
-                topic.Votes.Count))
+                topic.Votes.Count, topic.Category, topic.Material))
             .ToList();
     }
 
@@ -24,7 +24,9 @@ public abstract class ResponseGenerator
 		    topic.PresentationTimeInMinutes,
                     topic.Description,
                     topic.User.UserName,
-                    topic.Votes.Count(vote => vote.Voter.UserName.ToLower() == loggedInUserName.ToLower()) > 0
+                    topic.Votes.Count(vote => vote.Voter.UserName.ToLower() == loggedInUserName.ToLower()) > 0,
+                    topic.Category,
+                    topic.Material
                 )
             )
             .ToList();

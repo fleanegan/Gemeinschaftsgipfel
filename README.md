@@ -34,18 +34,19 @@ How to add and update SupportTasks
 -----
 - Create admin user (registering as user with username as set in `.env` file)
 - Obtain the auth-token e.g.:
-```curl -k POST https://localhost:8080/auth/login \
+```
+curl -k -X POST https://localhost:8888/auth/login \
 -H "Content-Type: application/json" \
 -d '{
-  "UserName": <ADMIN_USER_NAME>, 
-  "password":<admin password>
+  "UserName": "",
+  "password":""
 }'
 ```
 - Run the actual query e.g.:
 ```
-curl -k POST https://localhost:8080/supporttask/addnew \
--H "Content-Type: application/json" \
--H "Authorization: Bearer <your bearer key obtained earlier>" \ 
+curl -k POST https://localhost:8888/supporttask/addnew \
+-H "Content-Type: application/json" 
+-H "Authorization: Bearer <your bearer key obtained earlier>" 
 -d '{              
   "Title": "Sample Task",
   "Description": "This is a sample task description",

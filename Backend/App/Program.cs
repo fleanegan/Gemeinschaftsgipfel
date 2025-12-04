@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using Gemeinschaftsgipfel;
 using Gemeinschaftsgipfel.Models;
@@ -120,7 +121,11 @@ builder.Services.AddAuthentication(opt =>
             }
         };
     });
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddDbContext<DatabaseContextApplication>(options =>
 {
     var config = builder.Configuration;

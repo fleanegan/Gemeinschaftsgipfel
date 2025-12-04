@@ -20,4 +20,8 @@ public static class Constants
     public const string MissingPresentationTimeErrorMessage = "Gib an, wie lang der Vortrag geht.";
 
     public const int MaxLengthTopicCommentContent = 5000;
+
+    public const int MaxLengthMaterial = 500;
+    public const string MaxLengthMaterialErrorMessage = "Die Materialbeschreibung darf maximal {0} Zeichen lang sein.";
+    public const string MissingCategoryErrorMessage = "Bitte wähle eine Kategorie für deinen Vortrag.";
 }

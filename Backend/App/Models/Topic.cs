@@ -34,13 +34,19 @@ public class Topic
 
     [Required(ErrorMessage = Constants.MissingPresentationTimeErrorMessage)] public int PresentationTimeInMinutes { get; set; }
 
+    [Required(ErrorMessage = Constants.MissingCategoryErrorMessage)]
+    public TopicCategory Category { get; set; }
+
+    [StringLength(Constants.MaxLengthMaterial, ErrorMessage = Constants.MaxLengthMaterialErrorMessage)]
+    public string? Material { get; set; }
+
     [Required] public User User { get; init; }
 
     public ICollection<Vote> Votes { get; set; } = [];
 
-    public static Topic Create(string title, int presentationTimeInMinutes, string description, User user)
+    public static Topic Create(string title, int presentationTimeInMinutes, string description, TopicCategory category, string? material, User user)
     {
-        var model = new Topic { Title = title, Description = description, PresentationTimeInMinutes = presentationTimeInMinutes, User = user };
+        var model = new Topic { Title = title, Description = description, PresentationTimeInMinutes = presentationTimeInMinutes, Category = category, Material = material, User = user };
         Validator.ValidateObject(model, new ValidationContext(model), true);
         return model;
     }

@@ -117,7 +117,6 @@ export default defineComponent({
         this.title = existingTopic["title"];
         this.description = existingTopic["description"];
         this.presentationTimeInMinutes = existingTopic["presentationTimeInMinutes"];
-        // TODO: Remove dummy value when backend provides category/material
         this.category = (existingTopic as any)["category"] || 'Sonstiges';
         this.material = (existingTopic as any)["material"] || '';
       } catch (e) {

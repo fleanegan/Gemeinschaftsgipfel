@@ -26,7 +26,7 @@ public class TopicService(
         PreventForbiddenPresentationDurations(toBeAdded.PresentationTimeInMinutes);
         var user = await userManager.FindByNameAsync(userName);
         var newTopic = Topic.Create(toBeAdded.Title, toBeAdded.PresentationTimeInMinutes, toBeAdded.Description ?? "",
-            user!);
+            toBeAdded.Category, toBeAdded.Material, user!);
         return await topicRepository.Create(newTopic);
     }
 
@@ -42,6 +42,8 @@ public class TopicService(
         topicToChange.Title = updatedTopicCreationContent.Title;
         topicToChange.PresentationTimeInMinutes = updatedTopicCreationContent.PresentationTimeInMinutes;
         topicToChange.Description = updatedTopicCreationContent.Description ?? "";
+        topicToChange.Category = updatedTopicCreationContent.Category;
+        topicToChange.Material = updatedTopicCreationContent.Material;
         return await topicRepository.Update(topicToChange);
     }
 

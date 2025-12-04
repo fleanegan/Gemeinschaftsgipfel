@@ -1,33 +1,12 @@
 import apiClient from './client';
 import type { Comment, MyTopic, ForeignTopic, TopicCategory } from '@/types/TopicInterfaces';
 
-// TODO: Remove when backend provides category
-const CATEGORIES: TopicCategory[] = ['Workshop', 'Vortrag', 'Sport', 'Diskussion', 'Sonstiges'];
-function getRandomCategory(): TopicCategory {
-  return CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)]!;
-}
-
-// TODO: Remove when backend provides material
-const MATERIALS: string[] = [
-  'Laptop, Beamer',
-  'Flipchart, Stifte',
-  'Sportkleidung, Turnschuhe',
-  'Notizblock, Kugelschreiber',
-  'Musikanlage',
-  'Whiteboard, Marker',
-  '',  // Some topics have no material
-  '',
-];
-function getRandomMaterial(): string {
-  return MATERIALS[Math.floor(Math.random() * MATERIALS.length)]!;
-}
-
 export interface CreateTopicData {
   title: string;
   description: string;
   presentationTimeInMinutes: number;
-  category: TopicCategory | string;  // TODO: Remove string when backend supports category
-  material: string;                   // TODO: Remove when backend supports material
+  category: TopicCategory | string;
+  material: string;
 }
 
 export interface UpdateTopicData {
@@ -35,8 +14,8 @@ export interface UpdateTopicData {
   title: string;
   description: string;
   presentationTimeInMinutes: number;
-  category: TopicCategory | string;  // TODO: Remove string when backend supports category
-  material: string;                   // TODO: Remove when backend supports material
+  category: TopicCategory | string;
+  material: string;
 }
 
 export interface CommentData {
@@ -47,11 +26,8 @@ export interface CommentData {
 export const topicService = {
   async getMyTopics(): Promise<MyTopic[]> {
     const response = await apiClient.get<MyTopic[]>('/api/topic/allOfLoggedIn');
-    // TODO: Remove dummy values when backend provides category/material
     return response.data.map((topic: any) => ({
       ...topic,
-      category: topic.category || getRandomCategory(),
-      material: topic.material || getRandomMaterial(),
       expanded: false,
       comments: [],
       isLoading: false,
@@ -60,11 +36,8 @@ export const topicService = {
 
   async getForeignTopics(): Promise<ForeignTopic[]> {
     const response = await apiClient.get<ForeignTopic[]>('/api/topic/allExceptLoggedIn');
-    // TODO: Remove dummy values when backend provides category/material
     return response.data.map((topic: any) => ({
       ...topic,
-      category: topic.category || getRandomCategory(),
-      material: topic.material || getRandomMaterial(),
       expanded: false,
       comments: [],
       isLoading: false,
@@ -73,12 +46,7 @@ export const topicService = {
 
   async getTopic(id: string): Promise<MyTopic | ForeignTopic> {
     const response = await apiClient.get(`/api/topic/getone/${id}`);
-    // TODO: Remove dummy values when backend provides category/material
-    return {
-      ...response.data,
-      category: response.data.category || getRandomCategory(),
-      material: response.data.material || getRandomMaterial(),
-    };
+    return response.data;
   },
 
   async createTopic(data: CreateTopicData): Promise<void> {
