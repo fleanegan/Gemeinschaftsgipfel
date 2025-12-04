@@ -2,11 +2,18 @@
     display: flex;
     flex-direction: column;
     justify-items: center;
-    margin-bottom: 5rem;
+    margin-bottom: 1.5rem;
     height: fit-content;
     overflow-x: scroll;
     overflow-y: hidden;
     scrollbar-width: none;
+}
+
+/* Desktop: Larger bottom margin */
+@media (min-width: 1200px) {
+    .instruction_container {
+        margin-bottom: 5rem;
+    }
 }
 
 .instruction_card {

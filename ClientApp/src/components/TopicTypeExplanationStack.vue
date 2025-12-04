@@ -140,8 +140,8 @@ const baseFormats: { type: TopicType; title: string; description: string }[] = [
 ];
 
 // Card dimensions - Central definitions
-const STACK_CARD_HEIGHT = 215;
-const STACK_CARD_ASPECT_RATIO = 350 / STACK_CARD_HEIGHT;
+const STACK_CARD_HEIGHT = 280;
+const STACK_CARD_ASPECT_RATIO = 350 / 215; // Keep original aspect ratio
 const STACK_CARD_WIDTH = STACK_CARD_HEIGHT * STACK_CARD_ASPECT_RATIO; 
 
 // Expanded card dimensions - derived from stack dimensions

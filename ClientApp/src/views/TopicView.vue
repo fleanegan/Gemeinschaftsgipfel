@@ -264,11 +264,11 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 .instructions-formats-row {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-/* Desktop: Side-by-side layout */
+/* Desktop: Side-by-side layout with balanced flex sizing */
 @media (min-width: 1200px) {
   .instructions-formats-row {
     flex-direction: row;
@@ -277,7 +277,14 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   }
   
   .instructions-formats-row .instructions-wrapper {
-    flex-shrink: 0;
+    flex: 1 1 60%;
+    max-width: 600px;
+  }
+  
+  /* TopicTypeStack gets remaining space */
+  .instructions-formats-row > :last-child {
+    flex: 1 1 40%;
+    max-width: 500px;
   }
 }
 
