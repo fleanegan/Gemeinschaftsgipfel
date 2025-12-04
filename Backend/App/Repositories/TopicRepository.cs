@@ -59,6 +59,14 @@ public class TopicRepository(DatabaseContextApplication dbContext)
 
     public async Task Remove(Topic topicToDelete)
     {
+        // Remove related votes first to avoid foreign key constraint
+        var votes = dbContext.Votes.Where(v => v.Topic.Id == topicToDelete.Id);
+        dbContext.Votes.RemoveRange(votes);
+
+        // Remove related comments first to avoid foreign key constraint
+        var comments = dbContext.TopicComments.Where(c => c.Topic.Id == topicToDelete.Id);
+        dbContext.TopicComments.RemoveRange(comments);
+
         dbContext.Remove(topicToDelete);
         await dbContext.SaveChangesAsync();
     }
