@@ -1,48 +1,64 @@
 <template>
-  <div class="topic">
+  <div class="topic wide-content">
     <h1>Helfende Hände</h1>
-    <p class="support_description">Freiwillige vor! Wir haben ein paar Aufgaben gesammelt, bei denen wir Hilfe brauchen.
-      Mach
-      mit und schaff die letzten Hürden auf dem Weg zum Gemeinschaftsgipfel aus dem Weg. Keine Scheu, hier steht das
-      Vergnügen proportional zum Schweiß : Jeder Dienst wird in Dreiergruppen gestaltet, damit du auch bei diesem Teil
-      des Festivals immer von netten Menschen umgeben bist. Zur vergeben sind (oh ja, du darfst dich auch mehrmals
-      eintragen):</p>
-    <h2>Gruppenaufgaben</h2>
-    <p class="support_description">Hier zu helfen kostet nicht so viel Zeit und Energie, hilft aber ungemein</p>
-    <ul class="list">
-      <li v-for="(item, index) in groupSupportTasks" :key="index" class="card_scroll_container">
-        <SupportTaskCard
-          :task="item"
-          :taskList="groupSupportTasks"
-          :taskIndex="index"
-          :toggleSupporting="toggleSupporting"
-          :user-name="userName!"
-          @show-supporter="item.showSupporter=true"
-	  @hide-supporter="item.showSupporter=false"
-        />
-      </li>
-    </ul>
-    <h2><span style="font-weight: bold">NEU!</span> Hauptverantwortliche</h2>
-    <p class="support_description">Hierfür braucht es etwas Engagement, und der Ruhm wird ewig währen.
-      Zu Anfang des Festivals werden wir dich in Alles einweihen, was du wissen musst, damit du den spannenden Aufgaben
-      problemlos Herr wirst und dann in der Lage bist, alle anderen Teilnehmer:innen in allen Fragen rund um deine Verantwortlichkeit zu unterstützen.
-    </p>
-    <ul class="list">
-      <li v-for="(item, index) in singleSupportTasks" :key="index" class="card_scroll_container">
-        <SupportTaskCard
-          :task="item"
-          :taskList="singleSupportTasks"
-          :taskIndex="index"
-          :toggleSupporting="toggleSupporting"
-          :user-name="userName!"
-          @show-supporter="item.showSupporter=true"
-	  @hide-supporter="item.showSupporter=false"
-        />
-      </li>
-    </ul>
-    <div style="color: var(--main-color-secondary); margin: 1.5rem 0 0 1rem; font-size: small">{{allTheTaskNamesISubscribedTo.length ? "Da unterstützt du schon: " : " " }}</div>
-    <div style="background: var(--main-color-secondary); border: var(--main-color-secondary) .2rem solid; border-radius: .1rem; padding: 0 1rem 0 1rem; margin: .25rem 1.5rem 1rem 1rem; color: white">
-      {{allTheTaskNamesISubscribedTo.length? allTheTaskNamesISubscribedTo.join(",") : "Oha, du hast dich noch nirgendwo eingetragen"}}
+    <div class="instructions-wrapper">
+      <p class="support_description">Freiwillige vor! Wir haben ein paar Aufgaben gesammelt, bei denen wir Hilfe brauchen.
+        Mach
+        mit und schaff die letzten Hürden auf dem Weg zum Gemeinschaftsgipfel aus dem Weg. Keine Scheu, hier steht das
+        Vergnügen proportional zum Schweiß : Jeder Dienst wird in Dreiergruppen gestaltet, damit du auch bei diesem Teil
+        des Festivals immer von netten Menschen umgeben bist. Zur vergeben sind (oh ja, du darfst dich auch mehrmals
+        eintragen):</p>
+    </div>
+    
+    <div class="sections-container">
+      <!-- Left section: Gruppenaufgaben -->
+      <section class="support-section">
+        <h2>Gruppenaufgaben</h2>
+        <p class="support_description">Hier zu helfen kostet nicht so viel Zeit und Energie, hilft aber ungemein</p>
+        <ul class="list">
+          <li v-for="(item, index) in groupSupportTasks" :key="index" class="card_scroll_container">
+            <SupportTaskCard
+              :task="item"
+              :taskList="groupSupportTasks"
+              :taskIndex="index"
+              :toggleSupporting="toggleSupporting"
+              :user-name="userName!"
+              @show-supporter="item.showSupporter=true"
+              @hide-supporter="item.showSupporter=false"
+            />
+          </li>
+        </ul>
+      </section>
+      
+      <!-- Right section: Hauptverantwortliche -->
+      <section class="support-section">
+        <h2><span style="font-weight: bold">NEU!</span> Hauptverantwortliche</h2>
+        <p class="support_description">Hierfür braucht es etwas Engagement, und der Ruhm wird ewig währen.
+          Zu Anfang des Festivals werden wir dich in Alles einweihen, was du wissen musst, damit du den spannenden Aufgaben
+          problemlos Herr wirst und dann in der Lage bist, alle anderen Teilnehmer:innen in allen Fragen rund um deine Verantwortlichkeit zu unterstützen.
+        </p>
+        <ul class="list">
+          <li v-for="(item, index) in singleSupportTasks" :key="index" class="card_scroll_container">
+            <SupportTaskCard
+              :task="item"
+              :taskList="singleSupportTasks"
+              :taskIndex="index"
+              :toggleSupporting="toggleSupporting"
+              :user-name="userName!"
+              @show-supporter="item.showSupporter=true"
+              @hide-supporter="item.showSupporter=false"
+            />
+          </li>
+        </ul>
+      </section>
+    </div>
+    
+    <!-- Summary section: Subscribed tasks -->
+    <div class="summary-section">
+      <div class="summary-label">{{ allTheTaskNamesISubscribedTo.length ? "Da unterstützt du schon:" : "" }}</div>
+      <div class="summary-content">
+        {{ allTheTaskNamesISubscribedTo.length ? allTheTaskNamesISubscribedTo.join(", ") : "Oha, du hast dich noch nirgendwo eingetragen" }}
+      </div>
     </div>
   </div>
 </template>
@@ -118,15 +134,142 @@ export default defineComponent({
 });
 </script>
 
+<style>
+/* Override global .routed-elements width constraint */
+.routed-elements:has(.wide-content) {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+</style>
+
 <style scoped>
+.topic {
+  background-color: var(--color-background);
+}
+
+/* Wide content for support task page */
+.wide-content {
+  width: 100%;
+  padding: 0 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Small screens: Reduce horizontal padding */
+@media (max-width: 400px) {
+  .wide-content {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Constrain instructions wrapper width */
+.instructions-wrapper {
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
 .support_description {
-  margin: 1rem 2rem 1rem 1rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+}
+
+/* Sections container for side-by-side layout */
+.sections-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 100%;
+  overflow-x: hidden;
+  margin-bottom: 2rem;
+}
+
+.support-section {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Desktop: Sections side-by-side */
+@media (min-width: 1200px) {
+  .sections-container {
+    flex-direction: row;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  
+  .support-section {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+}
+
+.list {
+  background-color: var(--color-background-soft);
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 1rem 0 0 0;
+}
+
+/* Small screens: Reduce list padding */
+@media (max-width: 400px) {
+  .list {
+    padding: 0.5rem 0.5rem !important;
+    gap: 0.25rem !important;
+  }
+}
+
+.card_scroll_container {
+  list-style: none;
 }
 
 h2 {
-  margin-top: 3rem;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
 }
 
+/* Summary section */
+.summary-section {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--color-background-soft);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.summary-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-main-text);
+  opacity: 0.6;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.summary-content {
+  font-size: 0.9375rem;
+  color: var(--color-primary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  background-color: var(--color-nuance-light);
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin: 0;
+}
+
+/* Small screens: Reduce summary padding */
+@media (max-width: 400px) {
+  .summary-section {
+    padding: 0.75rem;
+  }
+}
 </style>
 <style scoped src="src/assets/topics.css"></style>
 <style scoped src="src/assets/instructions.css">
