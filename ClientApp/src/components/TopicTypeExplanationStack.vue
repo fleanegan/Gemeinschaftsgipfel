@@ -140,8 +140,8 @@ const baseFormats: { type: TopicType; title: string; description: string }[] = [
 ];
 
 // Card dimensions - Central definitions
-const STACK_CARD_HEIGHT = 280;
-const STACK_CARD_ASPECT_RATIO = 350 / 215; // Keep original aspect ratio
+const STACK_CARD_HEIGHT = 320;
+const STACK_CARD_ASPECT_RATIO = 600 / STACK_CARD_HEIGHT; // Keep original aspect ratio
 const STACK_CARD_WIDTH = STACK_CARD_HEIGHT * STACK_CARD_ASPECT_RATIO; 
 
 // Expanded card dimensions - derived from stack dimensions
@@ -430,7 +430,7 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   cursor: pointer;
-  margin-top: 1rem; /* Align with instruction card content (accounting for enumerator offset) */
+  margin-top: 0.5rem; /* Align with instruction card content (accounting for enumerator offset) */
 }
 
 /* Desktop: Size for compact stacked cards with some extra room for random offsets */
@@ -715,6 +715,37 @@ onUnmounted(() => {
   scroll-snap-align: center;
 }
 
+/* Mobile: smaller cards */
+@media (max-width: 500px) {
+  .is-mobile .format-card {
+    width: 280px;
+    height: 220px;
+    padding: 0.75rem;
+  }
+  
+  .is-mobile .format-card .card-title {
+    font-size: 0.85rem;
+  }
+  
+  .is-mobile .format-card .card-description {
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+  
+  .is-mobile .format-card .card-badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 380px) {
+  .is-mobile .format-card {
+    width: 240px;
+    height: 190px;
+  }
+}
+
 /* Mobile: show full description text */
 .is-mobile .format-card .card-description {
   -webkit-line-clamp: unset;
@@ -794,7 +825,7 @@ onUnmounted(() => {
 /* Hint text below the stack */
 .stack-hint {
   position: absolute;
-  bottom: -24px;
+  bottom: -32px;
   left: 0;
   font-size: 0.75rem;
   color: var(--color-main-text);

@@ -292,6 +292,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 @media (min-width: 785px) and (max-width: 1199px) {
   .instructions-formats-row {
     gap: 1.5rem;
+    padding-bottom: 2rem;
   }
 }
 
