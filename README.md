@@ -3,7 +3,19 @@ How to build and start the application
 1. Rename the .env-example to .env and modify according to your needs
     -> important is at least the ip address of the server
 2. Get ssl certificates and place them in a folder named ssl in the ClientApp (./ClientApp/ssl/my-site.crt && ./ClientApp/ssl/my-site.key) -> the file names must be exactly the same.
-3. run docker compose up --build
+3. Add required photos to `./ClientApp/public/photos/` (see "Required Photos" section below)
+4. run docker compose up --build
+
+Required Photos
+-----
+The application requires the following photos to be placed in `./ClientApp/public/photos/`:
+- `workshop.jpg` - Image for Workshop topic type
+- `presentation.png` - Image for Vortrag (Presentation) topic type
+- `sport.jpg` - Image for Sport topic type
+- `discussion.jpg` - Image for Diskussion (Discussion) topic type
+- `misc.jpg` - Image for Sonstiges (Other) topic type
+
+These images are used in the topic type explanation cards. If any photos are missing, the corresponding cards will not display a background image.
 
 Prepare running the app for the first time in dev mode
 -----
