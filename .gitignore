@@ -2,6 +2,7 @@ bin/
 obj/
 /packages/
 /ClientApp/public/schedule.svg
+/ClientApp/public/photos/
 riderModule.iml
 /_ReSharper.Caches/
 .idea/

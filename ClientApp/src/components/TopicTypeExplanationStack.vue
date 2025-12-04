@@ -21,10 +21,15 @@
         :class="`format-${format.type.toLowerCase()}`"
         :style="{ opacity: cardOpacities[index] }"
       >
-        <div class="card-circle" :style="{ backgroundColor: `var(--category-${format.type.toLowerCase()}-text)` }"></div>
-        <span class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
-        <h3 class="card-title">{{ format.title }}</h3>
-        <p class="card-description">{{ format.description }}</p>
+        <div class="card-background">
+          <img :src="format.photo" :alt="format.type" />
+        </div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <span class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
+          <h3 class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
+          <p class="card-description">{{ format.description }}</p>
+        </div>
       </div>
     </div>
 
@@ -37,10 +42,15 @@
         :class="`format-${format.type.toLowerCase()}`"
         :style="getStackedCardStyle(index)"
       >
-        <div class="card-circle" :style="{ backgroundColor: `var(--category-${format.type.toLowerCase()}-text)` }"></div>
-        <span class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
-        <h3 class="card-title">{{ format.title }}</h3>
-        <p class="card-description">{{ format.description }}</p>
+        <div class="card-background">
+          <img :src="format.photo" :alt="format.type" />
+        </div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <span class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
+          <h3 class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
+          <p class="card-description">{{ format.description }}</p>
+        </div>
       </div>
     </div>
     
@@ -68,10 +78,15 @@
           :style="getExpandedCardStyle(index)"
           @click.stop
         >
-          <div class="card-circle" :style="{ backgroundColor: `var(--category-${format.type.toLowerCase()}-text)` }"></div>
-          <span class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
-          <h3 class="card-title">{{ format.title }}</h3>
-          <p class="card-description">{{ format.description }}</p>
+          <div class="card-background">
+            <img :src="format.photo" :alt="format.type" />
+          </div>
+          <div class="card-overlay"></div>
+          <div class="card-content">
+            <span class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
+            <h3 class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
+            <p class="card-description">{{ format.description }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -87,6 +102,7 @@ interface FormatInfo {
   type: TopicType;
   title: string;
   description: string;
+  photo: string;
   // Random offsets for messy stack effect (seeded per card)
   offsetX: number;
   offsetY: number;
@@ -99,6 +115,15 @@ function seededRandom(seed: number): number {
   return x - Math.floor(x);
 }
 
+// Photo mapping for each topic type
+const photoMap: Record<TopicType, string> = {
+  'Workshop': '/photos/workshop.jpg',
+  'Vortrag': '/photos/presentation.png',
+  'Sport': '/photos/sport.jpg',
+  'Diskussion': '/photos/discussion.jpg',
+  'Sonstiges': '/photos/misc.jpg',
+};
+
 const baseFormats: { type: TopicType; title: string; description: string }[] = [
   { type: 'Workshop', title: 'Mitmach-Session', description: 'Interaktive Sessions zum gemeinsamen Lernen und Ausprobieren.' },
   { type: 'Vortrag', title: 'Präsentation', description: 'Klassische Vorträge zu spannenden Themen.' },
@@ -108,13 +133,15 @@ const baseFormats: { type: TopicType; title: string; description: string }[] = [
 ];
 
 const formats: FormatInfo[] = baseFormats.map((format, index) => {
+  const photo = photoMap[format.type];
   // Generate random offsets for each card (except the top one which stays neat)
   if (index === 0) {
-    return { ...format, offsetX: 0, offsetY: 0, rotation: 0 };
+    return { ...format, photo, offsetX: 0, offsetY: 0, rotation: 0 };
   }
   const seed = index * 42; // Consistent seed per card
   return {
     ...format,
+    photo,
     offsetX: (seededRandom(seed) - 0.5) * 16, // -8 to +8 px
     offsetY: (seededRandom(seed + 1) - 0.5) * 12, // -6 to +6 px
     rotation: (seededRandom(seed + 2) - 0.5) * 8, // -4 to +4 degrees
@@ -134,8 +161,8 @@ const cardOpacities = ref<number[]>([1, 1, 1, 1, 1]);
 const stackPosition = ref({ x: 0, y: 0 });
 
 // Stacked card dimensions (small)
-const STACK_CARD_WIDTH = 260;
-const STACK_CARD_HEIGHT = 160;
+const STACK_CARD_WIDTH = 280;
+const STACK_CARD_HEIGHT = 140;
 
 const MOBILE_BREAKPOINT = 785;
 
@@ -166,8 +193,8 @@ const expandedCardSize = computed(() => {
   const availableHeight = vh - paddingY;
   const maxHeightFromViewport = (availableHeight - gap * (rows - 1)) / rows;
   
-  // Maintain aspect ratio (380:240 = 1.583)
-  const aspectRatio = 380 / 240;
+  // Maintain aspect ratio (380:200 = 1.9)
+  const aspectRatio = 380 / 200;
   
   // Start with width-based calculation
   let cardWidth = maxWidthFromViewport;
@@ -180,8 +207,8 @@ const expandedCardSize = computed(() => {
   }
   
   // Apply reasonable min/max constraints
-  cardWidth = Math.min(Math.max(cardWidth, 200), 500);
-  cardHeight = Math.min(Math.max(cardHeight, 125), 320);
+  cardWidth = Math.min(Math.max(cardWidth, 240), 500);
+  cardHeight = Math.min(Math.max(cardHeight, 130), 280);
   
   return { width: cardWidth, height: cardHeight, gap, columns, rows };
 });
@@ -205,14 +232,10 @@ function getStackedCardStyle(index: number): Record<string, string | number> {
   const totalOffsetY = index * BASE_OFFSET_Y + format.offsetY;
   const rotation = format.rotation;
   
-  // Subtle blur increase per layer (except top card)
-  const blurAmount = index > 0 ? 0.3 + index * 0.4 : 0;
-  
   return {
     position: 'absolute',
     transform: `translate(${totalOffsetX}px, ${totalOffsetY}px) rotate(${rotation}deg)`,
     zIndex: formats.length - index,
-    filter: blurAmount > 0 ? `blur(${blurAmount}px)` : 'none',
     opacity: index === 0 ? 1 : Math.max(0.5, 1 - index * 0.12),
   };
 }
@@ -370,8 +393,8 @@ onUnmounted(() => {
 
 /* Desktop: Size for compact stacked cards with some extra room for random offsets */
 .stack-container:not(.is-mobile) {
-  width: calc(260px + 20px); /* Card width + buffer for random offsets */
-  height: calc(160px + 20px); /* Card height + buffer for random offsets */
+  width: calc(280px + 20px); /* Card width + buffer for random offsets */
+  height: calc(140px + 20px); /* Card height + buffer for random offsets */
   min-width: 0;
 }
 
@@ -395,8 +418,8 @@ onUnmounted(() => {
   position: relative;
   margin-left: 8px;
   margin-top: 8px;
-  width: 260px;
-  height: 160px;
+  width: 280px;
+  height: 140px;
 }
 
 /* Fullscreen overlay */
@@ -434,7 +457,7 @@ onUnmounted(() => {
 /* CSS Grid for expanded cards */
 .expanded-grid {
   --grid-card-width: 380px;
-  --grid-card-height: 240px;
+  --grid-card-height: 200px;
   --grid-gap: 24px;
   --grid-columns: 3;
   --grid-rows: 2;
@@ -477,7 +500,7 @@ onUnmounted(() => {
   --offset-y: 0px;
   --card-delay: 0s;
   --card-width: 380px;
-  --card-height: 240px;
+  --card-height: 200px;
   
   width: var(--card-width) !important;
   height: var(--card-height) !important;
@@ -510,40 +533,65 @@ onUnmounted(() => {
   }
 }
 
-/* Individual card styling */
+/* Individual card styling - full background photo design */
 .format-card {
-  width: 260px;
-  height: 160px;
+  width: 280px;
+  height: 140px;
   flex-shrink: 0;
-  background-color: var(--color-nuance-light);
   border: 1px solid var(--color-border-light);
   border-radius: 6px;
   padding: 1rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Full-card background photo */
+.card-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.card-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Semi-transparent overlay for text readability */
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0.1) 100%);
+  z-index: 1;
+}
+
+/* Card content (overlaid on photo) */
+.card-content {
+  display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 0.4rem;
-  transition: transform 0.4s ease, opacity 0.3s ease, filter 0.4s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  gap: 0.35rem;
+  position: relative;
+  z-index: 2;
 }
 
-/* Stacked cards have subtle shadow for depth */
-.format-card.is-stacked {
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-}
-
-/* Expanded cards have stronger shadow and larger size */
+/* Expanded cards have more space */
 .format-card.expanded-card {
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
   cursor: default;
   padding: 1.25rem;
-  gap: 0.5rem;
-}
-
-.format-card.expanded-card .card-circle {
-  width: 48px;
-  height: 48px;
 }
 
 .format-card.expanded-card .card-badge {
@@ -565,14 +613,6 @@ onUnmounted(() => {
 /* Mobile: scroll snap */
 .is-mobile .format-card {
   scroll-snap-align: start;
-}
-
-/* Colored circle placeholder */
-.card-circle {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  flex-shrink: 0;
 }
 
 /* Type badge - pill style matching existing category badges */
@@ -611,18 +651,27 @@ onUnmounted(() => {
   color: var(--category-sonstiges-text);
 }
 
-/* Card title */
+/* Card title - color white for visibility on photos */
 .card-title {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--color-primary);
   margin: 0;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.card-title.title-workshop,
+.card-title.title-vortrag,
+.card-title.title-sport,
+.card-title.title-diskussion,
+.card-title.title-sonstiges {
+  color: white;
 }
 
 /* Card description */
 .card-description {
   font-size: 0.8rem;
-  color: var(--color-main-text);
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.4;
   margin: 0;
   overflow: hidden;
@@ -631,6 +680,7 @@ onUnmounted(() => {
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Hint text below the stack */
