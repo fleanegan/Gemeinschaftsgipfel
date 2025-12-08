@@ -242,7 +242,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 /* Wide content for topic page only */
 .wide-content {
   width: 100%;
-  padding: 0 2rem;
+  padding: 0 var(--space-xl);
   max-width: 100%;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -251,7 +251,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 /* Small screens: Reduce horizontal padding */
 @media (max-width: 400px) {
   .wide-content {
-    padding: 0 0.5rem;
+    padding: 0 var(--space-sm);
   }
 }
 
@@ -264,8 +264,8 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 .instructions-formats-row {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
 }
 
 /* Desktop: Side-by-side layout with balanced flex sizing */
@@ -300,7 +300,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 .sections-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--space-xl);
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -316,7 +316,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 @media (min-width: 1200px) {
   .sections-container {
     flex-direction: row;
-    gap: 2rem;
+    gap: var(--space-xl);
     align-items: flex-start;
   }
   
@@ -328,11 +328,11 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 
 .list {
   background-color: var(--color-background-soft);
-  padding: 1rem;
-  border-radius: 6px;
+  padding: var(--space-md);
+  border-radius: var(--radius-none);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-sm);
   list-style: none;
   margin: 0;
 }
@@ -340,37 +340,37 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 /* Small screens: Reduce list padding */
 @media (max-width: 400px) {
   .list {
-    padding: 0.5rem 0.5rem !important;
-    gap: 0.25rem !important;
+    padding: var(--space-sm) var(--space-sm) !important;
+    gap: var(--space-xs) !important;
   }
 }
 
 .list-end-message {
   text-align: center;
-  padding: 1rem;
+  padding: var(--space-md);
   color: var(--color-main-text);
   opacity: 0.7;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 /* Info rows for presenter slot */
 .info-row {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-xs);
 }
 
 .info-label {
-  font-size: 0.6875rem;
-  font-weight: 600;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
   opacity: 0.6;
 }
 
 .info-value {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
   color: var(--color-primary);
 }
 
@@ -379,7 +379,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   cursor: pointer;
   background: none;
   border-style: none;
-  border-radius: 0.2rem;
+  border-radius: var(--radius-interactive);
   font-weight: bold;
   display: flex;
   place-items: center;
@@ -390,11 +390,11 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   flex-direction: row;
   align-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
 }
 
 .topic_card_details_owner_actions button {
-  margin-left: 0.5rem;
+  margin-left: var(--space-sm);
 }
 
 .my-topics-add-button-container {

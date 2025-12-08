@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     justify-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-lg);
     height: fit-content;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -12,31 +12,31 @@
 /* Desktop: Larger bottom margin */
 @media (min-width: 1200px) {
     .instruction_container {
-        margin-bottom: 5rem;
+        margin-bottom: var(--space-xl);
     }
 }
 
 .instruction_card {
     position: relative;
-    margin-right: 0.25rem;
-    margin-bottom: 0.25rem;
+    margin-right: 0;
+    margin-bottom: var(--space-xs);
     flex-shrink: 0;
     max-width: 100%;
 }
 
 .instruction_card_content_header_title {
-    font-size: 1.15rem;
+    font-size: var(--text-lg);
     font-stretch: extra-expanded;
 }
 
 .instruction_card_content {
-    margin-left: 0.25rem;
-    margin-top: 1rem;
-    padding-right: 0.25rem;
-    padding-left: 0.5rem;
+    margin-left: 0;
+    margin-top: var(--space-md);
+    padding-right: var(--space-xs);
+    padding-left: var(--space-sm);
     border-style: solid;
-    border-radius: 0.2rem;
-    font-size: 0.9rem;
+    border-radius: var(--radius-none);
+    font-size: var(--text-sm);
     height: 100%;
     border-color: var(--color-primary);
 }
@@ -49,11 +49,11 @@
     width: 3rem;
     background-color: var(--color-primary);
     border: 0.2rem;
-    border-radius: 3rem;
+    border-radius: var(--radius-pill);
     border-style: solid;
     border-color: var(--color-background);
     color: var(--color-background);
-    font-size: 1.5rem;
-    font-weight: normal;
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-normal);
     text-align: center;
 }

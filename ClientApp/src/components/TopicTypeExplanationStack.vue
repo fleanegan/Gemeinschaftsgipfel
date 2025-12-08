@@ -430,7 +430,7 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   cursor: pointer;
-  margin-top: 0.5rem; /* Align with instruction card content (accounting for enumerator offset) */
+  margin-top: var(--space-sm); /* Align with instruction card content (accounting for enumerator offset) */
 }
 
 /* Desktop: Size for compact stacked cards with some extra room for random offsets */
@@ -443,25 +443,25 @@ onUnmounted(() => {
 /* Mobile scroll container */
 .scroll-container {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-sm);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding: 0.5rem 0;
+  padding: var(--space-sm) 0;
   /* Break out of parent .wide-content padding to reach screen edges */
-  margin-left: -2rem;
-  margin-right: -2rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  margin-left: calc(-1 * var(--space-xl));
+  margin-right: calc(-1 * var(--space-xl));
+  padding-left: var(--space-xl);
+  padding-right: var(--space-xl);
 }
 
 @media (max-width: 400px) {
   .scroll-container {
-    margin-left: -0.5rem;
-    margin-right: -0.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    margin-left: calc(-1 * var(--space-sm));
+    margin-right: calc(-1 * var(--space-sm));
+    padding-left: var(--space-sm);
+    padding-right: var(--space-sm);
   }
 }
 
@@ -486,7 +486,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   background-color: var(--color-border-light);
-  border-radius: 6px;
+  border-radius: var(--radius-none);
   opacity: 0.5;
 }
 
@@ -586,8 +586,8 @@ onUnmounted(() => {
   height: calc(v-bind(STACK_CARD_HEIGHT) * 1px);
   flex-shrink: 0;
   border: 1px solid var(--color-border-light);
-  border-radius: 6px;
-  padding: 1rem;
+  border-radius: var(--radius-none);
+  padding: var(--space-md);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -683,7 +683,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.35rem;
+  gap: var(--space-xs);
   position: relative;
   z-index: 2;
 }
@@ -691,20 +691,20 @@ onUnmounted(() => {
 /* Expanded cards have more space */
 .format-card.expanded-card {
   cursor: default;
-  padding: 1.25rem;
+  padding: var(--space-lg);
 }
 
 .format-card.expanded-card .card-badge {
-  padding: 0.25rem 0.6rem;
-  font-size: 0.8rem;
+  padding: var(--space-xs) 0.6rem;
+  font-size: var(--text-sm);
 }
 
 .format-card.expanded-card .card-title {
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
 }
 
 .format-card.expanded-card .card-description {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   line-height: 1.4;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -720,21 +720,21 @@ onUnmounted(() => {
   .is-mobile .format-card {
     width: 280px;
     height: 220px;
-    padding: 0.75rem;
+    padding: var(--space-sm);
   }
   
   .is-mobile .format-card .card-title {
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
   }
   
   .is-mobile .format-card .card-description {
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
     line-height: 1.35;
   }
   
   .is-mobile .format-card .card-badge {
     font-size: 0.65rem;
-    padding: 0.15rem 0.4rem;
+    padding: 0.15rem var(--space-xs);
   }
 }
 
@@ -758,10 +758,10 @@ onUnmounted(() => {
 .card-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.2rem 0.5rem;
-  border-radius: 10px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  padding: 0.2rem var(--space-sm);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
   white-space: nowrap;
 }
 
@@ -792,8 +792,8 @@ onUnmounted(() => {
 
 /* Card title - color white for visibility on photos */
 .card-title {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
   margin: 0;
   color: white;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
@@ -809,7 +809,7 @@ onUnmounted(() => {
 
 /* Card description */
 .card-description {
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.95);
   line-height: 1.4;
   margin: 0;
@@ -827,7 +827,7 @@ onUnmounted(() => {
   position: absolute;
   bottom: -32px;
   left: 0;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   color: var(--color-main-text);
   opacity: 0.6;
   transition: opacity 0.3s ease;

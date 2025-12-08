@@ -121,8 +121,8 @@ export default defineComponent({
 /* Card container */
 .card_scroll_container {
   background-color: var(--color-nuance-light);
-  border-radius: 6px;
-  margin-bottom: 0.75rem;
+  border-radius: var(--radius-none);
+  margin-bottom: var(--space-sm);
   overflow: hidden;
   width: 100%;
   max-width: 100%;
@@ -132,11 +132,11 @@ export default defineComponent({
 }
 
 .most_liked_hint {
-  margin-left: 1.5rem;
-  margin-top: 0.5rem;
+  margin-left: var(--space-lg);
+  margin-top: var(--space-sm);
   background-color: var(--color-secondary);
-  border-top-left-radius: 0.2rem;
-  border-top-right-radius: 0.2rem;
+  border-top-left-radius: var(--radius-interactive);
+  border-top-right-radius: var(--radius-interactive);
   width: 12rem;
   height: 2rem;
   text-align: center;
@@ -145,14 +145,14 @@ export default defineComponent({
 
 /* Header section */
 .topic_card_header {
-  padding: 1rem;
+  padding: var(--space-md);
   background-color: var(--color-background);
   border-left: none;
   min-height: auto;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -165,8 +165,8 @@ export default defineComponent({
 
 /* Header title */
 .header-title {
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-base);
   color: var(--color-primary);
   margin: 0;
   padding: 0;
@@ -179,7 +179,7 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.25rem;
+  gap: var(--space-xs);
 }
 
 /* Details badges row */
@@ -187,9 +187,9 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   flex-wrap: wrap;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-sm);
 }
 
 /* Expand/collapse button with plus/minus */
@@ -200,7 +200,7 @@ export default defineComponent({
   width: 2rem;
   height: 2rem;
   padding: 0;
-  border-radius: 4px;
+  border-radius: var(--radius-interactive);
   background-color: var(--color-nuance-light);
   transition: background-color 0.2s ease;
   cursor: pointer;
@@ -212,7 +212,7 @@ export default defineComponent({
 }
 
 .expand-icon {
-  font-size: 1.5rem;
+  font-size: var(--text-lg);
   font-weight: 300;
   color: var(--color-main-text);
   line-height: 1;
@@ -223,10 +223,10 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem 0.625rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: var(--space-xs) 0.625rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
   white-space: nowrap;
   line-height: 1.2;
   /* Default fallback colors */
@@ -264,10 +264,10 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
   background-color: var(--color-nuance-light);
   color: var(--color-main-text);
   white-space: nowrap;
@@ -276,7 +276,7 @@ export default defineComponent({
 
 /* Details section */
 .topic-card-details {
-  padding: 1rem;
+  padding: var(--space-md);
   background-color: var(--color-background);
   width: 100%;
   max-width: 100%;
@@ -296,7 +296,7 @@ export default defineComponent({
 .topic-info-container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-md);
   width: 100%;
   min-width: 0;
 }
@@ -305,46 +305,46 @@ export default defineComponent({
 .info-row {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-xs);
 }
 
 .info-label {
-  font-size: 0.6875rem;
-  font-weight: 600;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
   opacity: 0.6;
 }
 
 .info-value {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
   color: var(--color-primary);
 }
 
 /* Notes/Description section */
 .notes-section {
-  margin-top: 0.5rem;
+  margin-top: var(--space-sm);
 }
 
 .notes-label {
   display: block;
-  font-size: 0.6875rem;
-  font-weight: 600;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
   opacity: 0.6;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-sm);
 }
 
 .notes-content {
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
   color: var(--color-primary);
   line-height: 1.6;
   white-space: pre-wrap;
   background-color: var(--color-nuance-light);
   padding-right: 0;
-  border-radius: 4px;
+  border-radius: var(--radius-interactive);
   margin: 0;
 }
 
@@ -357,16 +357,16 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   width: 100%;
-  margin-top: 1rem;
-  padding: 0.875rem;
+  margin-top: var(--space-md);
+  padding: var(--space-sm);
   background-color: var(--color-nuance-light);
   border: 1px solid var(--color-border-light);
-  border-radius: 6px;
+  border-radius: var(--radius-interactive);
   cursor: pointer;
-  font-size: 0.9375rem;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
   color: var(--color-primary);
   transition: background-color 0.2s ease;
 }
@@ -379,14 +379,14 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.5rem;
-  height: 1.5rem;
+  min-width: var(--space-lg);
+  height: var(--space-lg);
   padding: 0 0.375rem;
   background-color: var(--color-primary);
   color: var(--color-background);
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Action button styling */
@@ -394,7 +394,7 @@ export default defineComponent({
   cursor: pointer;
   background: none;
   border-style: none;
-  border-radius: 0.2rem;
+  border-radius: var(--radius-interactive);
   font-weight: bold;
   display: flex;
   place-items: center;
@@ -404,7 +404,7 @@ export default defineComponent({
 @media (min-width: 785px) {
   .details-layout {
     flex-direction: row;
-    gap: 1rem;
+    gap: var(--space-md);
     align-items: flex-start;
   }
 
