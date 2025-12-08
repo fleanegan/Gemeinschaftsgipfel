@@ -57,12 +57,12 @@ own variables
     --space-xl: 2rem;      /* 32px */
 
     /* Border radius
-       - none: containers, cards, sections (static content)
+       - sharp: containers, cards, sections (static content) - subtle edge
        - interactive: buttons, inputs, clickable controls
        - pill: badges, tags, counts
     */
-    --radius-none: 0;
-    --radius-interactive: 4px;
+    --radius-sharp: 0.3rem;
+    --radius-interactive: 0.5rem;
     --radius-pill: 999px;
 
     /* Typography scale */

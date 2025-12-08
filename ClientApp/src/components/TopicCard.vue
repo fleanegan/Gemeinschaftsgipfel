@@ -121,7 +121,7 @@ export default defineComponent({
 /* Card container */
 .card_scroll_container {
   background-color: var(--color-nuance-light);
-  border-radius: var(--radius-none);
+  border-radius: var(--radius-sharp);
   margin-bottom: var(--space-sm);
   overflow: hidden;
   width: 100%;
@@ -159,7 +159,7 @@ export default defineComponent({
 
 /*do not delete*/
 .most_liked_highlight {
-  border-radius: 1rem;
+  border-radius: var(--radius-sharp);
   border: .25rem solid var(--color-secondary);
 }
 
@@ -172,6 +172,8 @@ export default defineComponent({
   padding: 0;
   flex: 1;
   min-width: 0;
+  display: flex;
+  align-items: center;
 }
 
 /* Header actions container (edit/delete/vote buttons) */
@@ -309,7 +311,7 @@ export default defineComponent({
 }
 
 .info-label {
-  font-size: var(--text-xs);
+  font-size: 0.6875rem;
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
@@ -317,9 +319,14 @@ export default defineComponent({
 }
 
 .info-value {
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--text-sm);
   color: var(--color-primary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  background-color: var(--color-nuance-light);
+  padding-right: 0;
+  border-radius: var(--radius-interactive);
+  margin: 0;
 }
 
 /* Notes/Description section */
@@ -328,13 +335,11 @@ export default defineComponent({
 }
 
 .notes-label {
-  display: block;
-  font-size: var(--text-xs);
+  font-size: 0.6875rem;
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
   opacity: 0.6;
-  margin-bottom: var(--space-sm);
 }
 
 .notes-content {

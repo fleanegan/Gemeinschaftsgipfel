@@ -25,7 +25,7 @@
 }
 
 .instruction_card_content_header_title {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     font-stretch: extra-expanded;
 }
 
@@ -35,7 +35,7 @@
     padding-right: 0.25rem;
     padding-left: 0.5rem;
     border-style: solid;
-    border-radius: var(--radius-none);
+    border-radius: var(--radius-sharp);
     font-size: var(--text-sm);
     height: 100%;
     border-color: var(--color-primary);

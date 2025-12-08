@@ -40,13 +40,13 @@
         </ul>
         <hr>
         <div id="owner_action" class="my-topics-add-button-container">
-          <button class="submit-button" @click="addNewTopic">Neue Idee?</button>
+          <button class="submit-button" @click="addNewTopic">Neuer Vorschlag</button>
         </div>
       </section>
       
-      <!-- Right section: Ideen der Anderen -->
+      <!-- Right section: Vorschläge der Anderen -->
       <section class="topic-section">
-        <h2>Ideen der Anderen</h2>
+        <h2>Vorschläge der Anderen</h2>
         <ul class="list">
           <TopicCard
               v-for="(item, index) in foreignTopics"
@@ -267,6 +267,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 /* Constrain instruction cards width */
 .instructions-wrapper {
   max-width: 600px;
+  margin-left: -0.25rem;
 }
 
 /* Instructions and format explanation row */
@@ -338,7 +339,7 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 .list {
   background-color: var(--color-background-soft);
   padding: var(--space-md);
-  border-radius: var(--radius-none);
+  border-radius: var(--radius-sharp);
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);

@@ -3,7 +3,7 @@
   <header :class="{'nav_header': true, 'nav_header_sticky': isSticky && isStandardPage}">
     <nav class="nav-links">
       <router-link v-if="isStandardPage" class="router-link" to="/"><img alt="Home" src="/icon.svg"
-                                                                         style="width: 6rem; height: 6rem; max-height: 48px; max-width: 48px;">
+                                                                         style="width: 6rem; height: 6rem; max-height: 4rem; max-width: 4rem;">
       </router-link>
       <div class="transparent-header-area"></div>
       <router-link :class="{'router-link': true, 'headerless': !isStandardPage}" to="/topic">Inhalte

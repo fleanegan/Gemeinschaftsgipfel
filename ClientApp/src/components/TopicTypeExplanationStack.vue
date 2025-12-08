@@ -18,16 +18,16 @@
         v-for="(format, index) in formats"
         :key="format.type"
         class="format-card"
-        :class="[`format-${format.type.toLowerCase()}`, { 'no-background': !format.photo }]"
+        :class="[`format-${format.type.toLowerCase()}`, { 'no-background': !isImageLoaded(format.photo) }]"
         :style="{ opacity: cardOpacities[index] }"
       >
-        <div v-if="format.photo" class="card-background">
+        <div v-if="isImageLoaded(format.photo)" class="card-background">
           <img :src="format.photo" :alt="format.type" />
         </div>
-        <div v-if="format.photo" class="card-overlay"></div>
+        <div v-if="isImageLoaded(format.photo)" class="card-overlay"></div>
         <div class="card-content">
           <span v-if="format.type !== 'Explanation'" class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
-          <h3 class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
+          <h3 v-if="format.type === 'Explanation'" class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
           <p class="card-description">{{ format.description }}</p>
         </div>
       </div>
@@ -44,16 +44,16 @@
         v-show="!isExpanded"
         :key="format.type"
         class="format-card is-stacked"
-        :class="[`format-${format.type.toLowerCase()}`, { 'no-background': !format.photo, 'is-wiggling': isHovering }]"
+        :class="[`format-${format.type.toLowerCase()}`, { 'no-background': !isImageLoaded(format.photo), 'is-wiggling': isHovering }]"
         :style="getStackedCardStyle(index)"
       >
-        <div v-if="format.photo" class="card-background">
+        <div v-if="isImageLoaded(format.photo)" class="card-background">
           <img :src="format.photo" :alt="format.type" />
         </div>
-        <div v-if="format.photo" class="card-overlay"></div>
+        <div v-if="isImageLoaded(format.photo)" class="card-overlay"></div>
         <div class="card-content">
           <span v-if="format.type !== 'Explanation'" class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
-          <h3 class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
+          <h3 v-if="format.type === 'Explanation'" class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
           <p class="card-description">{{ format.description }}</p>
         </div>
       </div>
@@ -79,17 +79,17 @@
           v-for="(format, index) in formats"
           :key="format.type"
           class="format-card expanded-card"
-          :class="[`format-${format.type.toLowerCase()}`, { 'no-background': !format.photo }]"
+          :class="[`format-${format.type.toLowerCase()}`, { 'no-background': !isImageLoaded(format.photo) }]"
           :style="getExpandedCardStyle(index)"
           @click.stop
         >
-          <div v-if="format.photo" class="card-background">
+          <div v-if="isImageLoaded(format.photo)" class="card-background">
             <img :src="format.photo" :alt="format.type" />
           </div>
-          <div v-if="format.photo" class="card-overlay"></div>
+          <div v-if="isImageLoaded(format.photo)" class="card-overlay"></div>
           <div class="card-content">
             <span v-if="format.type !== 'Explanation'" class="card-badge" :class="`category-${format.type.toLowerCase()}`">{{ format.type }}</span>
-            <h3 class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
+            <h3 v-if="format.type === 'Explanation'" class="card-title" :class="`title-${format.type.toLowerCase()}`">{{ format.title }}</h3>
             <p class="card-description">{{ format.description }}</p>
           </div>
         </div>
@@ -218,6 +218,31 @@ const viewportWidth = ref(window.innerWidth);
 const viewportHeight = ref(window.innerHeight);
 const cardOpacities = ref<number[]>([1, 1, 1, 1, 1, 1]);
 const stackPosition = ref({ x: 0, y: 0 });
+
+// Track which images have successfully loaded
+const loadedImages = ref<Set<string>>(new Set());
+
+// Check if an image is loaded
+function isImageLoaded(photo: string): boolean {
+  return photo !== '' && loadedImages.value.has(photo);
+}
+
+// Preload images in the background
+function preloadImages() {
+  formats.forEach((format) => {
+    if (format.photo) {
+      const img = new Image();
+      img.onload = () => {
+        loadedImages.value = new Set([...loadedImages.value, format.photo]);
+      };
+      img.onerror = () => {
+        // Image failed to load - don't add to loadedImages
+        console.warn(`Failed to load image: ${format.photo}`);
+      };
+      img.src = format.photo;
+    }
+  });
+}
 
 // Detect portrait mode (taller than wide)
 const isPortrait = computed(() => viewportHeight.value > viewportWidth.value);
@@ -418,6 +443,7 @@ function updateLayout() {
 onMounted(() => {
   updateLayout();
   window.addEventListener('resize', updateLayout);
+  preloadImages();
 });
 
 onUnmounted(() => {
@@ -486,7 +512,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   background-color: var(--color-border-light);
-  border-radius: var(--radius-none);
+  border-radius: var(--radius-sharp);
   opacity: 0.5;
 }
 
@@ -586,7 +612,7 @@ onUnmounted(() => {
   height: calc(v-bind(STACK_CARD_HEIGHT) * 1px);
   flex-shrink: 0;
   border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-none);
+  border-radius: var(--radius-sharp);
   padding: var(--space-md);
   box-sizing: border-box;
   display: flex;
@@ -595,6 +621,7 @@ onUnmounted(() => {
   position: relative;
   overflow: hidden;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  background-color: var(--color-primary); /* Default opaque background for cards without images */
 }
 
 /* Wiggle animation for stacked cards on hover */
@@ -667,7 +694,7 @@ onUnmounted(() => {
   object-position: center;
 }
 
-/* Semi-transparent overlay for text readability */
+/* Semi-transparent overlay for text readability - uses primary color */
 .card-overlay {
   position: absolute;
   top: 0;
@@ -683,7 +710,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
   position: relative;
   z-index: 2;
 }
@@ -694,9 +721,13 @@ onUnmounted(() => {
   padding: var(--space-lg);
 }
 
+.format-card.expanded-card .card-content {
+  gap: var(--space-md);
+}
+
 .format-card.expanded-card .card-badge {
-  padding: var(--space-xs) 0.6rem;
-  font-size: var(--text-sm);
+  padding: 0.65rem 1.3rem;
+  font-size: 1.25rem;
 }
 
 .format-card.expanded-card .card-title {
@@ -733,8 +764,8 @@ onUnmounted(() => {
   }
   
   .is-mobile .format-card .card-badge {
-    font-size: 0.65rem;
-    padding: 0.15rem var(--space-xs);
+    font-size: var(--text-base);
+    padding: 0.4rem 0.8rem;
   }
 }
 
@@ -758,9 +789,9 @@ onUnmounted(() => {
 .card-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.2rem var(--space-sm);
+  padding: 0.5rem 1.1rem;
   border-radius: var(--radius-pill);
-  font-size: var(--text-xs);
+  font-size: 1.125rem;
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
 }
@@ -813,6 +844,7 @@ onUnmounted(() => {
   color: rgba(255, 255, 255, 0.95);
   line-height: 1.4;
   margin: 0;
+  margin-bottom: var(--space-xs);
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
