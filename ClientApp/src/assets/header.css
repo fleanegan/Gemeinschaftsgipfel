@@ -47,3 +47,146 @@
 .background {
     width: 100%;
 }
+
+/* Desktop links - visible by default */
+.desktop-links {
+    display: flex;
+    gap: 0;
+    align-items: center;
+}
+
+/* Burger menu - hidden by default */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 99999;
+    pointer-events: auto;
+    margin-left: auto;
+    margin-right: 0.5rem;
+    margin-top: 0;
+}
+
+.burger-menu span {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--color-primary);
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    position: relative;
+    transform-origin: 1px;
+}
+
+.burger-menu.menu-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--color-primary);
+    z-index: 998;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+.mobile-menu-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu-links a:hover {
+    opacity: 0.8;
+}
+
+/* Close button (X) */
+.close-menu {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.close-menu span {
+    position: absolute;
+    width: 2rem;
+    height: 0.25rem;
+    background: white;
+    border-radius: 10px;
+    top: 50%;
+    left: 50%;
+}
+
+.close-menu span:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close-menu span:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Transition animations */
+.menu-fade-enter-active,
+.menu-fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.menu-fade-enter-from,
+.menu-fade-leave-to {
+    opacity: 0;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    /* Hide desktop links */
+    .desktop-links {
+        display: none;
+    }
+    
+    /* Show burger menu */
+    .burger-menu {
+        display: flex;
+    }
+    
+    /* Adjust logo for mobile */
+    .logo-link img {
+        max-height: 3rem !important;
+        max-width: 3rem !important;
+    }
+    
+    .nav-links {
+        padding: 0.5rem 1rem;
+    }
+}

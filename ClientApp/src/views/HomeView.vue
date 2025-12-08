@@ -129,7 +129,7 @@ export default defineComponent({
   height: 5rem;
   position: fixed;
   left: 0.575rem;
-  z-index: 9999;
+  z-index: 100;
 }
 
 .animate_scroll_down_motivator {
