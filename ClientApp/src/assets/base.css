@@ -76,9 +76,6 @@ own variables
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
-
-    /* Content alignment - matches instruction card content left edge */
-    --content-indent: var(--space-sm);  /* 8px - aligns with instruction card border + padding */
 }
 
 /* semantic color variables for this project */

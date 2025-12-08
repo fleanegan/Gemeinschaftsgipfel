@@ -239,6 +239,15 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   background-color: var(--color-background);
 }
 
+/* Remove left margin from headings to align with content */
+.topic h1 {
+  margin-left: 0;
+}
+
+.topic h2 {
+  margin-left: 0;
+}
+
 /* Wide content for topic page only */
 .wide-content {
   width: 100%;
