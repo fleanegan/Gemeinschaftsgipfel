@@ -69,12 +69,12 @@
     z-index: 99999;
     pointer-events: auto;
     margin-left: auto;
-    margin-right: 0.5rem;
-    margin-top: 0;
+    margin-right: 0.45rem;
+    margin-top: 0.15rem;
 }
 
 .burger-menu span {
-    width: 2rem;
+    width: 1.75rem;
     height: 0.25rem;
     background: var(--color-primary);
     border-radius: 10px;
@@ -128,8 +128,8 @@
 /* Close button (X) */
 .close-menu {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 1.25rem;
+    right: 1.25rem;
     width: 2.5rem;
     height: 2.5rem;
     background: transparent;

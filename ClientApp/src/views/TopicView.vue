@@ -44,7 +44,7 @@
         </div>
       </section>
       
-      <!-- Right section: Vorschläge< der Anderen -->
+      <!-- Right section: Vorschläge der Anderen -->
       <section class="topic-section">
         <h2>Vorschläge der Anderen</h2>
         <ul class="list">
@@ -257,15 +257,6 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   box-sizing: border-box;
 }
 
-/* Desktop: Constrain content to 1200px and center */
-@media (min-width: 1200px) {
-  .wide-content {
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
 /* Small screens: Reduce horizontal padding */
 @media (max-width: 400px) {
   .wide-content {
@@ -279,39 +270,31 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   margin-left: -0.25rem;
 }
 
-/* Desktop: Remove max-width constraint on instructions wrapper */
-@media (min-width: 1200px) {
-  .instructions-wrapper {
-    max-width: none;
-  }
-}
-
 /* Instructions and format explanation row */
 .instructions-formats-row {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
   margin-bottom: var(--space-xl);
-  align-items: center;
 }
 
 /* Desktop: Side-by-side layout with balanced flex sizing */
 @media (min-width: 1200px) {
   .instructions-formats-row {
     flex-direction: row;
-    gap: var(--space-xl);
+    gap: 3rem;
     align-items: flex-start;
   }
   
   .instructions-formats-row .instructions-wrapper {
-    flex: 1 1 50%;
-    max-width: none;
+    flex: 1 1 60%;
+    max-width: 600px;
   }
   
   /* TopicTypeStack gets remaining space */
   .instructions-formats-row > :last-child {
-    flex: 1 1 50%;
-    max-width: none;
+    flex: 1 1 40%;
+    max-width: 500px;
   }
 }
 
@@ -339,11 +322,17 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   overflow-x: hidden;
 }
 
-/* Desktop: Keep sections stacked */
+/* Desktop: Sections side-by-side */
 @media (min-width: 1200px) {
   .sections-container {
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--space-xl);
+    align-items: flex-start;
+  }
+  
+  .topic-section {
+    flex: 1 1 50%;
+    min-width: 0;
   }
 }
 
