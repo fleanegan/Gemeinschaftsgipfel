@@ -140,8 +140,8 @@ const baseFormats: { type: TopicType; title: string; description: string }[] = [
 ];
 
 // Card dimensions - Central definitions
-const STACK_CARD_HEIGHT = 320;
-const STACK_CARD_ASPECT_RATIO = 600 / STACK_CARD_HEIGHT; // Keep original aspect ratio
+const STACK_CARD_HEIGHT = 280;
+const STACK_CARD_ASPECT_RATIO = 600 / 320; // Keep original aspect ratio (based on original 320px height)
 const STACK_CARD_WIDTH = STACK_CARD_HEIGHT * STACK_CARD_ASPECT_RATIO; 
 
 // Expanded card dimensions - derived from stack dimensions
@@ -461,9 +461,11 @@ onUnmounted(() => {
 
 /* Desktop: Size for compact stacked cards with some extra room for random offsets */
 .stack-container:not(.is-mobile) {
+  max-width: 100%;
   width: calc(v-bind(STACK_CARD_WIDTH) * 1px + v-bind(STACK_WIDTH_BUFFER) * 1px);
   height: calc(v-bind(STACK_CARD_HEIGHT) * 1px + v-bind(STACK_HEIGHT_BUFFER) * 1px);
   min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Mobile scroll container */
