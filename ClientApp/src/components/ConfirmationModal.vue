@@ -133,7 +133,7 @@ export default defineComponent({
 
 .modal-content p {
   margin: 0;
-  color: var(--color-main-text);
+  color: var(--color-primary);
   line-height: 1.6;
   font-size: var(--text-base);
 }
@@ -160,7 +160,7 @@ export default defineComponent({
 
 .cancel-button {
   background-color: var(--color-background);
-  color: var(--color-main-text);
+  color: var(--color-primary);
   border: 1px solid var(--color-border-light);
 }
 

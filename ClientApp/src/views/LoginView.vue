@@ -123,6 +123,16 @@ export default defineComponent({
 
 <style scoped>
 
+.login-container {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.login-container h1 {
+  text-align: left;
+  margin-left: 1rem;
+}
+
 .checkbox-container {
   text-align: center;
   display: flex;
@@ -188,10 +198,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   padding: 0.5rem 1rem 0.5rem 1rem;
-}
-
-.form-input {
-  max-width: 600px;
 }
 
 .errors {

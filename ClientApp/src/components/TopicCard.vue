@@ -140,7 +140,8 @@ export default defineComponent({
   width: 12rem;
   height: 2rem;
   text-align: center;
-  color: var(--color-background);
+  color: #2c3e50;
+  font-weight: 200;
 }
 
 /* Header section */

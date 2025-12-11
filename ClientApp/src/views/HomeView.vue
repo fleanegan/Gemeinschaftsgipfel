@@ -10,16 +10,10 @@
   <info-box :data="secretData" :globalProgress="progress.infoScreen"></info-box>
   <div class="content_box">
     <div class="text_paragraph" v-html="secretData.content"></div>
-    <router-link :class="{'topic_call_to_action': true, 'call_to_action_highlight': true, 'topic_call_to_action_animation': currentScreen > 1.5}"
-                 to="/topic">Thema einreichen
-    </router-link>
-    <router-link :class="{'topic_call_to_action': true, 'call_to_action_highlight': true, 'topic_call_to_action_animation1': currentScreen > 1.5}"
-                 to="/supporttask">Arbeitsgruppe beitreten
-    </router-link>
     <div class="text_paragraph">
       <br>
       <br>
-    <h2>Programme der letzten Jahre</h2>
+    <h1>Programme der letzten Jahre</h1>
     <span>Hier findest du die Programme der vergangenen Gemeinschaftsgipfel zur Inspiration.</span>
     </div>  
     <div class="program_section">
@@ -190,40 +184,6 @@ export default defineComponent({
 
 .call_to_action_highlight:hover {
 background-color: var(--main-color-primary);
-}
-
-.topic_call_to_action_animation {
-  animation: bounce 1s ease infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
-}
-
-.topic_call_to_action_animation1 {
-  animation: bounceDown 1s ease infinite;
-}
-
-@keyframes bounceDown {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(5px);
-
-  }
-  60% {
-    transform: translateY(10px);
-
-  }
 }
 
 .content_box {

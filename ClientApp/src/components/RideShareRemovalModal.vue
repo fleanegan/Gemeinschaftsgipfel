@@ -10,15 +10,15 @@
             <div class="modal-content">
               <p>{{ message }}</p>
             </div>
-            <div class="modal-actions-vertical">
-              <button class="option-button cancel-option" @click="$emit('cancel-ride')">
-                Fahrt absagen
-              </button>
-              <button class="option-button delete-option" @click="$emit('delete-ride')">
-                Fahrt löschen
-              </button>
+            <div class="modal-actions">
               <button class="cancel-button" @click="$emit('cancel')">
                 Abbrechen
+              </button>
+              <button class="option-button delete-option" @click="$emit('delete-ride')">
+                Löschen
+              </button>
+              <button class="option-button cancel-option" @click="$emit('cancel-ride')">
+                Absagen
               </button>
             </div>
           </div>
@@ -93,20 +93,22 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  padding: var(--space-md);
+  backdrop-filter: blur(2px);
 }
 
 .modal-dialog {
   background-color: var(--color-background);
-  border-radius: var(--radius-interactive);
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sharp);
+  width: 90%;
+  max-width: 28rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 }
 
 .modal-header {
-  padding: var(--space-lg);
+  padding: var(--space-md) var(--space-md);
   border-bottom: 1px solid var(--color-border-light);
+  background-color: var(--color-background-soft);
 }
 
 .modal-header h3 {
@@ -117,26 +119,27 @@ export default defineComponent({
 }
 
 .modal-content {
-  padding: var(--space-lg);
+  padding: var(--space-md);
 }
 
 .modal-content p {
   margin: 0;
-  font-size: var(--text-base);
-  color: var(--color-main-text);
+  color: var(--color-primary);
   line-height: 1.6;
+  font-size: var(--text-base);
 }
 
-.modal-actions-vertical {
-  padding: var(--space-lg);
+.modal-actions {
+  padding: var(--space-md);
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
   gap: var(--space-sm);
+  background-color: var(--color-background-soft);
   border-top: 1px solid var(--color-border-light);
 }
 
 .option-button {
-  padding: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
   border: none;
   border-radius: var(--radius-interactive);
   font-weight: var(--font-weight-semibold);
@@ -147,29 +150,30 @@ export default defineComponent({
 }
 
 .cancel-option {
-  background-color: #fff3e0;
-  color: #e65100;
+  background-color: #dc2626;
+  color: white;
 }
 
 .cancel-option:hover {
-  background-color: #ffe0b2;
+  background-color: #b91c1c;
 }
 
 .delete-option {
-  background-color: #ffebee;
-  color: #c62828;
+  background-color: white;
+  color: var(--color-primary);
+  border: 1px solid var(--color-border-light);
 }
 
 .delete-option:hover {
-  background-color: #ffcdd2;
+  background-color: var(--color-nuance-light);
 }
 
 .cancel-button {
-  padding: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-interactive);
-  background-color: transparent;
-  color: var(--color-main-text);
+  background-color: var(--color-background);
+  color: var(--color-primary);
   font-weight: var(--font-weight-semibold);
   font-size: var(--text-base);
   cursor: pointer;
@@ -177,19 +181,19 @@ export default defineComponent({
 }
 
 .cancel-button:hover {
-  background-color: var(--color-nuance-light);
+  background-color: var(--color-border-light);
 }
 
 /* Mobile responsiveness */
-@media (max-width: 600px) {
+@media (max-width: 785px) {
+  .modal-overlay {
+    align-items: flex-end;
+  }
+
   .modal-dialog {
-    margin: 0;
-    border-radius: var(--radius-interactive) var(--radius-interactive) 0 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
     max-width: 100%;
+    border-radius: var(--radius-sharp) var(--radius-sharp) 0 0;
   }
 }
 </style>
