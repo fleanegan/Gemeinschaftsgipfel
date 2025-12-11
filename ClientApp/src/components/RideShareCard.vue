@@ -1,6 +1,8 @@
 <template>
   <li class="card_scroll_container">
-    <div v-if="isCanceledOrCompleted" class="canceled-strike-bar"></div>
+    <div v-if="isCanceledOrCompleted" class="canceled-strike-bar">
+      <span class="canceled-text">Abgesagt</span>
+    </div>
     <div class="ride-card-wrapper">
       <div :class="{ topic_card_header: true, ride_canceled: isCanceledOrCompleted }">
         <button class="action_button expand-button" @click="$emit('toggle-details')">
@@ -210,12 +212,27 @@ export default defineComponent({
   left: -10px;
   right: -10px;
   height: 6px;
-  background-color: #e65100;
+  background-color: var(--color-primary);
   transform: translateY(-50%);
   z-index: 50;
   border-radius: 3px;
-  box-shadow: 0 2px 8px rgba(230, 81, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canceled-text {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  padding: var(--space-xs) var(--space-md);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-interactive);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* Header section */
