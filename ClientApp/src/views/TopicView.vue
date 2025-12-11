@@ -76,7 +76,7 @@
     <ConfirmationModal
       :is-open="confirmationModalOpen"
       title="Vorschlag löschen"
-      message="Möchten Sie diesen Vorschlag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+      message="Möchtest du diesen Vorschlag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
       confirm-text="Löschen"
       cancel-text="Abbrechen"
       confirm-button-class="danger-button"

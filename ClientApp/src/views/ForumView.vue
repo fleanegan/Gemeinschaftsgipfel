@@ -40,7 +40,7 @@
     <ConfirmationModal
       :is-open="confirmationModalOpen"
       title="Beitrag löschen"
-      message="Möchten Sie diesen Forumsbeitrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+      message="Möchtest du diesen Forumsbeitrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
       confirm-text="Löschen"
       cancel-text="Abbrechen"
       confirm-button-class="danger-button"

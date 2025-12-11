@@ -131,7 +131,7 @@ const photoMap: Record<TopicType, string> = {
 };
 
 const baseFormats: { type: TopicType; title: string; description: string }[] = [
-  { type: 'Explanation', title: 'Thementypen', description: 'Jede Veranstaltung kann von einem anderen Typ sein. Hier sind die verfügbaren Typen. Sie sind wichtig für die Themen.' },
+  { type: 'Explanation', title: 'Thementypen', description: 'Jeder Vorschlag kann von einem anderen Typ sein. Hier sind die verfügbaren Typen.' },
   { type: 'Workshop', title: 'Mitmach-Session', description: 'Interaktive Sessions zum gemeinsamen Lernen und Ausprobieren.' },
   { type: 'Vortrag', title: 'Präsentation', description: 'Klassische Vorträge zu spannenden Themen.' },
   { type: 'Sport', title: 'Bewegung', description: 'Gemeinsame sportliche Aktivitäten und Spiele.' },

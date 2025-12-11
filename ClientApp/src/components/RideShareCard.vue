@@ -9,7 +9,9 @@
         <span v-if="showDriver" class="ride-driver">({{ rideShare.driverUserName }})</span>
       </div>
       <span class="seat-badge" :class="seatBadgeClass">{{ rideShare.reservationCount }}/{{ rideShare.availableSeats }}</span>
-      <slot name="action-button"></slot>
+      <div class="header-actions">
+        <slot name="action-button"></slot>
+      </div>
     </div>
     <div v-if="rideShare.expanded" class="topic-card-details">
       <div class="details-layout">
@@ -64,11 +66,9 @@
             <p class="notes-content">{{ rideShare.description }}</p>
           </div>
 
-          <slot name="actions"></slot>
-
           <!-- Mobile only: Comments button -->
           <button class="mobile-comments-button" @click="openCommentModal">
-            <span class="comments-count">{{ rideShare.comments.length }}</span>
+            <span class="comments-count">{{ rideShare.comments?.length || 0 }}</span>
             Kommentare anzeigen
           </button>
         </div>
@@ -127,16 +127,17 @@ export default defineComponent({
   emits: ['toggle-details', 'comment-sent'],
   computed: {
     isCanceledOrCompleted(): boolean {
-      return this.rideShare.status === 1 || this.rideShare.status === 2; // Canceled or Completed
+      return this.rideShare.status === 1 || this.rideShare.status === 2 || 
+             this.rideShare.status === 'Canceled' || this.rideShare.status === 'Completed';
     },
     statusClass(): string {
-      if (this.rideShare.status === 1) return 'status-canceled';
-      if (this.rideShare.status === 2) return 'status-completed';
+      if (this.rideShare.status === 1 || this.rideShare.status === 'Canceled') return 'status-canceled';
+      if (this.rideShare.status === 2 || this.rideShare.status === 'Completed') return 'status-completed';
       return '';
     },
     statusText(): string {
-      if (this.rideShare.status === 1) return 'Abgesagt';
-      if (this.rideShare.status === 2) return 'Abgeschlossen';
+      if (this.rideShare.status === 1 || this.rideShare.status === 'Canceled') return 'Abgesagt';
+      if (this.rideShare.status === 2 || this.rideShare.status === 'Completed') return 'Abgeschlossen';
       return '';
     },
     seatBadgeClass(): string {
@@ -198,6 +199,14 @@ export default defineComponent({
   gap: var(--space-sm);
   max-width: 100%;
   box-sizing: border-box;
+}
+
+/* Header actions container (edit/delete/reserve buttons) */
+.header-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
 .ride_canceled {

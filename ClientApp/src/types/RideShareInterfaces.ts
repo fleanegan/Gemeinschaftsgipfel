@@ -17,7 +17,7 @@ export interface RideShare {
   driverUserName: string;
   didIReserve: boolean;
   reservationCount: number;
-  status: RideShareStatus;
+  status: RideShareStatus | string; // Can be enum number or string from backend
   passengerUserNames: string[];
   expanded: boolean;
   comments: Comment[];
