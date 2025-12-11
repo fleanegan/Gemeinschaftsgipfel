@@ -3,6 +3,7 @@ obj/
 /packages/
 /ClientApp/public/schedule.svg
 /ClientApp/public/photos/
+/ClientApp/public/programs/
 riderModule.iml
 /_ReSharper.Caches/
 .idea/
