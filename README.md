@@ -17,6 +17,13 @@ The application requires the following photos to be placed in `./ClientApp/publi
 
 These images are used in the topic type explanation cards. If any photos are missing, the corresponding cards will not display a background image.
 
+Program Archives (Optional)
+-----
+To display previous years' programs on the home page, add SVG files to `./ClientApp/public/programs/`:
+- `2024.svg`, `2025.svg`, etc.
+- Files are automatically discovered at build-time and displayed sorted by year (newest first)
+- Images lazy-load when scrolling to the bottom of the home page
+
 Prepare running the app for the first time in dev mode
 -----
 - ```dotnet restore```
