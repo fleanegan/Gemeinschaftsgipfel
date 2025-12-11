@@ -25,15 +25,19 @@
               @comment-sent="handleCommentSent"
           >
             <template #action-button>
-              <button v-if="item.status !== 'Canceled' && item.status !== 1" class="action_button" @click="openRemovalModal(item.id)">
-                <img alt="Verwalten" src="/trash_bin.svg" title="Verwalten">
-              </button>
-              <button v-if="item.status === 'Canceled' || item.status === 1" class="action_button" @click="uncancelRideShare(item.id)">
-                <img alt="Uncancel" src="/empty_edit_no_border.svg" title="Reaktivieren">
-              </button>
-              <button class="action_button" @click="editRideShare(item.id)">
-                <img alt="Edit" src="/empty_edit_no_border.svg">
-              </button>
+              <template v-if="item.status === 'Canceled' || item.status === 1">
+                <button class="action_button" @click="uncancelRideShare(item.id)">
+                  <img alt="Reaktivieren" src="/empty_edit_no_border.svg" title="Reaktivieren">
+                </button>
+              </template>
+              <template v-else>
+                <button class="action_button" @click="openRemovalModal(item.id)">
+                  <img alt="Verwalten" src="/trash_bin.svg" title="Verwalten">
+                </button>
+                <button class="action_button" @click="editRideShare(item.id)">
+                  <img alt="Edit" src="/empty_edit_no_border.svg">
+                </button>
+              </template>
             </template>
           </RideShareCard>
         </ul>
@@ -57,6 +61,7 @@
           >
             <template #action-button>
               <button 
+                v-if="item.status !== 'Canceled' && item.status !== 1"
                 class="action_button" 
                 @click="toggleReservation(index)"
                 :disabled="!item.didIReserve && item.availableSeats <= item.reservationCount"

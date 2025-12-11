@@ -1,17 +1,23 @@
 <template>
   <li class="card_scroll_container">
-    <div :class="{ topic_card_header: true, ride_canceled: isCanceledOrCompleted }">
-      <button class="action_button expand-button" @click="$emit('toggle-details')">
-        <span class="expand-icon">{{ rideShare.expanded ? '−' : '+' }}</span>
-      </button>
+    <div v-if="isCanceledOrCompleted" class="canceled-strike-bar"></div>
+    <div class="ride-card-wrapper">
+      <div :class="{ topic_card_header: true, ride_canceled: isCanceledOrCompleted }">
+        <button class="action_button expand-button" @click="$emit('toggle-details')">
+          <span class="expand-icon">{{ rideShare.expanded ? '−' : '+' }}</span>
+        </button>
       <div class="ride-header-info">
         <span class="ride-route">{{ rideShare.from }} → {{ rideShare.to }}</span>
         <span v-if="showDriver" class="ride-driver">({{ rideShare.driverUserName }})</span>
       </div>
-      <span class="seat-badge" :class="seatBadgeClass">{{ rideShare.reservationCount }}/{{ rideShare.availableSeats }}</span>
-      <div class="header-actions">
+      <span v-if="!isCanceledOrCompleted" class="seat-badge" :class="seatBadgeClass">{{ rideShare.reservationCount }}/{{ rideShare.availableSeats }}</span>
+      <div v-if="!isCanceledOrCompleted" class="header-actions">
         <slot name="action-button"></slot>
       </div>
+      </div>
+    </div>
+    <div v-if="isCanceledOrCompleted" class="header-actions-overlay">
+      <slot name="action-button"></slot>
     </div>
     <div v-if="rideShare.expanded" class="topic-card-details">
       <div class="details-layout">
@@ -181,10 +187,35 @@ export default defineComponent({
   background-color: var(--color-nuance-light);
   border-radius: var(--radius-sharp);
   margin-bottom: var(--space-sm);
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  position: relative;
+}
+
+/* Wrapper for card content */
+.ride-card-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-sharp);
+  overflow: hidden;
+  background-color: var(--color-background);
+}
+
+/* Strike-through bar for canceled rides */
+.canceled-strike-bar {
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  right: -10px;
+  height: 6px;
+  background-color: #e65100;
+  transform: translateY(-50%);
+  z-index: 50;
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(230, 81, 0, 0.4);
+  pointer-events: none;
 }
 
 /* Header section */
@@ -199,6 +230,8 @@ export default defineComponent({
   gap: var(--space-sm);
   max-width: 100%;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
 /* Header actions container (edit/delete/reserve buttons) */
@@ -207,6 +240,34 @@ export default defineComponent({
   flex-direction: row;
   align-items: center;
   gap: var(--space-xs);
+  position: relative;
+  z-index: 100;
+}
+
+/* Overlay actions for canceled rides - positioned above the strike bar */
+.header-actions-overlay {
+  position: absolute;
+  top: 50%;
+  right: var(--space-md);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+  z-index: 100;
+}
+
+.header-actions :deep(.action_button),
+.header-actions-overlay :deep(.action_button) {
+  position: relative;
+  z-index: 100;
+  background-color: var(--color-background);
+  padding: var(--space-xs);
+  border-radius: var(--radius-interactive);
+}
+
+.header-actions-overlay :deep(.action_button) {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .ride_canceled {
