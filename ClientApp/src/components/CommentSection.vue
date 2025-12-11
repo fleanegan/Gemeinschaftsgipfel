@@ -82,6 +82,8 @@ export default defineComponent({
         return 'TopicId';
       } else if (this.apiEndpoint.includes('rideshare')) {
         return 'RideShareId';
+      } else if (this.apiEndpoint.includes('forum')) {
+        return 'ForumEntryId';
       }
       return 'Id';
     },
