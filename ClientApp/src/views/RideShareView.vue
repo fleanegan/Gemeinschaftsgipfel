@@ -56,6 +56,7 @@
               :key="item.id"
               :ride-share="item"
               :show-driver="true"
+              :is-highlighted="item.didIReserve"
               @toggle-details="toggleDetails(foreignRideShares, index)"
               @comment-sent="handleCommentSent"
           >

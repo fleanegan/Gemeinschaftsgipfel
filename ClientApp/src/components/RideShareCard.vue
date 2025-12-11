@@ -1,10 +1,12 @@
 <template>
   <li class="card_scroll_container">
-    <div v-if="isCanceledOrCompleted" class="canceled-strike-bar">
-      <span class="canceled-text">Abgesagt</span>
-    </div>
-    <div class="ride-card-wrapper">
-      <div :class="{ topic_card_header: true, ride_canceled: isCanceledOrCompleted }">
+    <p v-if="isHighlighted" class="most_liked_hint">Meine Reservierung</p>
+    <div class="ride-card-positioning-wrapper">
+      <div v-if="isCanceledOrCompleted" class="canceled-strike-bar">
+        <span class="canceled-text">Abgesagt</span>
+      </div>
+      <div class="ride-card-wrapper">
+      <div :class="{ topic_card_header: true, ride_canceled: isCanceledOrCompleted, most_liked_highlight: isHighlighted }">
         <button class="action_button expand-button" @click="$emit('toggle-details')">
           <span class="expand-icon">{{ rideShare.expanded ? '−' : '+' }}</span>
         </button>
@@ -17,9 +19,10 @@
         <slot name="action-button"></slot>
       </div>
       </div>
-    </div>
-    <div v-if="isCanceledOrCompleted" class="header-actions-overlay">
-      <slot name="action-button"></slot>
+      <div v-if="isCanceledOrCompleted" class="header-actions-overlay">
+        <slot name="action-button"></slot>
+      </div>
+      </div>
     </div>
     <div v-if="rideShare.expanded" class="topic-card-details">
       <div class="details-layout">
@@ -125,6 +128,10 @@ export default defineComponent({
     showDriver: {
       type: Boolean,
       default: false
+    },
+    isHighlighted: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -193,7 +200,26 @@ export default defineComponent({
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.most_liked_hint {
+  margin-left: var(--space-lg);
+  margin-top: var(--space-sm);
+  background-color: var(--color-secondary);
+  border-top-left-radius: var(--radius-interactive);
+  border-top-right-radius: var(--radius-interactive);
+  width: 12rem;
+  height: 2rem;
+  text-align: center;
+  color: var(--color-background);
+}
+
+/* Positioning wrapper for cancel bar */
+.ride-card-positioning-wrapper {
   position: relative;
+  width: 100%;
 }
 
 /* Wrapper for card content */
@@ -249,6 +275,12 @@ export default defineComponent({
   box-sizing: border-box;
   position: relative;
   z-index: 1;
+}
+
+/*do not delete*/
+.most_liked_highlight {
+  border-radius: var(--radius-sharp);
+  border: .25rem solid var(--color-secondary);
 }
 
 /* Header actions container (edit/delete/reserve buttons) */
