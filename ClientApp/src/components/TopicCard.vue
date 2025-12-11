@@ -225,7 +225,7 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xs) 0.625rem;
+  padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-pill);
   font-size: var(--text-xs);
   font-weight: var(--font-weight-semibold);
@@ -311,7 +311,7 @@ export default defineComponent({
 }
 
 .info-label {
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
@@ -335,7 +335,7 @@ export default defineComponent({
 }
 
 .notes-label {
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
@@ -386,7 +386,7 @@ export default defineComponent({
   justify-content: center;
   min-width: var(--space-lg);
   height: var(--space-lg);
-  padding: 0 0.375rem;
+  padding: 0 var(--space-xs);
   background-color: var(--color-primary);
   color: var(--color-background);
   border-radius: var(--radius-pill);
@@ -414,13 +414,13 @@ export default defineComponent({
   }
 
   .topic-info-container {
-    flex: 1 1 45%;
+    flex: 1 1 50%;
     min-width: 0;
   }
 
   .comments-sidebar {
     display: block;
-    flex: 1 1 55%;
+    flex: 1 1 50%;
     min-width: 0;
   }
 

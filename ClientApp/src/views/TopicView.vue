@@ -248,31 +248,6 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   margin-left: 0;
 }
 
-/* Wide content for topic page only */
-.wide-content {
-  width: 100%;
-  padding: 0 var(--space-xl);
-  max-width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-/* Desktop: Constrain content to 1200px and center */
-@media (min-width: 1200px) {
-  .wide-content {
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-/* Small screens: Reduce horizontal padding */
-@media (max-width: 400px) {
-  .wide-content {
-    padding: 0 var(--space-sm);
-  }
-}
-
 /* Constrain instruction cards width */
 .instructions-wrapper {
   max-width: 600px;
@@ -320,8 +295,8 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
 /* Tablet: Stack with less gap */
 @media (min-width: 785px) and (max-width: 1199px) {
   .instructions-formats-row {
-    gap: 1.5rem;
-    padding-bottom: 2rem;
+    gap: var(--space-lg);
+    padding-bottom: var(--space-xl);
   }
 }
 
@@ -431,22 +406,16 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
   margin-left: auto;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  border-bottom-left-radius: var(--radius-interactive);
+  border-bottom-right-radius: var(--radius-interactive);
   margin-right: 0;
   white-space: nowrap;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
   width: auto;
 }
 
 </style>
 <style scoped src="src/assets/instructions.css">
-</style>
-
-<!-- Override global .routed-elements width constraint -->
-<style>
-.routed-elements:has(.wide-content) {
-  width: 100% !important;
-  max-width: 100% !important;
-}
 </style>
 

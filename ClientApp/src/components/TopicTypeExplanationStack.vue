@@ -531,7 +531,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: var(--space-lg);
   box-sizing: border-box;
   opacity: 1;
   transition: opacity 0.3s ease;
@@ -728,8 +728,8 @@ onUnmounted(() => {
 }
 
 .format-card.expanded-card .card-badge {
-  padding: 0.65rem 1.3rem;
-  font-size: 1.25rem;
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--text-xl);
 }
 
 .format-card.expanded-card .card-title {
@@ -767,7 +767,7 @@ onUnmounted(() => {
   
   .is-mobile .format-card .card-badge {
     font-size: var(--text-base);
-    padding: 0.4rem 0.8rem;
+    padding: var(--space-xs) var(--space-sm);
   }
 }
 
@@ -791,9 +791,9 @@ onUnmounted(() => {
 .card-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem 1.1rem;
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-pill);
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
 }

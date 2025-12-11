@@ -23,7 +23,7 @@
         <div class="card_action_helper_list" v-if="task.showSupporter">
           <p>Wir helfen schon:</p>
           <div v-for="supporter in task.supporterUserNames" :key="supporter">
-            <p style="margin-left: 0.5rem; font-size: 0.75rem">{{ supporter }}</p>
+            <p style="margin-left: var(--space-sm); font-size: var(--text-xs)">{{ supporter }}</p>
           </div>
         </div>
         <p v-if="isUserSubscribed(task) && !task.showSupporter" class="card_action_helper_list">Ich habe mich
@@ -111,10 +111,10 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   min-height: 3rem;
-  padding-left: 0.5rem;
-  padding-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  border-radius: 0.2rem;
+  padding-left: var(--space-sm);
+  padding-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  border-radius: var(--radius-sharp);
   border: 0.1rem solid rgba(179, 76, 76, 0.1);
 }
 
@@ -132,12 +132,12 @@ export default defineComponent({
 
 .card_action_container {
   width: 100%;
-  margin-right: 0.25rem;
-  margin-bottom: 0.25rem;
+  margin-right: var(--space-xs);
+  margin-bottom: var(--space-xs);
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
+  padding: var(--space-sm);
 }
 
 .card_action_button_container {
@@ -150,18 +150,18 @@ export default defineComponent({
 
 .card_action_helper_list {
   position: relative;
-  margin-left: 0.4rem;
-  padding-top: .2rem;
-  font-size: small;
+  margin-left: var(--space-sm);
+  padding-top: var(--space-xs);
+  font-size: var(--text-sm);
 }
 
 .card_action_button {
-  padding: 0.25rem;
+  padding: var(--space-xs);
   margin-left: auto;
   margin-right: 0;
   min-width: 5rem;
   height: 1.75rem;
-  border-radius: 0.2rem;
+  border-radius: var(--radius-interactive);
   border: 0.1rem solid var(--main-color-primary);
 }
 
@@ -184,15 +184,15 @@ export default defineComponent({
   align-items: center;
   flex-shrink: 4;
   position: relative;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-sm);
 }
 
 .progress_bar_shell {
   border: 1px solid var(--main-color-primary);
-  border-radius: 0.2rem;
+  border-radius: var(--radius-sharp);
   width: 100%;
   height: 100%;
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
 }
 
 .progress_bar_progress {
@@ -201,8 +201,8 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-top: 0.1rem;
-  padding-right: 0.5rem;
+  padding-top: var(--space-xs);
+  padding-right: var(--space-sm);
   color: var(--color-background);
 }
 
@@ -214,12 +214,12 @@ export default defineComponent({
 
 .support_task_header {
   font-stretch: extra-expanded;
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 .support_task_duration {
   margin-left: auto;
-  margin-top: 0.5rem;
-  margin-right: 0.5rem;
+  margin-top: var(--space-sm);
+  margin-right: var(--space-sm);
 }
 </style>

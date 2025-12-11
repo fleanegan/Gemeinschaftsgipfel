@@ -178,8 +178,8 @@ export default defineComponent({
 /* Card container */
 .card_scroll_container {
   background-color: var(--color-nuance-light);
-  border-radius: 6px;
-  margin-bottom: 0.75rem;
+  border-radius: var(--radius-sharp);
+  margin-bottom: var(--space-sm);
   overflow: hidden;
   width: 100%;
   max-width: 100%;
@@ -188,14 +188,14 @@ export default defineComponent({
 
 /* Header section */
 .topic_card_header {
-  padding: 1rem;
+  padding: var(--space-md);
   background-color: var(--color-background);
   border-left: none;
   min-height: auto;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   max-width: 100%;
   box-sizing: border-box;
 }
@@ -211,9 +211,9 @@ export default defineComponent({
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto auto;
-    gap: 0.5rem;
+    gap: var(--space-sm);
     align-items: start;
-    padding: 0.75rem;
+    padding: var(--space-sm);
   }
   
   /* Left column: vertical stack of buttons and badge - all same size */
@@ -241,7 +241,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.6875rem;
+    font-size: var(--text-xs);
   }
   
   .topic_card_header :deep(.action_button:not(.expand-button)) {
@@ -265,7 +265,7 @@ export default defineComponent({
   width: 2rem;
   height: 2rem;
   padding: 0;
-  border-radius: 4px;
+  border-radius: var(--radius-interactive);
   background-color: var(--color-nuance-light);
   transition: background-color 0.2s ease;
 }
@@ -275,7 +275,7 @@ export default defineComponent({
 }
 
 .expand-icon {
-  font-size: 1.5rem;
+  font-size: var(--text-lg);
   font-weight: 300;
   color: var(--color-main-text);
   line-height: 1;
@@ -285,32 +285,32 @@ export default defineComponent({
 .ride-header-info {
   display: flex;
   flex-direction: column;
-  margin-left: 1rem;
+  margin-left: var(--space-md);
   flex: 1;
   min-width: 0;
 }
 
 .ride-route {
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-base);
   color: var(--color-primary);
 }
 
 .ride-driver {
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   color: var(--color-main-text);
-  margin-top: 0.125rem;
+  margin-top: var(--space-xs);
 }
 
 /* Seat availability badge */
 .seat-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.625rem;
-  border-radius: 4px;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  margin-right: 0.5rem;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-interactive);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-right: var(--space-sm);
   white-space: nowrap;
 }
 
@@ -331,8 +331,8 @@ export default defineComponent({
 
 /* Details section */
 .topic-card-details {
-  padding: 1rem;
-  padding-left: calc(2rem + 1rem + 1rem);
+  padding: var(--space-md);
+  padding-left: calc(2rem + var(--space-md) + var(--space-md));
   background-color: var(--color-background);
   border-radius: 0;
   width: 100%;
@@ -342,9 +342,9 @@ export default defineComponent({
 }
 
 .topic-card-details {
-    padding: 0.75rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: var(--space-sm);
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
   }
 
 /* Layout container for side-by-side on desktop */
@@ -361,7 +361,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   padding: 0;
-  gap: 1rem;
+  gap: var(--space-md);
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -377,16 +377,16 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
   width: 100%;
-  margin-top: 1rem;
-  padding: 0.875rem;
+  margin-top: var(--space-md);
+  padding: var(--space-sm);
   background-color: var(--color-nuance-light);
   border: 1px solid var(--color-border-light);
-  border-radius: 6px;
+  border-radius: var(--radius-interactive);
   cursor: pointer;
-  font-size: 0.9375rem;
-  font-weight: 500;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
   color: var(--color-primary);
   transition: background-color 0.2s ease;
 }
@@ -399,14 +399,14 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.5rem;
-  height: 1.5rem;
-  padding: 0 0.375rem;
+  min-width: var(--space-lg);
+  height: var(--space-lg);
+  padding: 0 var(--space-xs);
   background-color: var(--color-primary);
   color: var(--color-background);
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Desktop: Side-by-side layout */
@@ -420,7 +420,7 @@ export default defineComponent({
   .ride-info-container {
     flex: 1 1 45%;
     min-width: 0;
-    padding-right: 1rem;
+    padding-right: var(--space-md);
   }
 
   .comments-sidebar {
@@ -436,7 +436,7 @@ export default defineComponent({
 
 /* Route visualization section */
 .route-section {
-  padding: 0.25rem 0 1rem 0;
+  padding: var(--space-xs) 0 var(--space-md) 0;
   border-bottom: 1px solid var(--color-border-light);
 }
 
@@ -444,14 +444,14 @@ export default defineComponent({
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.375rem;
+  gap: var(--space-xs);
   line-height: 1.4;
   width: 100%;
 }
 
 .route-point {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
   color: var(--color-primary);
 }
 
@@ -470,62 +470,62 @@ export default defineComponent({
 .route-stop {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
+  gap: var(--space-xs);
 }
 
 /* Info rows with muted labels */
 .info-row {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-xs);
 }
 
 .info-label {
-  font-size: 0.6875rem;
-  font-weight: 600;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
   opacity: 0.6;
 }
 
 .info-value {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
   color: var(--color-primary);
 }
 
 /* Notes section */
 .notes-section {
-  margin-top: 0.5rem;
+  margin-top: var(--space-sm);
 }
 
 .notes-label {
   display: block;
-  font-size: 0.6875rem;
-  font-weight: 600;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
   color: var(--color-main-text);
   opacity: 0.6;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-sm);
 }
 
 .notes-content {
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
   color: var(--color-primary);
   line-height: 1.6;
   white-space: pre-wrap;
   background-color: var(--color-nuance-light);
-  padding: 0.75rem;
-  border-radius: 4px;
+  padding: var(--space-sm);
+  border-radius: var(--radius-interactive);
 }
 
 /* Status badges */
 .status-badge {
   display: inline-block;
-  padding: 0.375rem 0.875rem;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 0.875rem;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-interactive);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-sm);
   width: fit-content;
 }
 

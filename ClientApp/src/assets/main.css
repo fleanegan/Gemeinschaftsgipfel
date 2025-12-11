@@ -82,16 +82,20 @@ a,
 }
 
 .routed-elements {
-    width: 500px;
-    max-width: 900px;
+    width: 100%;
+    max-width: 1200px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     z-index: 4;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 var(--space-xl);
+    box-sizing: border-box;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 400px) {
     .routed-elements {
-        width: 100%;
+        padding: 0 var(--space-sm);
     }
 }

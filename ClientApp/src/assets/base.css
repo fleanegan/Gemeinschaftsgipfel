@@ -49,6 +49,14 @@ own variables
        DESIGN SYSTEM TOKENS
        =========================================== */
 
+    /* Breakpoints */
+    --breakpoint-mobile: 400px;
+    --breakpoint-tablet: 785px;
+    --breakpoint-desktop: 1200px;
+
+    /* Layout constraints */
+    --content-max-width: 1200px;
+
     /* Spacing scale */
     --space-xs: 0.25rem;   /* 4px */
     --space-sm: 0.5rem;    /* 8px */
@@ -61,8 +69,8 @@ own variables
        - interactive: buttons, inputs, clickable controls
        - pill: badges, tags, counts
     */
-    --radius-sharp: 0.3rem;
-    --radius-interactive: 0.5rem;
+    --radius-sharp: 0.2rem;
+    --radius-interactive: 4px;
     --radius-pill: 999px;
 
     /* Typography scale */

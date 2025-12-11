@@ -10,7 +10,7 @@
 }
 
 /* Desktop: Larger bottom margin */
-@media (min-width: 1200px) {
+@media (min-width: var(--breakpoint-desktop)) {
     .instruction_container {
         margin-bottom: var(--space-xl);
     }
@@ -18,8 +18,8 @@
 
 .instruction_card {
     position: relative;
-    margin-right: 0.25rem;
-    margin-bottom: 0.25rem;
+    margin-right: var(--space-xs);
+    margin-bottom: var(--space-xs);
     flex-shrink: 0;
     max-width: 100%;
 }
@@ -30,10 +30,10 @@
 }
 
 .instruction_card_content {
-    margin-left: 0.25rem;
-    margin-top: 1rem;
-    padding-right: 0.25rem;
-    padding-left: 0.5rem;
+    margin-left: var(--space-xs);
+    margin-top: var(--space-md);
+    padding-right: var(--space-xs);
+    padding-left: var(--space-sm);
     border-style: solid;
     border-radius: var(--radius-sharp);
     font-size: var(--text-sm);
@@ -48,12 +48,12 @@
     height: 3rem;
     width: 3rem;
     background-color: var(--color-primary);
-    border: 0.2rem;
+    border: var(--space-xs);
     border-radius: var(--radius-pill);
     border-style: solid;
     border-color: var(--color-background);
     color: var(--color-background);
-    font-size: 1.5rem;
+    font-size: var(--text-lg);
     font-weight: var(--font-weight-normal);
     text-align: center;
 }

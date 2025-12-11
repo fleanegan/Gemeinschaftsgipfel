@@ -1,13 +1,15 @@
 <template>
-  <div class="topic wide-content">
+  <div class="rideshare wide-content">
     <div :class="{'floating_scroll_to_top_hidden': true, 'floating_scroll_to_top_shown': isSticky}">
       <button class="action_button" style="margin-right: 1rem;" @click="scrollToTop">
         <img :src="'/expand.svg'" alt="Expand">
       </button>
     </div>
     <h1>Fahrgemeinschaften</h1>
-    <div class="instructions-wrapper">
-      <InstructionCards :instructions="instructions" />
+    <div class="instructions-formats-row">
+      <div class="instructions-wrapper">
+        <InstructionCards :instructions="instructions" />
+      </div>
     </div>
     
     <div class="sections-container">
@@ -224,53 +226,40 @@ export default defineComponent({
 });
 </script>
 
-<style>
-/* Override global .routed-elements width constraint */
-.routed-elements:has(.wide-content) {
-  width: 100% !important;
-  max-width: 100% !important;
-}
-</style>
-
 <style scoped>
-.topic {
+.rideshare {
   background-color: var(--color-background);
 }
 
-/* Wide content for rideshare page only */
-.wide-content {
-  width: 100%;
-  padding: 0 2rem;
-  max-width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
+/* Remove left margin from headings to align with content */
+.rideshare h1 {
+  margin-left: 0;
 }
 
-/* Ensure all text can wrap */
-.wide-content h1,
-.wide-content h2 {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
-}
-
-/* Small screens: Reduce horizontal padding */
-@media (max-width: 400px) {
-  .wide-content {
-    padding: 0 0.5rem;
-  }
+.rideshare h2 {
+  margin-left: 0;
 }
 
 /* Constrain instruction cards width */
 .instructions-wrapper {
   max-width: 600px;
+  margin-left: -0.25rem;
 }
 
-/* Sections container for side-by-side layout */
+/* Instructions row (single column for RideShareView) */
+.instructions-formats-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  align-items: center;
+}
+
+/* Sections container - always stacked vertically */
 .sections-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--space-xl);
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -282,48 +271,82 @@ export default defineComponent({
   overflow-x: hidden;
 }
 
-.ride-section h2 {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Desktop: Sections side-by-side */
+/* Desktop: Keep sections stacked */
 @media (min-width: 1200px) {
   .sections-container {
-    flex-direction: row;
-    gap: 2rem;
-    align-items: flex-start;
-  }
-  
-  .ride-section {
-    flex: 1 1 50%;
-    min-width: 0;
+    flex-direction: column;
+    gap: var(--space-xl);
   }
 }
 
 .list {
   background-color: var(--color-background-soft);
-  padding: 1rem;
-  border-radius: 6px;
+  padding: var(--space-md);
+  border-radius: var(--radius-sharp);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-sm);
+  list-style: none;
+  margin: 0;
 }
 
 /* Small screens: Reduce list padding */
 @media (max-width: 400px) {
   .list {
-    padding: 0.5rem 0.5rem !important;
-    gap: 0.25rem !important;
+    padding: var(--space-sm) var(--space-sm) !important;
+    gap: var(--space-xs) !important;
   }
 }
 
 .list-end-message {
   text-align: center;
-  padding: 1rem;
+  padding: var(--space-md);
   color: var(--color-main-text);
   opacity: 0.7;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
+}
+
+/* Action button styling */
+.action_button {
+  cursor: pointer;
+  background: none;
+  border-style: none;
+  border-radius: var(--radius-interactive);
+  font-weight: bold;
+  display: flex;
+  place-items: center;
+}
+
+.topic_card_details_owner_actions {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.topic_card_details_owner_actions button {
+  margin-left: var(--space-sm);
+}
+
+.my-topics-add-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.submit-button {
+  margin-top: 0;
+  margin-left: auto;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: var(--radius-interactive);
+  border-bottom-right-radius: var(--radius-interactive);
+  margin-right: 0;
+  white-space: nowrap;
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+  width: auto;
 }
 
 .floating_scroll_to_top_hidden {
