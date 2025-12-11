@@ -24,7 +24,7 @@ public class TopicServiceTest
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
 
-        await instance.Service.AddTopic(new TopicCreationDto(title, AnAllowedPresentationTime, description),
+        await instance.Service.AddTopic(new TopicCreationDto(title, AnAllowedPresentationTime, description, TopicCategory.Workshop, null),
             loggedInUserName);
 
         var result = (await instance.Repository.GetAll()).ToArray()[0];
@@ -44,7 +44,7 @@ public class TopicServiceTest
 
         async Task Action()
         {
-            await instance.Service.AddTopic(new TopicCreationDto("title", ilallowedPresentationTime, "description"),
+            await instance.Service.AddTopic(new TopicCreationDto("title", ilallowedPresentationTime, "description", TopicCategory.Workshop, null),
                 loggedInUserName);
         }
 
@@ -71,7 +71,7 @@ public class TopicServiceTest
     {
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
-        var topicCreationDto = new TopicCreationDto("title", AnAllowedPresentationTime, "description");
+        var topicCreationDto = new TopicCreationDto("title", AnAllowedPresentationTime, "description", TopicCategory.Workshop, null);
         var expectedResult = await instance.Service.AddTopic(topicCreationDto, loggedInUserName);
 
         var actualResult = await instance.Service.GetTopicById(expectedResult.Id);
@@ -86,7 +86,7 @@ public class TopicServiceTest
     {
         const string loggedInUserName = "Fake User";
         var nonExistingId = "the original topic does not exist";
-        var updatedTopic = new TopicUpdateDto(nonExistingId, "title", AnAllowedPresentationTime, "description");
+        var updatedTopic = new TopicUpdateDto(nonExistingId, "title", AnAllowedPresentationTime, "description", TopicCategory.Workshop, null);
         var instance = await CreateInstance([loggedInUserName]);
 
         async Task Action()
@@ -103,10 +103,10 @@ public class TopicServiceTest
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
         var originalTopic =
-            await instance.Service.AddTopic(new TopicCreationDto("original title", AnAllowedPresentationTime, ""),
+            await instance.Service.AddTopic(new TopicCreationDto("original title", AnAllowedPresentationTime, "", TopicCategory.Workshop, null),
                 "anotherUserName");
         var updatedTopic = new TopicUpdateDto(originalTopic.Id, "updated title", AnAllowedPresentationTime,
-            "updated description");
+            "updated description", TopicCategory.Workshop, null);
 
         async Task Action()
         {
@@ -125,10 +125,10 @@ public class TopicServiceTest
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName], []);
         var originalTopic =
-            await instance.Service.AddTopic(new TopicCreationDto("original title", 76, ""),
+            await instance.Service.AddTopic(new TopicCreationDto("original title", 76, "", TopicCategory.Workshop, null),
                 loggedInUserName);
         var updatedTopic =
-            new TopicUpdateDto(originalTopic.Id, "newTitle", newPresentationTimeInMinutes, "newDescription");
+            new TopicUpdateDto(originalTopic.Id, "newTitle", newPresentationTimeInMinutes, "newDescription", TopicCategory.Workshop, null);
         
         await instance.Service.UpdateTopic(updatedTopic, loggedInUserName);
     }
@@ -145,9 +145,9 @@ public class TopicServiceTest
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
         var originalTopic =
-            await instance.Service.AddTopic(new TopicCreationDto("original title", AnAllowedPresentationTime, ""),
+            await instance.Service.AddTopic(new TopicCreationDto("original title", AnAllowedPresentationTime, "", TopicCategory.Workshop, null),
                 loggedInUserName);
-        var updatedTopic = new TopicUpdateDto(originalTopic.Id, newTitle, newPresentationTimeInMinutes, newDescription);
+        var updatedTopic = new TopicUpdateDto(originalTopic.Id, newTitle, newPresentationTimeInMinutes, newDescription, TopicCategory.Workshop, null);
 
         await instance.Service.UpdateTopic(updatedTopic, loggedInUserName);
 
@@ -171,8 +171,8 @@ public class TopicServiceTest
     public async Task Test_fetchAllExceptLoggedIn_GIVEN_two_topics_by_other_users_THEN_return_them_all()
     {
         var otherUserName = "otherUserName";
-        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description");
-        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description");
+        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description", TopicCategory.Workshop, null);
+        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description", TopicCategory.Workshop, null);
         var instance = await CreateInstance([otherUserName]);
         await instance.Service.AddTopic(firstTopicContent, otherUserName);
         await instance.Service.AddTopic(secondTopicContent, otherUserName);
@@ -194,7 +194,7 @@ public class TopicServiceTest
         var nameDuringCreation = "loggedInUserName";
         var nameDuringRetrieval = "LOGGEDINUSERNAME";
         var instance = await CreateInstance([nameDuringCreation]);
-        var ownTopic = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description");
+        var ownTopic = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description", TopicCategory.Workshop, null);
         await instance.Service.AddTopic(ownTopic, nameDuringCreation);
 
         var result = await instance.Service.FetchAllExceptLoggedIn(nameDuringRetrieval);
@@ -211,9 +211,9 @@ public class TopicServiceTest
         var otherUserName = "otherUserName";
         await using var dbContext = TestHelper.GetDbContext<DatabaseContextApplication>();
         var instance = await CreateInstance([loggedInUserName, otherUserName]);
-        var firstTopicContent = new TopicCreationDto("first title", 5, "first description");
+        var firstTopicContent = new TopicCreationDto("first title", 5, "first description", TopicCategory.Workshop, null);
         await instance.Service.AddTopic(firstTopicContent, otherUserName);
-        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description");
+        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description", TopicCategory.Workshop, null);
         await instance.Service.AddTopic(secondTopicContent, loggedInUserName);
 
         var result = await instance.Service.FetchAllExceptLoggedIn(loggedInUserName);
@@ -241,8 +241,8 @@ public class TopicServiceTest
     public async Task Test_fetchAllOfLoggedIn_GIVEN_two_topics_by_other_users_THEN_return_empty()
     {
         var otherUserName = "otherUserName";
-        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description");
-        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description");
+        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description", TopicCategory.Workshop, null);
+        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description", TopicCategory.Workshop, null);
         var instance = await CreateInstance([otherUserName]);
         await instance.Service.AddTopic(firstTopicContent, otherUserName);
         await instance.Service.AddTopic(secondTopicContent, otherUserName);
@@ -261,9 +261,9 @@ public class TopicServiceTest
         var otherUserName = "otherUserName";
         await using var dbContext = TestHelper.GetDbContext<DatabaseContextApplication>();
         var instance = await CreateInstance([loggedInUserName, otherUserName]);
-        var firstTopicContent = new TopicCreationDto("first title", 5, "first description");
+        var firstTopicContent = new TopicCreationDto("first title", 5, "first description", TopicCategory.Workshop, null);
         await instance.Service.AddTopic(firstTopicContent, otherUserName);
-        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description");
+        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description", TopicCategory.Workshop, null);
         await instance.Service.AddTopic(secondTopicContent, loggedInUserName);
 
         var result = await instance.Service.FetchAllOfLoggedIn(loggedInUserName);
@@ -284,9 +284,9 @@ public class TopicServiceTest
         var otherUserName = "otherUserName";
         await using var dbContext = TestHelper.GetDbContext<DatabaseContextApplication>();
         var instance = await CreateInstance([loggedInUserName, otherUserName]);
-        var firstTopicContent = new TopicCreationDto("first title", 5, "first description");
+        var firstTopicContent = new TopicCreationDto("first title", 5, "first description", TopicCategory.Workshop, null);
         await instance.Service.AddTopic(firstTopicContent, otherUserName);
-        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description");
+        var secondTopicContent = new TopicCreationDto("second title", AnAllowedPresentationTime, "second description", TopicCategory.Workshop, null);
         await instance.Service.AddTopic(secondTopicContent, loggedInUserName);
 
         var result = await instance.Service.FetchAllOfLoggedIn(loggedInUserName.ToUpper());
@@ -321,7 +321,7 @@ public class TopicServiceTest
         const string creatorUserName = "creatorUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
         var topicToDelete =
-            await instance.Service.AddTopic(new TopicCreationDto("title", AnAllowedPresentationTime, "description"),
+            await instance.Service.AddTopic(new TopicCreationDto("title", AnAllowedPresentationTime, "description", TopicCategory.Workshop, null),
                 creatorUserName);
 
         async Task Action()
@@ -339,7 +339,7 @@ public class TopicServiceTest
         const string loggedInUserName = "loggedInUserName";
         var instance = await CreateInstance([loggedInUserName]);
         var topicToDelete =
-            await instance.Service.AddTopic(new TopicCreationDto("title", AnAllowedPresentationTime, "description"),
+            await instance.Service.AddTopic(new TopicCreationDto("title", AnAllowedPresentationTime, "description", TopicCategory.Workshop, null),
                 loggedInUserName);
 
 
@@ -370,7 +370,7 @@ public class TopicServiceTest
         const string loggedInUserName = "loggedInUserName";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
-        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description");
+        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description", TopicCategory.Workshop, null);
         var topic = await instance.Service.AddTopic(firstTopicContent, creatorUserName);
 
         await instance.Service.AddTopicVote(topic.Id, loggedInUserName);
@@ -385,7 +385,7 @@ public class TopicServiceTest
         const string loggedInUserName = "loggedInUserName";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
-        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description");
+        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description", TopicCategory.Workshop, null);
         var topic = await instance.Service.AddTopic(firstTopicContent, creatorUserName);
 
         await instance.Service.AddTopicVote(topic.Id, loggedInUserName);
@@ -421,7 +421,7 @@ public class TopicServiceTest
         const string loggedInUserName = "loggedInUserName";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
-        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description");
+        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description", TopicCategory.Workshop, null);
         var topic = await instance.Service.AddTopic(firstTopicContent, creatorUserName);
         await instance.Service.AddTopicVote(topic.Id, loggedInUserName);
 
@@ -438,7 +438,7 @@ public class TopicServiceTest
         const string loggedInUserNameForVoteRemoval = "LOGGEDINUSERNAME";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserNameForVoteCreation, loggedInUserNameForVoteRemoval]);
-        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description");
+        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description", TopicCategory.Workshop, null);
         var topic = await instance.Service.AddTopic(firstTopicContent, creatorUserName);
         await instance.Service.AddTopicVote(topic.Id, loggedInUserNameForVoteCreation);
 
@@ -454,7 +454,7 @@ public class TopicServiceTest
         const string loggedInUserName = "loggedInUserName";
         const string creatorUserName = "otherUserName";
         var instance = await CreateInstance([loggedInUserName, creatorUserName]);
-        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description");
+        var firstTopicContent = new TopicCreationDto("first title", AnAllowedPresentationTime, "first description", TopicCategory.Workshop, null);
         var topic = await instance.Service.AddTopic(firstTopicContent, creatorUserName);
 
         await instance.Service.RemoveTopicVote(topic.Id, loggedInUserName);
@@ -493,7 +493,7 @@ public class TopicServiceTest
         const string loggedInUserName = "Fake User";
         var instance = await CreateInstance([loggedInUserName]);
         var topic = await instance.Service.AddTopic(
-            new TopicCreationDto("Test Topic", AnAllowedPresentationTime, "Test Description"), 
+            new TopicCreationDto("Test Topic", AnAllowedPresentationTime, "Test Description", TopicCategory.Workshop, null), 
             loggedInUserName);
         
         await instance.Service.CommentOnTopic(topic.Id, "Test post content", loggedInUserName);

@@ -1,6 +1,7 @@
 export { topicService } from './topicService';
 export { rideShareService } from './rideShareService';
 export { supportTaskService } from './supportTaskService';
+export { forumService } from './forumService';
 export { authService } from './authService';
 export { homeService } from './homeService';
 export { default as apiClient } from './client';
@@ -21,6 +22,12 @@ export type {
 export type {
   HelpData,
 } from './supportTaskService';
+
+export type {
+  CreateForumEntryData,
+  UpdateForumEntryData,
+  ForumCommentData,
+} from './forumService';
 
 export type {
   LoginCredentials,

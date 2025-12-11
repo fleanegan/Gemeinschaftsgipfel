@@ -14,4 +14,6 @@ public class DatabaseContextApplication(DbContextOptions<DatabaseContextApplicat
     public DbSet<RideShare> RideShares => Set<RideShare>();
     public DbSet<RideShareReservation> RideShareReservations => Set<RideShareReservation>();
     public DbSet<RideShareComment> RideShareComments => Set<RideShareComment>();
+    public DbSet<ForumEntry> ForumEntries => Set<ForumEntry>();
+    public DbSet<ForumComment> ForumComments => Set<ForumComment>();
 }

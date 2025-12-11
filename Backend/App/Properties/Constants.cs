@@ -12,7 +12,7 @@ public static class Constants
     public const int MaxLengthDescription = 10000;
 
     public const string MaxLengthDescriptionErrorMessage =
-        "Vortragsbeschreibungen dürfen maximal {0} Zeichen lang sein.";
+        "Vortragsbeschreibungen dürfen maximal 10000 Zeichen lang sein.";
 
     public const string EmptyIdErrorMessage =
         "Die Vortragsidentitifikationsnummer ist obligatorisch, um Vortragsthemen zu modifizieren.";
@@ -24,4 +24,14 @@ public static class Constants
     public const int MaxLengthMaterial = 500;
     public const string MaxLengthMaterialErrorMessage = "Die Materialbeschreibung darf maximal {0} Zeichen lang sein.";
     public const string MissingCategoryErrorMessage = "Bitte wähle eine Kategorie für deinen Vortrag.";
+
+    public const int MaxLengthForumEntryTitle = 150;
+    public const string MaxLengthForumEntryTitleErrorMessage = "Forumsbeitragstitel dürfen maximal {0} Zeichen lang sein.";
+    public const string EmptyForumEntryTitleErrorMessage = "Ein Forumsbeitrag braucht einen Titel";
+
+    public const int MaxLengthForumEntryContent = 10000;
+    public const string MaxLengthForumEntryContentErrorMessage = "Forumsbeitragsinhalt darf maximal {0} Zeichen lang sein.";
+    public const string EmptyForumEntryContentErrorMessage = "Ein Forumsbeitrag braucht Inhalt";
+
+    public const int MaxLengthForumCommentContent = 5000;
 }

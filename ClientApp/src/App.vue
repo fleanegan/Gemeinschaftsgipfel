@@ -13,6 +13,8 @@
         </router-link>
         <router-link :class="{'router-link': true, 'headerless': !isStandardPage}" to="/rideshare">Fahrgemeinschaften
         </router-link>
+        <router-link :class="{'router-link': true, 'headerless': !isStandardPage}" to="/forum">Forum
+        </router-link>
         <router-link :class="{'router-link': true, 'headerless': !isStandardPage}" to="/schedule">Ablaufplan
         </router-link>
       </div>
@@ -36,6 +38,7 @@
         <router-link to="/topic" @click="toggleMenu">Inhalte</router-link>
         <router-link to="/supporttask" @click="toggleMenu">Mithelfen</router-link>
         <router-link to="/rideshare" @click="toggleMenu">Fahrgemeinschaften</router-link>
+        <router-link to="/forum" @click="toggleMenu">Forum</router-link>
         <router-link to="/schedule" @click="toggleMenu">Ablaufplan</router-link>
       </nav>
     </div>

@@ -69,6 +69,26 @@ const router = createRouter({
             component: () => import('../views/InputRideShareView.vue'),
             props: true,
             meta: { requiresAuth: true }
+        },
+        {
+            path: '/forum',
+            name: 'Forum',
+            component: () => import('../views/ForumView.vue'),
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/forum/add',
+            name: 'Neuer Forumsbeitrag',
+            component: () => import('../views/InputForumView.vue'),
+            props: false,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/forum/edit/:forumId',
+            name: 'Forumsbeitrag bearbeiten',
+            component: () => import('../views/InputForumView.vue'),
+            props: true,
+            meta: { requiresAuth: true }
         }
     ]
 });

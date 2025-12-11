@@ -24,7 +24,7 @@ public class TopicControllerTest : IClassFixture<WebApplicationFactory<Program>>
     [
         new("description", "title",
             new User { UserName = AutoAuthorizeMiddleware.UserName },
-            [new Vote(Topic.Create("asdf", 5, "asdf", new User()), new User { UserName = "demo voter" })])
+            [new Vote(Topic.Create("asdf", 5, "asdf", TopicCategory.Workshop, null, new User()), new User { UserName = "demo voter" })])
     ];
 
     private readonly WebApplicationFactory<Program> _factoryWithAuthorization;
@@ -80,7 +80,7 @@ public class TopicControllerTest : IClassFixture<WebApplicationFactory<Program>>
             .ReturnsAsync((TopicCreationDto newTopic, string _) =>
             {
                 var topic = Topic.Create(newTopic.Title, newTopic.PresentationTimeInMinutes, newTopic.Description ?? "",
-                    new User { Id = "testId" });
+                    newTopic.Category, newTopic.Material, new User { Id = "testId" });
                 topic.Id = HappyPathDummyId;
                 return topic;
             });
@@ -93,7 +93,7 @@ public class TopicControllerTest : IClassFixture<WebApplicationFactory<Program>>
                 if (topicToUpdate.Id == ConflictingDummyId)
                     throw new UnauthorizedTopicModificationException(topicToUpdate.Id);
                 var topic = Topic.Create(topicToUpdate.Title, topicToUpdate.PresentationTimeInMinutes,
-                    topicToUpdate.Description ?? "",
+                    topicToUpdate.Description ?? "", topicToUpdate.Category, topicToUpdate.Material,
                     new User { Id = "testId" });
                 topic.Id = HappyPathDummyId;
                 topic.Votes = [];
@@ -333,7 +333,9 @@ public class TopicControllerTest : IClassFixture<WebApplicationFactory<Program>>
             "Correct id",
             "Correct title",
             3,
-            "Correct description"
+            "Correct description",
+            TopicCategory.Workshop,
+            null
         );
 
         var response = await client.PutAsync("/topic/Update", TestHelper.EncodeBody(payload));
