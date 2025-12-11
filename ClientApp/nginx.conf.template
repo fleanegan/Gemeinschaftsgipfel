@@ -20,6 +20,19 @@ http {
         ssl_certificate /etc/ssl/certs/my-site.crt;
         ssl_certificate_key /etc/ssl/private/my-site.key;
 
+        # Cache static images with 2-week expiry and ETags for revalidation
+        location /photos/ {
+            root /usr/share/nginx/html;
+            add_header Cache-Control "public, max-age=1209600, must-revalidate";
+            etag on;
+        }
+
+        location /programs/ {
+            root /usr/share/nginx/html;
+            add_header Cache-Control "public, max-age=1209600, must-revalidate";
+            etag on;
+        }
+
         # Vue frontend static built folder (resides with Nginx server)
         location / {
             include /etc/nginx/mime.types;
@@ -28,6 +41,8 @@ http {
             root   /usr/share/nginx/html;
             index  index.html index.htm;
             try_files $uri $uri/ /index.html;
+            # Prevent caching of index.html for SPA routing
+            add_header Cache-Control "no-cache, must-revalidate";
           }
           
          location /api/ {

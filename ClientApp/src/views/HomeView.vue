@@ -16,17 +16,28 @@
     <router-link :class="{'topic_call_to_action': true, 'call_to_action_highlight': true, 'topic_call_to_action_animation1': currentScreen > 1.5}"
                  to="/supporttask">Arbeitsgruppe beitreten
     </router-link>
+    <div class="text_paragraph">
+      <br>
+      <br>
+    <h2>Programme der letzten Jahre</h2>
+    <span>Hier findest du die Programme der vergangenen Gemeinschaftsgipfel zur Inspiration.</span>
+    </div>  
+    <div class="program_section">
+      <program-gallery />
+  </div>
   </div>
   <div :class="{'slider':true, 'key_information_slider': false}"></div>
+
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
 import InfoBox from "@/components/InfoBox.vue";
+import ProgramGallery from "@/components/ProgramGallery.vue";
 import {homeService} from '@/services/api';
 
 export default defineComponent({
-  components: {InfoBox},
+  components: {InfoBox, ProgramGallery},
   data() {
     return {
       actionContainer: document.getElementById('action_container'),
@@ -261,6 +272,17 @@ background-color: var(--main-color-primary);
   margin-top: 25rem;
   font-size: 2rem;
   text-align: center;
+}
+
+.program_section {
+  text-align: center;
+  max-width: 900px;
+  padding: 0 1rem;
+}
+
+.program_section h2 {
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
 }
 
 </style>
