@@ -124,7 +124,7 @@ function seededRandom(seed: number): number {
 const photoMap: Record<TopicType, string> = {
   'Explanation': '', // No photo for explanation card
   'Workshop': '/photos/workshop.jpg',
-  'Vortrag': '/photos/presentation.png',
+  'Vortrag': '/photos/presentation.jpg',
   'Sport': '/photos/sport.jpg',
   'Diskussion': '/photos/discussion.jpg',
   'Sonstiges': '/photos/misc.jpg',

@@ -190,6 +190,10 @@ export default defineComponent({
   padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
+.form-input {
+  max-width: 600px;
+}
+
 .errors {
   color: red;
   margin-left: 1.5rem;

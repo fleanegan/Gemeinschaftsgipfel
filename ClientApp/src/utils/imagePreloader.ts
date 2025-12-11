@@ -5,7 +5,7 @@
 
 const TOPIC_PHOTOS = [
   '/photos/workshop.jpg',
-  '/photos/presentation.png',
+  '/photos/presentation.jpg',
   '/photos/sport.jpg',
   '/photos/discussion.jpg',
   '/photos/misc.jpg',

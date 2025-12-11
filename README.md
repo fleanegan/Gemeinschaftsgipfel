@@ -10,7 +10,7 @@ Required Photos
 -----
 The application requires the following photos to be placed in `./ClientApp/public/photos/`:
 - `workshop.jpg` - Image for Workshop topic type
-- `presentation.png` - Image for Vortrag (Presentation) topic type
+- `presentation.jpg` - Image for Vortrag (Presentation) topic type
 - `sport.jpg` - Image for Sport topic type
 - `discussion.jpg` - Image for Diskussion (Discussion) topic type
 - `misc.jpg` - Image for Sonstiges (Other) topic type
