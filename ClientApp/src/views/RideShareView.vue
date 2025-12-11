@@ -27,10 +27,10 @@
             <template #actions>
               <div class="topic_card_details_owner_actions">
                 <button class="action_button" @click="removeRideShare(item.id)">
-                  <img alt="Delete" src="/empty_delete.svg">
+                  <img alt="Delete" src="/trash_bin.svg">
                 </button>
                 <button v-if="item.status !== 1" class="action_button" @click="cancelRideShare(item.id)">
-                  <img alt="Cancel" src="/empty_delete.svg" title="Absagen">
+                  <img alt="Cancel" src="/trash_bin.svg" title="Absagen">
                 </button>
                 <button v-if="item.status === 1" class="action_button" @click="uncancelRideShare(item.id)">
                   <img alt="Uncancel" src="/empty_edit_no_border.svg" title="Reaktivieren">

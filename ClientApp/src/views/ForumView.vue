@@ -21,7 +21,7 @@
           <template v-if="isOwner(entry)" #action-button>
             <div class="forum_card_details_owner_actions">
               <button class="action_button" @click="confirmDelete(entry.id)">
-                <img alt="Delete" src="/empty_delete.svg">
+                <img alt="Delete" src="/trash_bin.svg">
               </button>
               <button class="action_button" @click="editForumEntry(entry.id)">
                 <img alt="Edit" src="/empty_edit_no_border.svg">
