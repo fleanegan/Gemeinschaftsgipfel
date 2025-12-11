@@ -52,6 +52,37 @@ public class TopicServiceTest
     }
 
     [Fact]
+    public async Task Test_add_GIVEN_unlimited_duration_THEN_store_in_db()
+    {
+        const int unlimitedDuration = -1;
+        const string loggedInUserName = "Fake User";
+        var instance = await CreateInstance([loggedInUserName]);
+
+        await instance.Service.AddTopic(new TopicCreationDto("title", unlimitedDuration, "description", TopicCategory.Workshop, null),
+            loggedInUserName);
+
+        var result = (await instance.Repository.GetAll()).ToArray()[0];
+        Assert.NotNull(result);
+        Assert.Equal(unlimitedDuration, result.PresentationTimeInMinutes);
+    }
+
+    [Fact]
+    public async Task Test_update_GIVEN_unlimited_duration_THEN_update_successfully()
+    {
+        const int unlimitedDuration = -1;
+        const string loggedInUserName = "Fake User";
+        var instance = await CreateInstance([loggedInUserName]);
+        var topicCreationDto = new TopicCreationDto("title", AnAllowedPresentationTime, "description", TopicCategory.Workshop, null);
+        var createdTopic = await instance.Service.AddTopic(topicCreationDto, loggedInUserName);
+        
+        var updatedTopic = new TopicUpdateDto(createdTopic.Id, "updated title", unlimitedDuration, "updated description", TopicCategory.Vortrag, "material");
+        var result = await instance.Service.UpdateTopic(updatedTopic, loggedInUserName);
+
+        Assert.Equal(unlimitedDuration, result.PresentationTimeInMinutes);
+        Assert.Equal("updated title", result.Title);
+    }
+
+    [Fact]
     public async Task Test_getById_GIVEN_non_existing_id_THEN_throw_exception()
     {
         const string nonExistingId = "nonExistingId";

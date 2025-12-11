@@ -36,7 +36,9 @@
       <select v-if="legalDurations.length > 0" id="presentationTimeInMinutes" v-model.number="presentationTimeInMinutes"
               class="form-input" required>
         <option value="" disabled selected>Bitte wähle eine Dauer (Wenn du weniger Zeit brauchst, ist das kein Problem)</option>
-        <option v-for="option in legalDurations" :key="option" :value="option">{{ option }} Minuten</option>
+        <option v-for="option in legalDurations" :key="option" :value="option">
+          {{ option === -1 ? 'Ich laufe nebenher' : `${option} Minuten` }}
+        </option>
       </select>
       <input v-else id="presentationTimeInMinutes" type="number" v-model.number="presentationTimeInMinutes"
              class="form-input" placeholder="in Minuten"/>

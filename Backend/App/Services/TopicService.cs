@@ -103,6 +103,10 @@ public class TopicService(
 
     private void PreventForbiddenPresentationDurations(int presentationTimeInMinutes)
     {
+        // Allow -1 for unlimited duration ("Ich laufe nebenher")
+        if (presentationTimeInMinutes == -1)
+            return;
+            
         if (!allowedPresentationDurations.Contains(presentationTimeInMinutes) && allowedPresentationDurations.Count > 0)
             throw new ArgumentOutOfRangeException(presentationTimeInMinutes.ToString());
     }

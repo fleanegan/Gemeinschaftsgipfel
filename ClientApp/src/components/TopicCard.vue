@@ -17,7 +17,7 @@
           <!-- Badges row -->
           <div class="details-badges-row">
             <span class="category-badge" :class="categoryBadgeClass">{{ topic.category }}</span>
-            <span class="time-badge">{{ topic.presentationTimeInMinutes }}'</span>
+            <span class="time-badge">{{ formatDuration(topic.presentationTimeInMinutes) }}</span>
           </div>
 
           <!-- Presenter (foreign topics only) -->
@@ -100,6 +100,12 @@ export default defineComponent({
     }
   },
   methods: {
+    formatDuration(minutes: number): string {
+      if (minutes === -1) {
+        return '∞';
+      }
+      return `${minutes}'`;
+    },
     handleCommentSent(payload: any) {
       this.$emit('comment-sent', {
         topicId: payload.itemId,
