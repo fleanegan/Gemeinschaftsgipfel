@@ -197,78 +197,80 @@ export default defineComponent({
 }
 
 .forum-section {
-  margin-bottom: var(--spacing-xl);
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  background-color: var(--color-background-soft);
+  padding: var(--space-md);
+  border-radius: var(--radius-sharp);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--space-sm);
+  list-style: none;
+  margin: 0;
+}
+
+/* Small screens: Reduce list padding */
+@media (max-width: 400px) {
+  .list {
+    padding: var(--space-sm) var(--space-sm) !important;
+    gap: var(--space-xs) !important;
+  }
 }
 
 .list-end-message {
   text-align: center;
-  color: var(--color-text-muted);
-  padding: var(--spacing-lg);
-  font-style: italic;
+  padding: var(--space-md);
+  color: var(--color-main-text);
+  opacity: 0.7;
+  font-size: var(--text-sm);
 }
 
 .add-button-container {
   display: flex;
-  justify-content: center;
-  margin-top: var(--spacing-lg);
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .submit-button {
-  padding: var(--spacing-sm) var(--spacing-xl);
-  background-color: var(--color-primary);
-  color: var(--color-text-bright);
-  border: none;
-  border-radius: var(--radius-interactive);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--text-base);
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.submit-button:hover {
-  opacity: 0.9;
+  margin-top: 0;
+  margin-left: auto;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: var(--radius-interactive);
+  border-bottom-right-radius: var(--radius-interactive);
+  margin-right: 0;
+  white-space: nowrap;
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+  width: auto;
 }
 
 .forum_card_details_owner_actions {
   display: flex;
-  gap: var(--space-xs);
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.forum_card_details_owner_actions button {
+  margin-left: var(--space-sm);
 }
 
 .action_button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  border-radius: var(--radius-interactive);
-  background-color: var(--color-nuance-light);
-  transition: background-color 0.2s ease;
   cursor: pointer;
-  border: none;
+  background: none;
+  border-style: none;
+  border-radius: var(--radius-interactive);
+  font-weight: bold;
+  display: flex;
+  place-items: center;
 }
 
-.action_button:hover {
-  background-color: var(--color-border-light);
-}
 
-.action_button img {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid var(--color-border-light);
-  margin: var(--spacing-lg) 0;
-}
 </style>

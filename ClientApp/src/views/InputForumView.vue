@@ -1,41 +1,39 @@
 <template>
-  <div class="input-forum-container">
-    <h1>{{ isEditing ? 'Beitrag bearbeiten' : 'Neuer Beitrag' }}</h1>
-    <form @submit.prevent="submit">
-      <div class="form-group">
-        <label for="title">Titel</label>
-        <input 
-          id="title" 
-          v-model="title" 
-          class="form-input" 
-          type="text"
-          maxlength="150"
-          required
-        />
-        <p v-if="isTitleEmpty" class="error-message">Der Titel darf nicht leer sein</p>
-        <p v-if="isTitleTooLong" class="error-message">Der Titel darf maximal 150 Zeichen lang sein</p>
-      </div>
-      
-      <div class="form-group">
-        <label for="content">Inhalt</label>
-        <textarea 
-          id="content" 
-          v-model="content" 
-          class="form-input" 
-          rows="10"
-          maxlength="10000"
-          required
-        ></textarea>
-        <p v-if="isContentEmpty" class="error-message">Der Inhalt darf nicht leer sein</p>
-        <p v-if="isContentTooLong" class="error-message">Der Inhalt darf maximal 10000 Zeichen lang sein</p>
-      </div>
-      
-      <div class="button-container">
-        <button type="button" class="abort-button" @click="abort">Abbrechen</button>
-        <button type="submit" class="submit-button" :disabled="!canSubmit">Absenden</button>
-      </div>
-    </form>
-  </div>
+  <h1>{{ isEditing ? 'Beitrag bearbeiten' : 'Neuer Beitrag' }}</h1>
+  <form @submit.prevent="submit">
+    <div class="form-group">
+      <label for="title">Titel</label>
+      <input 
+        id="title" 
+        v-model="title" 
+        class="form-input" 
+        type="text"
+        maxlength="150"
+        required
+      />
+      <p v-if="isTitleEmpty" class="error-message">Der Titel darf nicht leer sein</p>
+      <p v-if="isTitleTooLong" class="error-message">Der Titel darf maximal 150 Zeichen lang sein</p>
+    </div>
+    
+    <div class="form-group">
+      <label for="content">Inhalt</label>
+      <textarea 
+        id="content" 
+        v-model="content" 
+        class="form-input" 
+        rows="10"
+        maxlength="10000"
+        required
+      ></textarea>
+      <p v-if="isContentEmpty" class="error-message">Der Inhalt darf nicht leer sein</p>
+      <p v-if="isContentTooLong" class="error-message">Der Inhalt darf maximal 10000 Zeichen lang sein</p>
+    </div>
+    
+    <div class="button-container">
+      <button type="button" class="abort-button" @click="abort">Verwerfen</button>
+      <button type="submit" class="submit-button" :disabled="!canSubmit">Abschicken</button>
+    </div>
+  </form>
 </template>
 
 <script lang="ts">
@@ -120,95 +118,23 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.input-forum-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: var(--spacing-lg);
-}
-
-h1 {
-  margin-bottom: var(--spacing-lg);
-  color: var(--color-primary);
-}
-
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--spacing-lg);
-}
-
-label {
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--spacing-xs);
-  color: var(--color-main-text);
-}
-
-.form-input {
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-interactive);
-  font-size: var(--text-base);
-  font-family: inherit;
-  background-color: var(--color-background);
-  color: var(--color-main-text);
-  transition: border-color 0.2s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-}
-
-textarea.form-input {
-  resize: vertical;
-  min-height: 200px;
+  padding: 0 1rem 1rem 1rem;
 }
 
 .error-message {
-  color: #dc2626;
-  font-size: var(--text-sm);
-  margin-top: var(--spacing-xs);
-  margin-bottom: 0;
+  color: red;
 }
 
 .button-container {
   display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-sm);
-  margin-top: var(--spacing-xl);
-}
-
-.abort-button,
-.submit-button {
-  padding: var(--spacing-sm) var(--spacing-xl);
-  border: none;
-  border-radius: var(--radius-interactive);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--text-base);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.abort-button {
-  background-color: var(--color-background-soft);
-  color: var(--color-main-text);
-}
-
-.abort-button:hover {
-  background-color: var(--color-border);
+  flex-direction: row;
 }
 
 .submit-button {
-  background-color: var(--color-primary);
-  color: var(--color-text-bright);
-}
-
-.submit-button:hover:not(:disabled) {
-  opacity: 0.9;
-}
-
-.submit-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  margin-left: auto;
+  margin-right: 1rem;
 }
 </style>

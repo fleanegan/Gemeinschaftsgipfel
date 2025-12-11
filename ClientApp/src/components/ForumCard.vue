@@ -230,14 +230,16 @@ export default defineComponent({
 
 .info-label {
   font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-secondary);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
+  color: var(--color-main-text);
+  opacity: 0.6;
 }
 
 .info-value {
   font-size: var(--text-base);
-  color: var(--color-main-text);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
 }
 
 /* Content section */
@@ -250,17 +252,20 @@ export default defineComponent({
 
 .content-label {
   font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-secondary);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.05em;
+  color: var(--color-main-text);
+  opacity: 0.6;
 }
 
 .content-text {
-  font-size: var(--text-base);
-  color: var(--color-main-text);
+  font-size: var(--text-sm);
+  color: var(--color-primary);
   line-height: 1.6;
   white-space: pre-wrap;
-  word-wrap: break-word;
+  background-color: var(--color-nuance-light);
+  padding-right: 0;
+  border-radius: var(--radius-interactive);
   margin: 0;
 }
 
@@ -268,15 +273,18 @@ export default defineComponent({
 .mobile-comments-button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  background-color: var(--color-nuance-light);
-  color: var(--color-primary);
-  border: none;
-  border-radius: var(--radius-interactive);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
+  width: 100%;
   margin-top: var(--space-md);
+  padding: var(--space-sm);
+  background-color: var(--color-nuance-light);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-interactive);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
   transition: background-color 0.2s ease;
 }
 
@@ -288,14 +296,14 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.5rem;
-  height: 1.5rem;
+  min-width: var(--space-lg);
+  height: var(--space-lg);
   padding: 0 var(--space-xs);
   background-color: var(--color-primary);
-  color: var(--color-text-bright);
-  border-radius: 50%;
+  color: var(--color-background);
+  border-radius: var(--radius-pill);
   font-size: var(--text-xs);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Comments sidebar (desktop only) */
@@ -303,23 +311,23 @@ export default defineComponent({
   display: none;
 }
 
-/* Desktop layout */
-@media (min-width: 768px) {
+/* Desktop: Side-by-side layout */
+@media (min-width: 785px) {
   .details-layout {
     flex-direction: row;
-    gap: var(--space-lg);
+    gap: var(--space-md);
+    align-items: flex-start;
   }
 
   .forum-info-container {
-    flex: 1;
+    flex: 1 1 50%;
     min-width: 0;
   }
 
   .comments-sidebar {
     display: block;
-    flex-shrink: 0;
-    width: 24rem;
-    max-width: 40%;
+    flex: 1 1 50%;
+    min-width: 0;
   }
 
   .mobile-comments-button {

@@ -107,7 +107,7 @@ export default defineComponent({
 
 .modal-dialog {
   background-color: var(--color-background);
-  border-radius: var(--radius-interactive);
+  border-radius: var(--radius-sharp);
   width: 90%;
   max-width: 28rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -115,52 +115,57 @@ export default defineComponent({
 }
 
 .modal-header {
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: var(--space-md) var(--space-md);
   border-bottom: 1px solid var(--color-border-light);
+  background-color: var(--color-background-soft);
 }
 
 .modal-header h3 {
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
 }
 
 .modal-content {
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: var(--space-md);
 }
 
 .modal-content p {
   margin: 0;
   color: var(--color-main-text);
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: var(--text-base);
 }
 
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-background-soft);
   border-top: 1px solid var(--color-border-light);
 }
 
 .cancel-button,
 .confirm-button {
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: var(--space-sm) var(--space-lg);
   border: none;
   border-radius: var(--radius-interactive);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-base);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .cancel-button {
-  background-color: var(--color-background-soft);
+  background-color: var(--color-background);
   color: var(--color-main-text);
+  border: 1px solid var(--color-border-light);
 }
 
 .cancel-button:hover {
-  background-color: var(--color-border);
+  background-color: var(--color-border-light);
 }
 
 .confirm-button {
@@ -181,7 +186,7 @@ export default defineComponent({
   background-color: #b91c1c;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 785px) {
   .modal-overlay {
     align-items: flex-end;
   }
@@ -189,7 +194,7 @@ export default defineComponent({
   .modal-dialog {
     width: 100%;
     max-width: 100%;
-    border-radius: 12px 12px 0 0;
+    border-radius: var(--radius-sharp) var(--radius-sharp) 0 0;
   }
 }
 </style>

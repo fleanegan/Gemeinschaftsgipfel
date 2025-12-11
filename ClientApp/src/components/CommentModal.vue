@@ -78,7 +78,7 @@ export default defineComponent({
 
 .modal-container {
   background-color: var(--color-background);
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--radius-sharp) var(--radius-sharp) 0 0;
   width: 100%;
   max-height: 85vh;
   display: flex;
@@ -95,14 +95,15 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 1rem;
+  padding: var(--space-md) var(--space-md);
   border-bottom: 1px solid var(--color-border-light);
+  background-color: var(--color-background-soft);
 }
 
 .modal-header h3 {
   margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
 }
 
@@ -119,28 +120,28 @@ export default defineComponent({
   line-height: 1;
   color: var(--color-main-text);
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: var(--radius-interactive);
   transition: background-color 0.2s ease;
 }
 
 .close-button:hover {
-  background-color: var(--color-nuance-light);
+  background-color: var(--color-border-light);
 }
 
 .modal-content {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+  padding: var(--space-md);
 }
 
 /* Desktop: Centered modal instead of bottom sheet */
-@media (min-width: 768px) {
+@media (min-width: 785px) {
   .modal-overlay {
     align-items: center;
   }
   
   .modal-container {
-    border-radius: 8px;
+    border-radius: var(--radius-sharp);
     max-width: 600px;
     max-height: 80vh;
     animation: fade-in 0.3s ease-out;
