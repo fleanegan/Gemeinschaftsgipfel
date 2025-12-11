@@ -2,8 +2,10 @@ bin/
 obj/
 /packages/
 /ClientApp/public/schedule.svg
-/ClientApp/public/photos/
-/ClientApp/public/programs/
+/ClientApp/public/photos/*
+!/ClientApp/public/photos/.gitkeep
+/ClientApp/public/programs/*
+!/ClientApp/public/programs/.gitkeep
 riderModule.iml
 /_ReSharper.Caches/
 .idea/
