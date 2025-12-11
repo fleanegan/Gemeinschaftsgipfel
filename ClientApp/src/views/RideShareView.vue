@@ -26,10 +26,10 @@
           >
             <template #actions>
               <div class="topic_card_details_owner_actions">
-                <button class="action_button" @click="removeRideShare(item.id)">
+                <button class="action_button" @click="confirmRemoveRideShare(item.id)">
                   <img alt="Delete" src="/trash_bin.svg">
                 </button>
-                <button v-if="item.status !== 1" class="action_button" @click="cancelRideShare(item.id)">
+                <button v-if="item.status !== 1" class="action_button" @click="confirmCancelRideShare(item.id)">
                   <img alt="Cancel" src="/trash_bin.svg" title="Absagen">
                 </button>
                 <button v-if="item.status === 1" class="action_button" @click="uncancelRideShare(item.id)">
@@ -74,6 +74,17 @@
         </ul>
       </section>
     </div>
+
+    <ConfirmationModal
+      :is-open="confirmationModalOpen"
+      :title="confirmationTitle"
+      :message="confirmationMessage"
+      confirm-text="Löschen"
+      cancel-text="Abbrechen"
+      confirm-button-class="danger-button"
+      @confirm="executeDelete"
+      @cancel="cancelDelete"
+    />
   </div>
 </template>
 
@@ -82,17 +93,23 @@ import {defineComponent} from 'vue';
 import type {RideShare} from "@/types/RideShareInterfaces";
 import type {Comment} from "@/types/TopicInterfaces";
 import RideShareCard from "@/components/RideShareCard.vue";
+import ConfirmationModal from '@/components/ConfirmationModal.vue';
 import {scrollToTopMixin} from '@/mixins/scrollToTop';
 import InstructionCards from '@/components/InstructionCards.vue';
 import {rideShareService} from '@/services/api';
 
 export default defineComponent({
-  components: {RideShareCard, InstructionCards},
+  components: {RideShareCard, ConfirmationModal, InstructionCards},
   mixins: [scrollToTopMixin],
   data() {
     return {
       foreignRideShares: [] as RideShare[],
       myRideShares: [] as RideShare[],
+      confirmationModalOpen: false,
+      rideShareToDelete: null as string | null,
+      deleteAction: null as (() => Promise<void>) | null,
+      confirmationTitle: '',
+      confirmationMessage: '',
       instructions: [
         {
           title: 'Fahrt anbieten',
@@ -180,13 +197,42 @@ export default defineComponent({
         }
       });
     },
-    async removeRideShare(rideShareId: string) {
-      await rideShareService.deleteRideShare(rideShareId);
-      await this.fetchData();
+    confirmRemoveRideShare(rideShareId: string) {
+      this.rideShareToDelete = rideShareId;
+      this.confirmationTitle = 'Fahrt löschen';
+      this.confirmationMessage = 'Möchten Sie diese Fahrt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.';
+      this.deleteAction = async () => {
+        await rideShareService.deleteRideShare(rideShareId);
+        await this.fetchData();
+      };
+      this.confirmationModalOpen = true;
     },
-    async cancelRideShare(rideShareId: string) {
-      await rideShareService.cancelRideShare(rideShareId);
-      await this.fetchData();
+    confirmCancelRideShare(rideShareId: string) {
+      this.rideShareToDelete = rideShareId;
+      this.confirmationTitle = 'Fahrt absagen';
+      this.confirmationMessage = 'Möchten Sie diese Fahrt wirklich absagen? Alle Mitfahrer werden benachrichtigt.';
+      this.deleteAction = async () => {
+        await rideShareService.cancelRideShare(rideShareId);
+        await this.fetchData();
+      };
+      this.confirmationModalOpen = true;
+    },
+    async executeDelete() {
+      if (!this.deleteAction) return;
+      
+      try {
+        await this.deleteAction();
+        this.confirmationModalOpen = false;
+        this.rideShareToDelete = null;
+        this.deleteAction = null;
+      } catch (error) {
+        console.error('Error executing delete action:', error);
+      }
+    },
+    cancelDelete() {
+      this.confirmationModalOpen = false;
+      this.rideShareToDelete = null;
+      this.deleteAction = null;
     },
     async uncancelRideShare(rideShareId: string) {
       await rideShareService.uncancelRideShare(rideShareId);

@@ -28,7 +28,7 @@
           >
             <template #action-button>
               <div class="topic_card_details_owner_actions">
-                <button class="action_button" @click="removeTopic(item.id)">
+                <button class="action_button" @click="confirmDeleteTopic(item.id)">
                   <img alt="Delete" src="/trash_bin.svg">
                 </button>
                 <button class="action_button" @click="editTopic(item.id)">
@@ -72,28 +72,43 @@
         </ul>
       </section>
     </div>
+
+    <ConfirmationModal
+      :is-open="confirmationModalOpen"
+      title="Vorschlag löschen"
+      message="Möchten Sie diesen Vorschlag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+      confirm-text="Löschen"
+      cancel-text="Abbrechen"
+      confirm-button-class="danger-button"
+      @confirm="removeTopic"
+      @cancel="cancelDelete"
+    />
   </div>
 </template>
 
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import type {ForeignTopic, MyTopic, Comment} from "@/types/TopicInterfaces";
+import type {ForeignTopic, MyTopic} from "@/types/TopicInterfaces";
+import type {Comment} from "@/types/TopicInterfaces";
 import TopicCard from "@/components/TopicCard.vue";
-import {formatDateTime} from '@/utils/dateFormatter';
-import {scrollToTopMixin} from '@/mixins/scrollToTop';
+import ConfirmationModal from '@/components/ConfirmationModal.vue';
 import InstructionCards from '@/components/InstructionCards.vue';
 import TopicTypeExplanationStack from '@/components/TopicTypeExplanationStack.vue';
+import {scrollToTopMixin} from '@/mixins/scrollToTop';
 import {topicService} from '@/services/api';
+import {formatDateTime} from '@/utils/dateFormatter';
 
 
 export default defineComponent({
-  components: {TopicCard, InstructionCards, TopicTypeExplanationStack},
+  components: {TopicCard, ConfirmationModal, InstructionCards, TopicTypeExplanationStack},
   mixins: [scrollToTopMixin],
   data() {
     return {
       foreignTopics: [] as ForeignTopic[],
       myTopics: [] as MyTopic[],
+      confirmationModalOpen: false,
+      topicToDelete: null as string | null,
       instructions: [
         {
           title: 'Inhalt ausdenken',
@@ -158,9 +173,25 @@ async toggleDetails(topic: MyTopic[] | ForeignTopic[], index: number): Promise<v
       });
     },
     formatDateTime,
-    async removeTopic(topicId: string) {
-      await topicService.deleteTopic(topicId);
-      await this.fetchData();
+    confirmDeleteTopic(topicId: string) {
+      this.topicToDelete = topicId;
+      this.confirmationModalOpen = true;
+    },
+    async removeTopic() {
+      if (!this.topicToDelete) return;
+      
+      try {
+        await topicService.deleteTopic(this.topicToDelete);
+        this.confirmationModalOpen = false;
+        this.topicToDelete = null;
+        await this.fetchData();
+      } catch (error) {
+        console.error('Error deleting topic:', error);
+      }
+    },
+    cancelDelete() {
+      this.confirmationModalOpen = false;
+      this.topicToDelete = null;
     },
     addNewTopic() {
       this.$router.push("/topic/add");
