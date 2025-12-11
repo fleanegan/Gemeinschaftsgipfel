@@ -1,14 +1,14 @@
 <template>
   <div class="supporttask wide-content">
+    <div :class="{'floating_scroll_to_top_hidden': true, 'floating_scroll_to_top_shown': isSticky}">
+      <button class="action_button" style="margin-right: 1rem;" @click="scrollToTop">
+        <img :src="'/expand.svg'" alt="Expand">
+      </button>
+    </div>
     <h1>Helfende Hände</h1>
     <div class="instructions-formats-row">
       <div class="instructions-wrapper">
-        <p class="support_description">Freiwillige vor! Wir haben ein paar Aufgaben gesammelt, bei denen wir Hilfe brauchen.
-        Mach
-        mit und schaff die letzten Hürden auf dem Weg zum Gemeinschaftsgipfel aus dem Weg. Keine Scheu, hier steht das
-        Vergnügen proportional zum Schweiß : Jeder Dienst wird in Dreiergruppen gestaltet, damit du auch bei diesem Teil
-        des Festivals immer von netten Menschen umgeben bist. Zur vergeben sind (oh ja, du darfst dich auch mehrmals
-        eintragen):</p>
+        <InstructionCards :instructions="instructions" />
       </div>
     </div>
     
@@ -69,18 +69,34 @@
 import { defineComponent } from 'vue';
 import { useAuthStore } from '@/store/auth';
 import SupportTaskCard from '@/components/SupportTaskCard.vue';
+import InstructionCards from '@/components/InstructionCards.vue';
 import {scrollToTopMixin} from '@/mixins/scrollToTop';
 import type {SupportTask} from '@/types/SupportTaskInterfaces';
 import {supportTaskService} from '@/services/api';
 
 export default defineComponent({
   components: {
-    SupportTaskCard
+    SupportTaskCard,
+    InstructionCards
   },
   mixins: [scrollToTopMixin],
   data() {
     return {
       supportTasks: [] as SupportTask[],
+      instructions: [
+        {
+          title: 'Aufgabe aussuchen',
+          content: 'Freiwillige vor! Wir haben ein paar Aufgaben gesammelt, bei denen wir Hilfe brauchen. Keine Scheu, hier steht das Vergnügen proportional zum Schweiß.'
+        },
+        {
+          title: 'Gemeinsam anpacken',
+          content: 'Jeder Dienst wird in Dreiergruppen gestaltet, damit du auch bei diesem Teil des Festivals immer von netten Menschen umgeben bist.'
+        },
+        {
+          title: 'Mehrfach helfen',
+          content: 'Du darfst dich auch mehrmals eintragen und bei verschiedenen Aufgaben mithelfen. Jede helfende Hand wird gebraucht!'
+        }
+      ]
     };
   },
   methods: {
@@ -137,6 +153,31 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.floating_scroll_to_top_hidden {
+  margin-left: auto;
+  height: 3.3rem;
+  width: 75%;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: none;
+}
+
+.floating_scroll_to_top_shown {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: right;
+  background-color: transparent;
+}
+
+@media (max-width: 900px) {
+  .floating_scroll_to_top_shown {
+    background-color: var(--color-background);
+  }
+}
+
 .supporttask {
   background-color: var(--color-background);
 }
@@ -148,6 +189,7 @@ export default defineComponent({
 
 .supporttask h2 {
   margin-left: 0;
+  font-size: var(--text-xl);
 }
 
 /* Instructions row (single column for SupportTaskView) */
@@ -163,11 +205,6 @@ export default defineComponent({
 .instructions-wrapper {
   max-width: 600px;
   margin-left: -0.25rem;
-}
-
-.support_description {
-  margin: 0 0 var(--space-md) 0;
-  line-height: 1.6;
 }
 
 /* Sections container - always stacked vertically */
@@ -195,6 +232,24 @@ export default defineComponent({
   }
 }
 
+.support-section {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.support-section h2 {
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+}
+
+.support-section .support_description {
+  margin: 0 0 var(--space-md) 0;
+  line-height: 1.6;
+  font-size: var(--text-sm);
+}
+
 .list {
   background-color: var(--color-background-soft);
   padding: var(--space-md);
@@ -207,7 +262,7 @@ export default defineComponent({
 }
 
 /* Small screens: Reduce list padding */
-@media (max-width: 400px) {
+@media (max-width: var(--breakpoint-mobile)) {
   .list {
     padding: var(--space-sm) var(--space-sm) !important;
     gap: var(--space-xs) !important;
@@ -218,15 +273,10 @@ export default defineComponent({
   list-style: none;
 }
 
-h2 {
-  margin-top: 0;
-  margin-bottom: var(--space-sm);
-}
-
 /* Summary section */
 .summary-section {
   width: 100%;
-  margin-top: var(--space-md);
+  margin-top: var(--space-xl);
   padding: var(--space-md);
   background-color: var(--color-background-soft);
   border-radius: var(--radius-sharp);
@@ -255,12 +305,21 @@ h2 {
 }
 
 /* Small screens: Reduce summary padding */
-@media (max-width: 400px) {
+@media (max-width: var(--breakpoint-mobile)) {
   .summary-section {
     padding: var(--space-sm);
   }
 }
+
+/* Action button styling */
+.action_button {
+  cursor: pointer;
+  background: none;
+  border-style: none;
+  border-radius: var(--radius-interactive);
+  font-weight: bold;
+  display: flex;
+  place-items: center;
+}
 </style>
-<style scoped src="src/assets/topics.css"></style>
-<style scoped src="src/assets/instructions.css">
-</style>
+<style scoped src="src/assets/instructions.css"></style>

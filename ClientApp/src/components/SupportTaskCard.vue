@@ -111,11 +111,10 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   min-height: 3rem;
-  padding-left: var(--space-sm);
-  padding-top: var(--space-sm);
-  margin-bottom: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-background);
   border-radius: var(--radius-sharp);
-  border: 0.1rem solid rgba(179, 76, 76, 0.1);
+  border: 1px solid var(--color-border-light);
 }
 
 .card_content {
@@ -189,7 +188,7 @@ export default defineComponent({
 
 .progress_bar_shell {
   border: 1px solid var(--main-color-primary);
-  border-radius: var(--radius-sharp);
+  border-radius: var(--radius-interactive);
   width: 100%;
   height: 100%;
   font-size: var(--text-xs);
@@ -215,11 +214,22 @@ export default defineComponent({
 .support_task_header {
   font-stretch: extra-expanded;
   font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-xs);
+}
+
+.card_content p {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  margin-bottom: var(--space-xs);
 }
 
 .support_task_duration {
   margin-left: auto;
   margin-top: var(--space-sm);
-  margin-right: var(--space-sm);
+  margin-right: 0;
+  font-size: var(--text-sm);
+  color: var(--color-main-text);
+  opacity: 0.8;
 }
 </style>
