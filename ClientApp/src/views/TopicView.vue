@@ -63,7 +63,7 @@
             </template>
             <template #presenter>
               <div class="info-row">
-                <span class="info-label">VORTRAGENDER</span>
+                <span class="info-label">ES TRÄGT VOR</span>
                 <span class="info-value">{{ item.presenterUserName }}</span>
               </div>
             </template>

@@ -14,7 +14,7 @@
         <div class="forum-info-container">
           <!-- Creator info -->
           <div class="info-row">
-            <span class="info-label">ERSTELLER</span>
+            <span class="info-label">ERSTELLT VON</span>
             <span class="info-value">{{ forumEntry.creatorUserName }}</span>
           </div>
 

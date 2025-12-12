@@ -56,13 +56,13 @@
 
           <!-- Driver -->
           <div class="info-row">
-            <span class="info-label">FAHRER</span>
+            <span class="info-label">ES FÄHRT</span>
             <span class="info-value">{{ rideShare.driverUserName }}</span>
           </div>
 
           <!-- Passengers -->
           <div v-if="rideShare.passengerUserNames && rideShare.passengerUserNames.length > 0" class="info-row">
-            <span class="info-label">MITFAHRER</span>
+            <span class="info-label">ES FAHREN MIT</span>
             <span class="info-value">{{ rideShare.passengerUserNames.join(', ') }}</span>
           </div>
 
@@ -324,58 +324,6 @@ export default defineComponent({
   background-color: #f0f0f0;
 }
 
-/* Very small screens: Stack expand, action button, and seat badge vertically on the left */
-@media (max-width: 400px) {
-  .topic_card_header {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto auto;
-    gap: var(--space-sm);
-    align-items: start;
-    padding: var(--space-sm);
-  }
-  
-  /* Left column: vertical stack of buttons and badge - all same size */
-  .expand-button {
-    grid-column: 1;
-    grid-row: 1;
-    width: 2rem;
-    height: 2rem;
-  }
-  
-  .ride-header-info {
-    grid-column: 2;
-    grid-row: 1 / 4;
-    margin-left: 0;
-    align-self: center;
-  }
-  
-  .seat-badge {
-    grid-column: 1;
-    grid-row: 2;
-    margin-right: 0;
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--text-xs);
-  }
-  
-  .topic_card_header :deep(.action_button:not(.expand-button)) {
-    grid-column: 1;
-    grid-row: 3;
-    margin-left: 0;
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
 /* Expand/collapse button with plus/minus */
 .expand-button {
   display: flex;
@@ -413,12 +361,18 @@ export default defineComponent({
   font-weight: var(--font-weight-semibold);
   font-size: var(--text-base);
   color: var(--color-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ride-driver {
   font-size: var(--text-sm);
   color: var(--color-main-text);
   margin-top: var(--space-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Seat availability badge */
@@ -656,5 +610,31 @@ export default defineComponent({
 .status-completed {
   background-color: #e8f5e9;
   color: #2e7d32;
+}
+
+/* Mobile: Reduce whitespace */
+@media (max-width: 600px) {
+  .topic_card_header {
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+  }
+  
+  .header-actions {
+    gap: 2px;
+  }
+  
+  .header-actions :deep(.action_button) {
+    padding: var(--space-xs);
+  }
+  
+  .ride-header-info {
+    margin-left: var(--space-sm);
+  }
+  
+  .seat-badge {
+    margin-right: var(--space-xs);
+    padding: var(--space-xs);
+    font-size: var(--text-xs);
+  }
 }
 </style>
