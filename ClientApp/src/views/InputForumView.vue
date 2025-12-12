@@ -76,7 +76,28 @@ export default defineComponent({
              !this.isContentTooLong;
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      const titleInput = document.getElementById('title');
+      if (titleInput) {
+        titleInput.focus();
+      }
+    });
+    document.addEventListener('keydown', this.handleKeydown);
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown);
+  },
   methods: {
+    handleKeydown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.abort();
+      } else if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        this.submit();
+      }
+    },
     async submit() {
       if (!this.canSubmit) return;
       

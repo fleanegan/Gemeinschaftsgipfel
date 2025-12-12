@@ -59,10 +59,35 @@ export default defineComponent({
   watch: {
     isOpen(newVal) {
       document.body.style.overflow = newVal ? 'hidden' : '';
+      if (newVal) {
+        this.$nextTick(() => {
+          const confirmButton = this.$el?.querySelector('.confirm-button');
+          if (confirmButton) {
+            (confirmButton as HTMLElement).focus();
+          }
+        });
+      }
     }
+  },
+  mounted() {
+    document.addEventListener('keydown', this.handleKeydown);
   },
   beforeUnmount() {
     document.body.style.overflow = '';
+    document.removeEventListener('keydown', this.handleKeydown);
+  },
+  methods: {
+    handleKeydown(event: KeyboardEvent) {
+      if (!this.isOpen) return;
+      
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.$emit('cancel');
+      } else if (event.key === 'Enter') {
+        event.preventDefault();
+        this.$emit('confirm');
+      }
+    }
   }
 });
 </script>

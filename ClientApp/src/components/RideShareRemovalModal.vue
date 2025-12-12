@@ -50,10 +50,32 @@ export default defineComponent({
   watch: {
     isOpen(newVal) {
       document.body.style.overflow = newVal ? 'hidden' : '';
+      if (newVal) {
+        this.$nextTick(() => {
+          const cancelButton = this.$el?.querySelector('.cancel-button');
+          if (cancelButton) {
+            (cancelButton as HTMLElement).focus();
+          }
+        });
+      }
     }
+  },
+  mounted() {
+    document.addEventListener('keydown', this.handleKeydown);
   },
   beforeUnmount() {
     document.body.style.overflow = '';
+    document.removeEventListener('keydown', this.handleKeydown);
+  },
+  methods: {
+    handleKeydown(event: KeyboardEvent) {
+      if (!this.isOpen) return;
+      
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.$emit('cancel');
+      }
+    }
   }
 });
 </script>

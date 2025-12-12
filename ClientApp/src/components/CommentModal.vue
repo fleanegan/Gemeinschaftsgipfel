@@ -38,6 +38,14 @@ export default defineComponent({
   methods: {
     closeModal() {
       this.$emit('close');
+    },
+    handleKeydown(event: KeyboardEvent) {
+      if (!this.isOpen) return;
+      
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.closeModal();
+      }
     }
   },
   watch: {
@@ -45,8 +53,12 @@ export default defineComponent({
       document.body.style.overflow = newVal ? 'hidden' : '';
     }
   },
+  mounted() {
+    document.addEventListener('keydown', this.handleKeydown);
+  },
   beforeUnmount() {
     document.body.style.overflow = '';
+    document.removeEventListener('keydown', this.handleKeydown);
   }
 });
 </script>

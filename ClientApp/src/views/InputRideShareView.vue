@@ -47,7 +47,28 @@ export default defineComponent({
       description: '',
     };
   },
+  mounted() {
+    this.$nextTick(() => {
+      const fromInput = document.getElementById('from');
+      if (fromInput) {
+        fromInput.focus();
+      }
+    });
+    document.addEventListener('keydown', this.handleKeydown);
+  },
+  beforeUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown);
+  },
   methods: {
+    handleKeydown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.abort();
+      } else if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        this.submitData();
+      }
+    },
     isRideShareIdSet(): boolean {
       return this.$props['rideShareId'] !== undefined && this.$props['rideShareId'] !== null;
     },
