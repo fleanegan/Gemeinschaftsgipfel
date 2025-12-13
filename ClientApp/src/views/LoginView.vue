@@ -164,33 +164,45 @@ export default defineComponent({
   opacity: 0;
 }
 
+
 .switch {
-  display: inline-flex;
-  align-items: center;
-  font-size: 1rem;
-  height: 1.4rem;
-  width: 2.4rem;
-  border-radius: 1rem;
-  border-color: var(--color-main-text);
-  border-style: solid;
-  border-width: 0.29rem;
   position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 28px;
+  background: #ccc;
+  border-radius: 14px;
+  transition: background 0.3s;
+  vertical-align: middle;
+    margin-right: 0.25rem;
+
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .switch div {
-  height: 1rem;
-  width: 1rem;
-  border-radius: 1rem;
-  background-color: var(--color-main-text);
-  -webkit-transition: all 300ms;
-  -moz-transition: all 300ms;
-  transition: all 300ms;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  background: var(--color-main-text);
+  border-radius: 50%;
+  transition: left 0.3s cubic-bezier(.4,2.08,.55,.44), background 0.3s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 
 .switch input:checked + div {
-  -webkit-transform: translate3d(100%, 0, 0);
-  -moz-transform: translate3d(100%, 0, 0);
-  transform: translate3d(100%, 0, 0);
+  left: 24px;
+  background: var(--color-main-text);
+}
+
+.switch input:checked ~ .switch {
+  background: #8ecae6;
 }
 
 .checkbox-container p {
