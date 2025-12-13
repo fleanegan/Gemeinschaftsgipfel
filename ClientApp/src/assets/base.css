@@ -142,11 +142,4 @@ body {
     font-size: 15px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    max-width: 100vw;
-}
-
-html {
-    overflow-x: hidden;
-    max-width: 100vw;
 }

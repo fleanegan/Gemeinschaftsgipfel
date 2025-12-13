@@ -245,22 +245,27 @@ export default defineComponent({
   margin-top: 1rem;
 }
 
-.impressum{
-  position: absolute; 
+
+
+.impressum {
+  position: absolute;
   top: 100vh;
-  padding: 0 1rem;
-  box-sizing: border-box;
+  left: 0;
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem; /* add a gap from the right edge */
+  box-sizing: border-box;
   overflow-x: hidden;
 }
 
-.impressum p{
+/* Target the paragraph elements only so we don't force all children to 100% viewport width */
+.impressum p {
   margin-left: 0;
-  max-width: 100%;
+  margin-right: 1rem !important; /* ensure 1rem whitespace on the right */
+  padding-right: 0; /* avoid doubling the gap */
   word-wrap: break-word;
   overflow-wrap: break-word;
-  box-sizing: border-box;
 }
 
 :deep(p) {
