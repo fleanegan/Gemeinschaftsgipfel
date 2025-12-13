@@ -1,6 +1,6 @@
 <template>
   <global-loading/>
-  <header :class="{'nav_header': true, 'nav_header_sticky': isSticky && isStandardPage && !isMenuOpen}">
+  <header v-if="!isLoginPage" :class="{'nav_header': true, 'nav_header_sticky': isSticky && isStandardPage && !isMenuOpen}">
     <nav class="nav-links">
       <router-link v-if="isStandardPage" class="router-link logo-link" to="/"><img alt="Home" src="/icon.svg"
                                                                          style="width: 6rem; height: 6rem; max-height: 4rem; max-width: 4rem;">
@@ -61,6 +61,11 @@ export default defineComponent({
       backgroundGradient: '',
       isMenuOpen: false
     };
+  },
+  computed: {
+    isLoginPage() {
+      return this.$route.path === '/login';
+    }
   },
   methods: {
     handleScroll: function () {

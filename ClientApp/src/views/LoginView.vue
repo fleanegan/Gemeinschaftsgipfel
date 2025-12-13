@@ -1,7 +1,8 @@
 <template>
-  <div class="login-container">
-    <h1>Kennen wir uns?</h1>
-    <div class="checkbox-container">
+  <div class="login-page-wrapper">
+    <div class="login-container">
+      <h1>Kennen wir uns?</h1>
+      <div class="checkbox-container">
       <p :class="{active: !isSignup, inactive: isSignup}">Anmelden</p>
       <label class="switch"><input v-model="isSignup" type="checkbox" @click="errors=''"/>
         <div></div>
@@ -29,8 +30,9 @@
       <textarea v-if="errors!=''" class="errors" inputmode="none">{{ errors }}</textarea>
       <button class="submit-button" type="submit">Abschicken</button>
     </form>
+    </div>
+    <div class="impressum" v-html="impressum"></div>
   </div>
-  <div class="impressum" v-html="impressum"></div>
 </template>
 
 <script lang="ts">
@@ -123,14 +125,28 @@ export default defineComponent({
 
 <style scoped>
 
+.login-page-wrapper {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
 .login-container {
-  width: 600px;
+  max-width: 600px;
+  width: 100%;
   margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .login-container h1 {
   text-align: left;
-  margin-left: 1rem;
+  margin-left: 0;
+  font-size: 1.5rem;
 }
 
 .checkbox-container {
@@ -140,7 +156,7 @@ export default defineComponent({
   align-content: center;
   align-items: center;
   flex-direction: row;
-  margin: auto auto 2rem;
+  margin: 2rem auto 2rem;
 }
 
 .switch input {
@@ -149,13 +165,16 @@ export default defineComponent({
 }
 
 .switch {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-size: 1rem;
   height: 1.4rem;
   width: 2.4rem;
   border-radius: 1rem;
   border-color: var(--color-main-text);
   border-style: solid;
+  border-width: 0.29rem;
+  position: relative;
 }
 
 .switch div {
@@ -166,7 +185,6 @@ export default defineComponent({
   -webkit-transition: all 300ms;
   -moz-transition: all 300ms;
   transition: all 300ms;
-  margin-top: 0.0rem;
 }
 
 .switch input:checked + div {
@@ -197,13 +215,13 @@ export default defineComponent({
 .form-group {
   display: flex;
   flex-direction: column;
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding: 0.5rem 0;
 }
 
 .errors {
   color: red;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin-left: 0;
+  margin-right: 0;
   font-size: 0.75rem;
   resize: none;
   border: none;
@@ -211,21 +229,61 @@ export default defineComponent({
 
 .submit-button {
   margin-left: auto;
-  margin-right: 1rem;
+  margin-right: 0;
+  margin-top: 1rem;
 }
 
 .impressum{
   position: absolute; 
   top: 100vh;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .impressum p{
-  margin-left: 1rem;
-  max-width: 50%;
+  margin-left: 0;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
 :deep(p) {
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .login-container h1 {
+    font-size: 1.25rem;
+  }
+  
+  .checkbox-container {
+    margin: 1.5rem auto 1.5rem;
+  }
+  
+  .checkbox-container p {
+    font-size: 0.75rem;
+    width: 4rem;
+    margin-right: 0.5rem;
+  }
+  
+  .form-group {
+    padding: 0.25rem 0;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem;
+  }
+  
+  .form-input {
+    font-size: 0.9rem;
+  }
 }
 </style>
