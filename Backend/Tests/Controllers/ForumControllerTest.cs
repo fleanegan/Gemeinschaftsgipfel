@@ -140,7 +140,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithoutAuthorization.CreateClient();
 
-        var response = await client.GetAsync("/api/forum/all");
+        var response = await client.GetAsync("/forum/all");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -150,7 +150,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithAuthorization.CreateClient();
 
-        var response = await client.GetAsync("/api/forum/all");
+        var response = await client.GetAsync("/forum/all");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
@@ -165,7 +165,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithAuthorization.CreateClient();
 
-        var response = await client.GetAsync($"/api/forum/getone/{NonExistingDummyId}");
+        var response = await client.GetAsync($"/forum/getone/{NonExistingDummyId}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -175,7 +175,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithAuthorization.CreateClient();
 
-        var response = await client.GetAsync($"/api/forum/getone/{HappyPathDummyId}");
+        var response = await client.GetAsync($"/forum/getone/{HappyPathDummyId}");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
@@ -191,7 +191,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var client = _factoryWithoutAuthorization.CreateClient();
         var newEntry = new ForumEntryCreationDto("Test Title", "Test Content");
 
-        var response = await client.PostAsync("/api/forum/addnew", TestHelper.EncodeBody(newEntry));
+        var response = await client.PostAsync("/forum/addnew", TestHelper.EncodeBody(newEntry));
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -202,7 +202,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var client = _factoryWithAuthorization.CreateClient();
         var newEntry = new ForumEntryCreationDto("Test Title", "Test Content");
 
-        var response = await client.PostAsync("/api/forum/addnew", TestHelper.EncodeBody(newEntry));
+        var response = await client.PostAsync("/forum/addnew", TestHelper.EncodeBody(newEntry));
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
@@ -219,7 +219,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var client = _factoryWithAuthorization.CreateClient();
         var updateDto = new ForumEntryUpdateDto(NonExistingDummyId, "Updated Title", "Updated Content");
 
-        var response = await client.PutAsync("/api/forum/update", TestHelper.EncodeBody(updateDto));
+        var response = await client.PutAsync("/forum/update", TestHelper.EncodeBody(updateDto));
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -230,7 +230,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var client = _factoryWithAuthorization.CreateClient();
         var updateDto = new ForumEntryUpdateDto(ConflictingDummyId, "Updated Title", "Updated Content");
 
-        var response = await client.PutAsync("/api/forum/update", TestHelper.EncodeBody(updateDto));
+        var response = await client.PutAsync("/forum/update", TestHelper.EncodeBody(updateDto));
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
@@ -241,7 +241,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var client = _factoryWithAuthorization.CreateClient();
         var updateDto = new ForumEntryUpdateDto(HappyPathDummyId, "Updated Title", "Updated Content");
 
-        var response = await client.PutAsync("/api/forum/update", TestHelper.EncodeBody(updateDto));
+        var response = await client.PutAsync("/forum/update", TestHelper.EncodeBody(updateDto));
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
@@ -257,7 +257,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithoutAuthorization.CreateClient();
 
-        var response = await client.DeleteAsync($"/api/forum/delete/{HappyPathDummyId}");
+        var response = await client.DeleteAsync($"/forum/delete/{HappyPathDummyId}");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -267,7 +267,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithAuthorization.CreateClient();
 
-        var response = await client.DeleteAsync($"/api/forum/delete/{NonExistingDummyId}");
+        var response = await client.DeleteAsync($"/forum/delete/{NonExistingDummyId}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -277,7 +277,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithAuthorization.CreateClient();
 
-        var response = await client.DeleteAsync($"/api/forum/delete/{ConflictingDummyId}");
+        var response = await client.DeleteAsync($"/forum/delete/{ConflictingDummyId}");
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
@@ -287,7 +287,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithAuthorization.CreateClient();
 
-        var response = await client.DeleteAsync($"/api/forum/delete/{HappyPathDummyId}");
+        var response = await client.DeleteAsync($"/forum/delete/{HappyPathDummyId}");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -298,7 +298,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var client = _factoryWithoutAuthorization.CreateClient();
         var commentDto = new ForumCommentDto(HappyPathDummyId, "Test comment");
 
-        var response = await client.PostAsync("/api/forum/CommentOnForumEntry", TestHelper.EncodeBody(commentDto));
+        var response = await client.PostAsync("/forum/CommentOnForumEntry", TestHelper.EncodeBody(commentDto));
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -309,7 +309,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var client = _factoryWithAuthorization.CreateClient();
         var commentDto = new ForumCommentDto(NonExistingDummyId, "Test comment");
 
-        var response = await client.PostAsync("/api/forum/CommentOnForumEntry", TestHelper.EncodeBody(commentDto));
+        var response = await client.PostAsync("/forum/CommentOnForumEntry", TestHelper.EncodeBody(commentDto));
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -320,7 +320,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
         var client = _factoryWithAuthorization.CreateClient();
         var commentDto = new ForumCommentDto(HappyPathDummyId, "Test comment");
 
-        var response = await client.PostAsync("/api/forum/CommentOnForumEntry", TestHelper.EncodeBody(commentDto));
+        var response = await client.PostAsync("/forum/CommentOnForumEntry", TestHelper.EncodeBody(commentDto));
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -330,7 +330,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithoutAuthorization.CreateClient();
 
-        var response = await client.GetAsync($"/api/forum/comments?ForumEntryId={HappyPathDummyId}");
+        var response = await client.GetAsync($"/forum/comments?ForumEntryId={HappyPathDummyId}");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -340,7 +340,7 @@ public class ForumControllerTest : IClassFixture<WebApplicationFactory<Program>>
     {
         var client = _factoryWithAuthorization.CreateClient();
 
-        var response = await client.GetAsync($"/api/forum/comments?ForumEntryId={HappyPathDummyId}");
+        var response = await client.GetAsync($"/forum/comments?ForumEntryId={HappyPathDummyId}");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseString = await response.Content.ReadAsStringAsync();
