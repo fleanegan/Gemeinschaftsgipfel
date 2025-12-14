@@ -26,16 +26,26 @@
 }
 
 .headerless {
-    margin-top: 0.5rem;
+    margin-top: 0;
+}
+
+.router-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.25rem;
+    height: 100%;
+}
+
+.logo-link {
+    display: inline-flex;
+    align-items: center;
+    padding-right: var(--space-sm);
 }
 
 .transparent-header-area {
-    /* Do NOT use auto margins here; flex: 1 handles spacing. Auto margins in flex can cause
-       components to expand unexpectedly and produce overflow on small screens. */
     pointer-events: none;
 }
 
-/* Make the transparent spacer flexible and shrinkable so it doesn't cause overflow */
 .transparent-header-area {
     flex: 1 1 auto;
     min-width: 0;
@@ -48,18 +58,17 @@
     flex-direction: row;
     align-items: center;
     width: 100%;
-    padding: 0 1rem 0.5rem 0.5rem;
+    min-height: 4rem;
+    padding: 0 1rem;
     box-sizing: border-box;
     max-width: 100%;
-    overflow-x: hidden; /* prevent any horizontal overflow within the header */
+    overflow-x: hidden;
 }
 
-/* Ensure flex items are allowed to shrink properly and not cause horizontal overflow */
 .nav-links > * {
     min-width: 0;
 }
 
-/* Make sure each part of the header cannot be wider than the nav itself */
 .nav-links > * {
     max-width: 100%;
 }
@@ -98,9 +107,7 @@
     padding: 0;
     z-index: 99999;
     pointer-events: auto;
-    margin-left: 0;
-    margin-right: 0.25rem;
-    margin-top: 0.15rem;
+    margin: 0 0.25rem 0 0;
 }
 
 .burger-menu {
