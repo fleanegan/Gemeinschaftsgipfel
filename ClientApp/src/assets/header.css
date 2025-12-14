@@ -1,5 +1,8 @@
 .nav_header {
     width: 100%;
+    box-sizing: border-box;
+    left: 0;
+    right: 0;
     position: fixed;
     overflow-anchor: none;
     top: 0;
@@ -8,6 +11,8 @@
     background-color: rgba(255, 255, 255, 0);
     pointer-events: none;
     transition: background-color 0.6s ease;
+    max-width: 100vw; /* ensure the header itself never grows beyond the viewport */
+    overflow-x: hidden; /* clip any accidental overflow from child elements */
 }
 
 .nav_header.nav_header_sticky {
@@ -25,9 +30,16 @@
 }
 
 .transparent-header-area {
-    margin-left: auto;
-    margin-right: auto;
+    /* Do NOT use auto margins here; flex: 1 handles spacing. Auto margins in flex can cause
+       components to expand unexpectedly and produce overflow on small screens. */
     pointer-events: none;
+}
+
+/* Make the transparent spacer flexible and shrinkable so it doesn't cause overflow */
+.transparent-header-area {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
 }
 
 .nav-links {
@@ -37,6 +49,19 @@
     align-items: center;
     width: 100%;
     padding: 0 1rem 0.5rem 0.5rem;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: hidden; /* prevent any horizontal overflow within the header */
+}
+
+/* Ensure flex items are allowed to shrink properly and not cause horizontal overflow */
+.nav-links > * {
+    min-width: 0;
+}
+
+/* Make sure each part of the header cannot be wider than the nav itself */
+.nav-links > * {
+    max-width: 100%;
 }
 
 .home_page_routed_elements {
@@ -50,14 +75,17 @@
     width: 100%;
 }
 
-/* Desktop links - visible by default */
 .desktop-links {
     display: flex;
     gap: 0;
     align-items: center;
 }
 
-/* Burger menu - hidden by default */
+.desktop-links {
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
 .burger-menu {
     display: none;
     flex-direction: column;
@@ -70,9 +98,13 @@
     padding: 0;
     z-index: 99999;
     pointer-events: auto;
-    margin-left: auto;
+    margin-left: 0;
     margin-right: 0.45rem;
     margin-top: 0.15rem;
+}
+
+.burger-menu {
+    flex: 0 0 auto;
 }
 
 .burger-menu span {
@@ -90,12 +122,13 @@
     pointer-events: none;
 }
 
-/* Mobile Menu Overlay */
 .mobile-menu-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    right: 0;
+    width: auto; 
+    max-width: 100%;
     height: 100vh;
     background-color: var(--color-primary);
     z-index: 998;
@@ -104,6 +137,7 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
+    overflow-x: hidden;
 }
 
 .mobile-menu-links {
@@ -127,7 +161,6 @@
     opacity: 0.8;
 }
 
-/* Close button (X) */
 .close-menu {
     position: absolute;
     top: 1.25rem;
@@ -159,7 +192,6 @@
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-/* Transition animations */
 .menu-fade-enter-active,
 .menu-fade-leave-active {
     transition: opacity 0.3s ease;
@@ -170,25 +202,34 @@
     opacity: 0;
 }
 
-/* Mobile styles */
 @media (max-width: 768px) {
-    /* Hide desktop links */
     .desktop-links {
         display: none;
     }
     
-    /* Show burger menu */
     .burger-menu {
         display: flex;
     }
     
-    /* Adjust logo for mobile */
     .logo-link img {
         max-height: 3rem !important;
         max-width: 3rem !important;
+        width: auto !important;
     }
     
     .nav-links {
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.5rem; 
     }
+}
+
+body.menu-open, html.menu-open {
+    overflow: hidden;
+    overflow-x: hidden;
+}
+@media (max-width: 480px) {
+    .nav-links, .nav-links > * {
+        min-width: 0;
+    }
+    .nav-links { padding: 0.5rem 0.5rem; }
+    .router-link { white-space: nowrap; }
 }

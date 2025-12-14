@@ -79,9 +79,11 @@ export default defineComponent({
       this.isMenuOpen = !this.isMenuOpen;
       // Prevent body scroll when menu is open
       if (this.isMenuOpen) {
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('menu-open');
+        document.documentElement.classList.add('menu-open');
       } else {
-        document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
+        document.documentElement.classList.remove('menu-open');
       }
     }
   },

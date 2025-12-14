@@ -127,7 +127,7 @@ export default defineComponent({
 
 .login-page-wrapper {
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
   overflow-x: hidden;
   min-height: 100vh;
   display: flex;
@@ -254,16 +254,15 @@ export default defineComponent({
   width: 100%;
   max-width: 100%;
   padding-left: 1rem;
-  padding-right: 1rem; /* add a gap from the right edge */
+  padding-right: 1rem;
   box-sizing: border-box;
   overflow-x: hidden;
 }
 
-/* Target the paragraph elements only so we don't force all children to 100% viewport width */
 .impressum p {
   margin-left: 0;
-  margin-right: 1rem !important; /* ensure 1rem whitespace on the right */
-  padding-right: 0; /* avoid doubling the gap */
+  margin-right: 1rem !important;
+  padding-right: 0;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }

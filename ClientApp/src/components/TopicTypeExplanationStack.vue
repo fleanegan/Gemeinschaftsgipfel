@@ -523,7 +523,9 @@ onUnmounted(() => {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  right: 0;
+  width: auto; /* use left/right so 100vw doesn't cause overflow */
+  max-width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 10000;

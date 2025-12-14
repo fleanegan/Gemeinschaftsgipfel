@@ -156,14 +156,16 @@ th:nth-child(2), td:nth-child(2) {
   position: fixed;
   height: 100vh;
   min-height: 100vh;
-  width: 100vw; 
+  left: 0;
+  right: 0;
+  width: auto; /* left/right ensures full width without 100vw overflow */
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  left: 0;
-  right: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .info_tile_content {
