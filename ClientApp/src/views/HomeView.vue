@@ -189,7 +189,9 @@ background-color: var(--main-color-primary);
 .content_box {
   margin-right: auto; 
   margin-left: auto;
+  max-width: 100vw;
   z-index: 10;
+  overflow-wrap: break-word;
 }
 
 :deep(h1) {
@@ -232,6 +234,8 @@ background-color: var(--main-color-primary);
   margin-top: 25rem;
   font-size: 2rem;
   text-align: center;
+  overflow-wrap: break-word;
+  max-width: 100vw;
 }
 
 .program_section {
