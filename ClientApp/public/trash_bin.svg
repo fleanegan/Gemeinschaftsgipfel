@@ -22,17 +22,17 @@
        width="4.0"
        height="0.4"
        rx="0.08"
-       style="fill:#006f47;fill-opacity:1" />
+       style="fill:#2e4152;fill-opacity:1" />
     
     <!-- Bin body (trapezoid - filled with lines cut out) -->
     <path
        d="M 1.8,2.1 L 2.2,5.6 L 4.16,5.6 L 4.56,2.1 Z"
-       style="fill:#006f47;fill-opacity:1;stroke:#006f47;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:#2e4152;fill-opacity:1;stroke:#2e4152;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round"
        mask="url(#lineMask)" />
     
     <!-- Handle at top -->
     <path
        d="M 2.4,1.4 L 2.4,1.0 L 3.96,1.0 L 3.96,1.4"
-       style="fill:none;stroke:#006f47;stroke-width:0.4;stroke-linecap:round;stroke-linejoin:round" />
+       style="fill:none;stroke:#2e4152;stroke-width:0.4;stroke-linecap:round;stroke-linejoin:round" />
   </g>
 </svg>
