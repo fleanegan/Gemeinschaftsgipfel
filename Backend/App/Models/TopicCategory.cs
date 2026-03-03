@@ -4,7 +4,7 @@ public enum TopicCategory
 {
     Workshop,
     Vortrag,
-    Sport,
+    Bewegung,
     Diskussion,
     Sonstiges
 }

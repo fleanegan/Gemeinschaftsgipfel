@@ -12,7 +12,7 @@
         <option value="" disabled selected>Bitte wähle eine Kategorie</option>
         <option value="Workshop">Workshop</option>
         <option value="Vortrag">Vortrag</option>
-        <option value="Sport">Sport</option>
+        <option value="Bewegung">Bewegung</option>
         <option value="Diskussion">Diskussion</option>
         <option value="Sonstiges">Sonstiges</option>
       </select>

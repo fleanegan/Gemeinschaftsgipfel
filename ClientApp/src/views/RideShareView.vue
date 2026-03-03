@@ -117,7 +117,7 @@ export default defineComponent({
         },
         {
           title: 'Gemeinsam fahren',
-          content: 'Kommuniziere mit Fahrer und Mitfahrern über die Kommentarfunktion. Spare Kosten und schone die Umwelt!'
+          content: 'Kommuniziert über die Kommentarfunktion miteinander.'
         }
       ]
     };

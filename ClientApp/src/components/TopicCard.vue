@@ -253,9 +253,9 @@ export default defineComponent({
   color: var(--category-vortrag-text, #2e7d32);
 }
 
-.category-badge.category-sport {
-  background-color: var(--category-sport-bg, #fff3e0);
-  color: var(--category-sport-text, #e65100);
+.category-badge.category-bewegung {
+  background-color: var(--category-bewegung-bg, #fff3e0);
+  color: var(--category-bewegung-text, #e65100);
 }
 
 .category-badge.category-diskussion {
@@ -452,7 +452,7 @@ export default defineComponent({
   color: #2e7d32 !important;
 }
 
-.category-badge.category-sport {
+.category-badge.category-bewegung {
   background-color: #fff3e0 !important;
   color: #e65100 !important;
 }

@@ -5,7 +5,7 @@ export interface Comment {
   createdAt: string;
 }
 
-export type TopicCategory = 'Workshop' | 'Vortrag' | 'Sport' | 'Diskussion' | 'Sonstiges';
+export type TopicCategory = 'Workshop' | 'Vortrag' | 'Bewegung' | 'Diskussion' | 'Sonstiges';
 
 export interface MyTopic {
   id: string;

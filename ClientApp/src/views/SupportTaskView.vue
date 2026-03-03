@@ -5,7 +5,7 @@
         <img :src="'/expand.svg'" alt="Expand">
       </button>
     </div>
-    <h1>Helfende Hände</h1>
+    <h1>Mithelfen</h1>
     <div class="instructions-formats-row">
       <div class="instructions-wrapper">
         <InstructionCards :instructions="instructions" />

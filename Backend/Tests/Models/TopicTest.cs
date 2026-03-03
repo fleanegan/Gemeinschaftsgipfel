@@ -51,7 +51,7 @@ public class TopicTest
             "This title is ok",
             1,
             legallyLongDescription,
-            TopicCategory.Sport,
+            TopicCategory.Bewegung,
             "material",
             new User { Id = "testId" }
         );

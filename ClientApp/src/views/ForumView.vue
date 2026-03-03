@@ -8,7 +8,8 @@
     <h1>Forum</h1>
     
     <section class="forum-section">
-      <h2>Alle Beiträge</h2>
+      <p>Fehlt dir noch etwas für den Gemeinschaftsgipfel? Willst du die Gemeinschaft noch etwas fragen? Dann ist dies der richtige Ort.</p>
+      <br>
       <ul class="list">
         <ForumCard
           v-for="(entry, index) in forumEntries"

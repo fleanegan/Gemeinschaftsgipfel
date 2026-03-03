@@ -5,7 +5,7 @@
         <img :src="'/expand.svg'" alt="Expand">
       </button>
     </div>
-    <h1>Zeig uns was 'ne Harke ist!</h1>
+    <h1>Inhalte</h1>
     <div class="instructions-formats-row">
       <div class="instructions-wrapper">
         <InstructionCards :instructions="instructions" />
@@ -112,15 +112,15 @@ export default defineComponent({
       instructions: [
         {
           title: 'Inhalt ausdenken',
-          content: "Reite dein Steckenpferd und zeig' uns, was dich begeistert! Ob Trick 17, dein Promotionsthema oder Haekeltipps, wir sind gespannt."
+          content: "Lass dich von den Programmen der letzten Jahre inspirieren und überlege dir was du mit anderen teilen möchtest."
         },
         {
           title: 'Entscheidung treffen',
-          content: 'Geht es dir wie uns, du kannst dich kaum entscheiden, welches deiner vielen Herzensthemen du praesentieren sollst? Trag alle Themen ein, lass die Gemeinschaft waehlen und hilf selbst mit deiner Stimme!'
+          content: 'Du hast mehrere Ideen? Trag alle ein und lass die Gemeinschaft entscheiden. '
         },
         {
-          title: 'Gemeinsam staunen',
-          content: 'Das Ziel ist es, zusammen unsere Vielfalt zu geniessen. Lass Leistungsdruck und Lampenfieber zuhause, denn es erwartet dich ein wohlwollendes Publikum :)'
+          title: 'Keine Idee',
+          content: 'Keine Sorge, ein Beitrag ist keine Pflicht.'
         }
       ]
     };

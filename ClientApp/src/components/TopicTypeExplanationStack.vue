@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
-type TopicType = 'Explanation' | 'Workshop' | 'Vortrag' | 'Sport' | 'Diskussion' | 'Sonstiges';
+type TopicType = 'Explanation' | 'Workshop' | 'Vortrag' | 'Bewegung' | 'Diskussion' | 'Sonstiges';
 
 interface FormatInfo {
   type: TopicType;
@@ -125,18 +125,18 @@ const photoMap: Record<TopicType, string> = {
   'Explanation': '', // No photo for explanation card
   'Workshop': '/photos/workshop.jpg',
   'Vortrag': '/photos/presentation.jpg',
-  'Sport': '/photos/sport.jpg',
+  'Bewegung': '/photos/bewegung.jpg',
   'Diskussion': '/photos/discussion.jpg',
   'Sonstiges': '/photos/misc.jpg',
 };
 
 const baseFormats: { type: TopicType; title: string; description: string }[] = [
   { type: 'Explanation', title: 'Thementypen', description: 'Jeder Vorschlag kann von einem anderen Typ sein. Hier sind die verfügbaren Typen.' },
-  { type: 'Workshop', title: 'Mitmach-Session', description: 'Interaktive Sessions zum gemeinsamen Lernen und Ausprobieren.' },
-  { type: 'Vortrag', title: 'Präsentation', description: 'Klassische Vorträge zu spannenden Themen.' },
-  { type: 'Sport', title: 'Bewegung', description: 'Gemeinsame sportliche Aktivitäten und Spiele.' },
-  { type: 'Diskussion', title: 'Austausch', description: 'Offene Gesprächsrunden zu kontroversen oder interessanten Themen.' },
-  { type: 'Sonstiges', title: 'Kreativ', description: 'Alles, was in keine andere Kategorie passt.' },
+  { type: 'Workshop', title: 'Mitmach-Session', description: 'Interaktives Format zum gemeinsamen Lernen und Ausprobieren.' },
+  { type: 'Vortrag', title: 'Präsentation', description: 'Klassischer Vortrag mit anschließender kurzer Fragerunde.' },
+  { type: 'Bewegung', title: 'Bewegung', description: 'Gemeinsame sportiliche Aktivität oder Spiel an der frischen Luft.' },
+  { type: 'Diskussion', title: 'Austausch', description: 'Kurzer Impuls(Vortrag) mit andschließender offener Gesprächsrunde.' },
+  { type: 'Sonstiges', title: 'Kreativ', description: 'Hierunter fällt alles, was in keine andere Kategorie passt.' },
 ];
 
 // Card dimensions - Central definitions
@@ -726,12 +726,12 @@ onUnmounted(() => {
 }
 
 .format-card.expanded-card .card-content {
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .format-card.expanded-card .card-badge {
-  padding: var(--space-sm) var(--space-lg);
-  font-size: var(--text-xl);
+  padding: 0 var(--space-sm);
+  font-size: var(--text-md);
 }
 
 .format-card.expanded-card .card-title {
@@ -769,7 +769,7 @@ onUnmounted(() => {
   
   .is-mobile .format-card .card-badge {
     font-size: var(--text-base);
-    padding: var(--space-xs) var(--space-sm);
+    padding: 0 var(--space-sm);
   }
 }
 
@@ -810,9 +810,9 @@ onUnmounted(() => {
   color: var(--category-vortrag-text);
 }
 
-.category-sport {
-  background-color: var(--category-sport-bg);
-  color: var(--category-sport-text);
+.category-bewegung {
+  background-color: var(--category-bewegung-bg);
+  color: var(--category-bewegung-text);
 }
 
 .category-diskussion {
@@ -836,7 +836,7 @@ onUnmounted(() => {
 
 .card-title.title-workshop,
 .card-title.title-vortrag,
-.card-title.title-sport,
+.card-title.title-bewegung,
 .card-title.title-diskussion,
 .card-title.title-sonstiges {
   color: white;
