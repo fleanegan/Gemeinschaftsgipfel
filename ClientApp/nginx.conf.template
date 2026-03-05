@@ -22,12 +22,14 @@ http {
 
         # Cache static images with 2-week expiry and ETags for revalidation
         location /photos/ {
+            include /etc/nginx/mime.types;
             root /usr/share/nginx/html;
             add_header Cache-Control "public, max-age=1209600, must-revalidate";
             etag on;
         }
 
         location /programs/ {
+            include /etc/nginx/mime.types;
             root /usr/share/nginx/html;
             add_header Cache-Control "public, max-age=1209600, must-revalidate";
             etag on;
