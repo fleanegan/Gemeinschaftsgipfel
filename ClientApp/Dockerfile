@@ -25,4 +25,8 @@ COPY --from=env_inliner /etc/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./ssl/my-site.crt /etc/ssl/certs/my-site.crt
 COPY ./ssl/my-site.key /etc/ssl/private/my-site.key
 
+# Ensure proper permissions for nginx to serve files
+RUN find /usr/share/nginx/html -type f -exec chmod 644 {} \; && \
+    find /usr/share/nginx/html -type d -exec chmod 755 {} \;
+
 CMD ["nginx", "-g", "daemon off;"]

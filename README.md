@@ -3,6 +3,13 @@ How to build and start the application
 1. Rename the .env-example to .env and modify according to your needs
     -> important is at least the ip address of the server
 2. Get ssl certificates and place them in a folder named ssl in the ClientApp (./ClientApp/ssl/my-site.crt && ./ClientApp/ssl/my-site.key) -> the file names must be exactly the same.
+   - **For local development**: Generate self-signed certificates:
+     ```bash
+     cd ClientApp
+     mkdir -p ssl
+     openssl req -x509 -newkey rsa:4096 -keyout ssl/my-site.key -out ssl/my-site.crt -sha256 -days 365 -nodes -subj "/C=DE/ST=State/L=City/O=Dev/CN=localhost"
+     ```
+   - **For production**: Use proper certificates from a CA (e.g., Let's Encrypt)
 3. Add required photos to `./ClientApp/public/photos/` (see "Required Photos" section below)
 4. run docker compose up --build
 

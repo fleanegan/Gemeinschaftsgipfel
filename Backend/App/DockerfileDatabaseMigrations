@@ -9,6 +9,8 @@ RUN dotnet restore "Gemeinschaftsgipfel.csproj"
 
 COPY . ./
 
+RUN dotnet build "Gemeinschaftsgipfel.csproj" -c Debug
+
 WORKDIR .
 
 ENTRYPOINT dotnet ef database update
