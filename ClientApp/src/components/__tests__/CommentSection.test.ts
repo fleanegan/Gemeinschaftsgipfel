@@ -56,7 +56,7 @@ describe('CommentSection', () => {
     });
 
     expect(wrapper.findAll('.comment-item')).toHaveLength(0);
-    expect(wrapper.find('.comments-title').text()).toBe('Kommentare:');
+    expect(wrapper.find('.comments-label').text()).toBe('KOMMENTARE');
   });
 
   it('formats comment timestamps correctly', () => {
@@ -82,8 +82,7 @@ describe('CommentSection', () => {
     });
 
     expect(wrapper.find('.comment-input').exists()).toBe(true);
-    expect(wrapper.find('.comment-send-button').exists()).toBe(true);
-    expect(wrapper.find('.comment-send-button').text()).toBe('Senden');
+    expect(wrapper.find('.send-button').exists()).toBe(true);
   });
 
   it('updates input field when typing', async () => {
@@ -114,7 +113,7 @@ describe('CommentSection', () => {
     });
 
     await wrapper.find('.comment-input').setValue('New comment');
-    await wrapper.find('.comment-send-button').trigger('click');
+    await wrapper.find('.send-button').trigger('click');
 
     expect(apiClient.post).toHaveBeenCalledWith('api/topic/CommentOnTopic/', {
       TopicId: 'topic-123',
@@ -135,7 +134,7 @@ describe('CommentSection', () => {
     });
 
     await wrapper.find('.comment-input').setValue('New rideshare comment');
-    await wrapper.find('.comment-send-button').trigger('click');
+    await wrapper.find('.send-button').trigger('click');
 
     expect(apiClient.post).toHaveBeenCalledWith('api/rideshare/CommentOnRideShare/', {
       RideShareId: 'ride-456',
@@ -156,7 +155,7 @@ describe('CommentSection', () => {
     });
 
     await wrapper.find('.comment-input').setValue('New comment');
-    await wrapper.find('.comment-send-button').trigger('click');
+    await wrapper.find('.send-button').trigger('click');
     await wrapper.vm.$nextTick();
 
     expect(wrapper.emitted('comment-sent')).toBeTruthy();
@@ -181,7 +180,7 @@ describe('CommentSection', () => {
 
     const input = wrapper.find('.comment-input');
     await input.setValue('New comment');
-    await wrapper.find('.comment-send-button').trigger('click');
+    await wrapper.find('.send-button').trigger('click');
     await wrapper.vm.$nextTick();
 
     expect((input.element as HTMLInputElement).value).toBe('');
@@ -196,7 +195,7 @@ describe('CommentSection', () => {
       }
     });
 
-    await wrapper.find('.comment-send-button').trigger('click');
+    await wrapper.find('.send-button').trigger('click');
 
     expect(apiClient.post).not.toHaveBeenCalled();
     expect(wrapper.emitted('comment-sent')).toBeFalsy();
@@ -215,7 +214,7 @@ describe('CommentSection', () => {
     });
 
     await wrapper.find('.comment-input').setValue('New comment');
-    await wrapper.find('.comment-send-button').trigger('click');
+    await wrapper.find('.send-button').trigger('click');
     await wrapper.vm.$nextTick();
 
     expect(consoleErrorSpy).toHaveBeenCalled();
