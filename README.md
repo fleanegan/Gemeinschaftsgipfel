@@ -44,6 +44,22 @@ Prepare running the app for the first time in dev mode
 - ```cd Backend/App && dotnet run```
 
 
+Running Tests
+-----
+To run the backend tests, use the provided test runner script:
+```bash
+./Backend/run-tests.sh
+```
+
+This script automatically sets `DOTNET_USE_POLLING_FILE_WATCHER=true` to avoid inotify limit issues on Linux systems.
+
+Alternatively, you can run tests directly with:
+```bash
+cd Backend/Tests
+DOTNET_USE_POLLING_FILE_WATCHER=true dotnet test
+```
+
+
 How to add and update SupportTasks
 -----
 - Create admin user (registering as user with username as set in `.env` file)
