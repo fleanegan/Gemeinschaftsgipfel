@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Git pre-push hook for Gemeinschaftsgipfel
+# Runs all backend and frontend tests before allowing a push
+
+set -e
+
+echo ""
+echo "🧪 Running pre-push tests..."
+echo ""
+
+# Get the root directory of the git repository
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+cd "$ROOT_DIR"
+
+# Run Backend Tests
+echo "================================"
+echo "Running Backend Tests (.NET)"
+echo "================================"
+cd Backend/Tests
+if ! DOTNET_USE_POLLING_FILE_WATCHER=true dotnet test --logger "console;verbosity=minimal"; then
+    echo ""
+    echo "❌ Backend tests failed!"
+    echo "Push aborted. Please fix the failing tests before pushing."
+    exit 1
+fi
+cd ../..
+
+echo ""
+echo "================================"
+echo "Running Frontend Tests (Vue.js)"
+echo "================================"
+cd ClientApp
+if ! npm test -- --run; then
+    echo ""
+    echo "❌ Frontend tests failed!"
+    echo "Push aborted. Please fix the failing tests before pushing."
+    exit 1
+fi
+cd ..
+
+echo ""
+echo "================================"
+echo "✅ All tests passed!"
+echo "================================"
+echo ""
+
+exit 0

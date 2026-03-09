@@ -59,6 +59,19 @@ cd Backend/Tests
 DOTNET_USE_POLLING_FILE_WATCHER=true dotnet test
 ```
 
+Git Hooks
+-----
+This repository includes Git hooks to maintain code quality. To install them:
+
+```bash
+./install-hooks.sh
+```
+
+**Available hooks:**
+- **pre-push**: Automatically runs all backend and frontend tests before allowing a push. This ensures that only tested code is pushed to the repository.
+
+The hooks are stored in the `hooks/` directory and can be reviewed before installation. Everyone on the team should run the installation script after cloning the repository.
+
 
 How to add and update SupportTasks
 -----
