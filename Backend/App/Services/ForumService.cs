@@ -51,14 +51,6 @@ public class ForumService(
         if (userName != entryToRemove.User.UserName)
             throw new UnauthorizedForumEntryModificationException(id);
         
-        // Delete associated comments first
-        var comments = await forumCommentRepository.GetCommentsForForumEntry(id);
-        foreach (var comment in comments)
-        {
-            // Note: We need a Remove method in ForumCommentRepository
-            // For now, we'll delete them via the context directly
-        }
-        
         await forumEntryRepository.Remove(entryToRemove);
     }
 

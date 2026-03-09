@@ -213,6 +213,32 @@ public class ForumServiceTest
     }
 
     [Fact]
+    public async Task Test_remove_THEN_comments_are_cascaded()
+    {
+        // Arrange
+        const string entryCreator = "creator";
+        const string commenterUserName1 = "commenter1";
+        const string commenterUserName2 = "commenter2";
+        const string commenterUserName3 = "commenter3";
+        var instance = await CreateInstance([entryCreator, commenterUserName1, commenterUserName2, commenterUserName3]);
+
+        var entryDto = new ForumEntryCreationDto("Test Title", "Test Content");
+        var entry = await instance.Service.AddForumEntry(entryDto, entryCreator);
+
+        // Add comments from different users
+        await CreateCommentsForForumEntry(instance, entry, commenterUserName1, commenterUserName2, commenterUserName3);
+
+        // Act
+        await instance.Service.RemoveForumEntry(entry.Id, entryCreator);
+
+        // Assert
+        var remainingComments = await instance.DbContext.ForumComments
+            .Where(c => c.ForumEntry.Id == entry.Id)
+            .ToListAsync();
+        Assert.Empty(remainingComments);
+    }
+
+    [Fact]
     public async Task Test_commentOnForumEntry_GIVEN_non_existing_id_THEN_throw_exception()
     {
         const string loggedInUserName = "Fake User";
@@ -289,20 +315,17 @@ public class ForumServiceTest
         var dbContext = TestHelper.GetDbContext<DatabaseContextApplication>();
         var forumEntryRepository = new ForumEntryRepository(dbContext);
         var forumCommentRepository = new ForumCommentRepository(dbContext);
-        var forumService = await GetService(dbContext, availableUserNames, forumEntryRepository, forumCommentRepository);
-        return new InstanceWrapper(forumEntryRepository, forumCommentRepository, forumService);
+        var userManager = await GetUserManager(dbContext, availableUserNames);
+        var forumService = new ForumService(forumEntryRepository, forumCommentRepository, userManager.Object);
+        return new InstanceWrapper(forumEntryRepository, forumCommentRepository, forumService, userManager, dbContext);
     }
 
-    private static async Task<ForumService> GetService(
-        DatabaseContextApplication dbContext, 
-        List<string> userNames,
-        ForumEntryRepository forumEntryRepository, 
-        ForumCommentRepository forumCommentRepository)
+    private static async Task<Mock<UserManager<User>>> GetUserManager(
+        DatabaseContextApplication dbContext,
+        List<string> userNames)
     {
         var userStore = new UserStore<User>(dbContext);
-        var userManager = await CannotInjectUserStoreDirectlySoWrappingInUserManager(userStore, userNames);
-        var service = new ForumService(forumEntryRepository, forumCommentRepository, userManager.Object);
-        return service;
+        return await CannotInjectUserStoreDirectlySoWrappingInUserManager(userStore, userNames);
     }
 
     private static async Task<Mock<UserManager<User>>> CannotInjectUserStoreDirectlySoWrappingInUserManager(
@@ -320,11 +343,30 @@ public class ForumServiceTest
     private class InstanceWrapper(
         ForumEntryRepository forumEntryRepository,
         ForumCommentRepository forumCommentRepository,
-        ForumService forumService)
+        ForumService forumService,
+        Mock<UserManager<User>> userManager,
+        DatabaseContextApplication dbContext)
     {
         public readonly ForumEntryRepository ForumEntryRepository = forumEntryRepository;
         public readonly ForumCommentRepository ForumCommentRepository = forumCommentRepository;
         public readonly ForumService Service = forumService;
+        public readonly Mock<UserManager<User>> UserManager = userManager;
+        public readonly DatabaseContextApplication DbContext = dbContext;
+    }
+
+    private static async Task<(ForumComment, ForumComment, ForumComment)> CreateCommentsForForumEntry(
+        InstanceWrapper instance, ForumEntry entry, string userName1, string userName2, string userName3)
+    {
+        var user1 = await instance.UserManager.Object.FindByNameAsync(userName1);
+        var user2 = await instance.UserManager.Object.FindByNameAsync(userName2);
+        var user3 = await instance.UserManager.Object.FindByNameAsync(userName3);
+        var comment1 = await instance.ForumCommentRepository.Save(
+            ForumComment.Create("Comment 1", user1!, entry));
+        var comment2 = await instance.ForumCommentRepository.Save(
+            ForumComment.Create("Comment 2", user2!, entry));
+        var comment3 = await instance.ForumCommentRepository.Save(
+            ForumComment.Create("Comment 3", user3!, entry));
+        return (comment1, comment2, comment3);
     }
 
     private static async Task<ForumComment[]> FetchAllCommentsFromRepositoryForForumEntry(

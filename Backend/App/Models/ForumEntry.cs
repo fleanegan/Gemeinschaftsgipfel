@@ -31,6 +31,8 @@ public class ForumEntry
     [Required]
     public User User { get; init; }
 
+    public ICollection<ForumComment> Comments { get; set; } = [];
+
     public static ForumEntry Create(string title, string content, User user)
     {
         var model = new ForumEntry

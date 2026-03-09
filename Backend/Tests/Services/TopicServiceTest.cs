@@ -380,6 +380,47 @@ public class TopicServiceTest
     }
 
     [Fact]
+    public async Task Test_removing_topic_THEN_comments_are_cascaded()
+    {
+        const string topicCreator = "creator";
+        const string commenterUserName1 = "commenter1";
+        const string commenterUserName2 = "commenter2";
+        var instance = await CreateInstance([topicCreator, commenterUserName1, commenterUserName2]);
+        var topicDto = new TopicCreationDto(
+            "Test Topic", AnAllowedPresentationTime, "Test Description", TopicCategory.Workshop, null);
+        var topic = await instance.Service.AddTopic(topicDto, topicCreator);
+        await CreateCommentsForTopic(instance, topic, commenterUserName1, commenterUserName2);
+
+        await instance.Service.RemoveTopic(topic.Id, topicCreator);
+
+        var remainingComments = await instance.DbContext.TopicComments
+            .Where(c => c.Topic.Id == topic.Id)
+            .ToListAsync();
+        Assert.Empty(remainingComments);
+    }
+
+    [Fact]
+    public async Task Test_removing_topic_THEN_votes_are_cascaded()
+    {
+        const string topicCreator = "creator";
+        const string voter1UserName = "voter1";
+        const string voter2UserName = "voter2";
+        var instance = await CreateInstance([topicCreator, voter1UserName, voter2UserName]);
+        var topicDto = new TopicCreationDto(
+            "Test Topic", AnAllowedPresentationTime, "Test Description", TopicCategory.Workshop, null);
+        var topic = await instance.Service.AddTopic(topicDto, topicCreator);
+        await instance.Service.AddTopicVote(topic.Id, voter1UserName);
+        await instance.Service.AddTopicVote(topic.Id, voter2UserName);
+
+        await instance.Service.RemoveTopic(topic.Id, topicCreator);
+
+        var remainingVotes = await instance.DbContext.Votes
+            .Where(v => v.Topic.Id == topic.Id)
+            .ToListAsync();
+        Assert.Empty(remainingVotes);
+    }
+
+    [Fact]
     public async Task Test_adding_vote_GIVEN_a_non_existing_topic_THEN_throw_error()
     {
         const string loggedInUserName = "loggedInUserName";
@@ -547,20 +588,18 @@ public class TopicServiceTest
         var dbContext = TestHelper.GetDbContext<DatabaseContextApplication>();
         var topicRepository = new TopicRepository(dbContext);
         var postRepository = new TopicCommentRepository(dbContext);
-        var topicService = await GetService(dbContext, availableUserNames, topicRepository, postRepository,
-            allowedPresentationDurationsInMin);
-        return new InstanceWrapper(topicRepository, postRepository, topicService);
+        var userManager = await GetUserManager(dbContext, availableUserNames);
+        var topicService = new TopicService(topicRepository, new VoteRepository(dbContext), postRepository,
+            userManager.Object, allowedPresentationDurationsInMin);
+        return new InstanceWrapper(topicRepository, postRepository, topicService, userManager, dbContext);
     }
 
-    private static async Task<TopicService> GetService(DatabaseContextApplication dbContext, List<string> userNames,
-        TopicRepository repository, TopicCommentRepository topicCommentRepository, List<int> allowedPresentationDurationsInMin)
+    private static async Task<Mock<UserManager<User>>> GetUserManager(
+        DatabaseContextApplication dbContext,
+        List<string> userNames)
     {
-        var voteRepository = new VoteRepository(dbContext);
         var userStore = new UserStore<User>(dbContext);
-        var userManager = await CannotInjectUserStoreDirectlySoWrappingInUserManager(userStore, userNames);
-        var service = new TopicService(repository, voteRepository, topicCommentRepository, userManager.Object,
-            allowedPresentationDurationsInMin);
-        return service;
+        return await CannotInjectUserStoreDirectlySoWrappingInUserManager(userStore, userNames);
     }
 
     private static async Task<Mock<UserManager<User>>> CannotInjectUserStoreDirectlySoWrappingInUserManager(
@@ -578,11 +617,27 @@ public class TopicServiceTest
     private class InstanceWrapper(
         TopicRepository topicRepository,
         TopicCommentRepository topicCommentRepository,
-        TopicService topicService)
+        TopicService topicService,
+        Mock<UserManager<User>> userManager,
+        DatabaseContextApplication dbContext)
     {
         public readonly TopicRepository Repository = topicRepository;
         public readonly TopicCommentRepository TopicCommentRepository = topicCommentRepository;
         public readonly TopicService Service = topicService;
+        public readonly Mock<UserManager<User>> UserManager = userManager;
+        public readonly DatabaseContextApplication DbContext = dbContext;
+    }
+
+    private static async Task<(TopicComment, TopicComment)> CreateCommentsForTopic(
+        InstanceWrapper instance, Topic topic, string userName1, string userName2)
+    {
+        var user1 = await instance.UserManager.Object.FindByNameAsync(userName1);
+        var user2 = await instance.UserManager.Object.FindByNameAsync(userName2);
+        var comment1 = await instance.TopicCommentRepository.Save(
+            TopicComment.Create("Comment 1", user1!, topic));
+        var comment2 = await instance.TopicCommentRepository.Save(
+            TopicComment.Create("Comment 2", user2!, topic));
+        return (comment1, comment2);
     }
 
     private static async Task<TopicComment[]> FetchAllPostsFromRepositoryForTopic(InstanceWrapper instance, Topic topic)

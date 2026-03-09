@@ -56,6 +56,8 @@ public class RideShare
 
     public ICollection<RideShareReservation> Reservations { get; set; } = [];
 
+    public ICollection<RideShareComment> Comments { get; set; } = [];
+
     public static RideShare Create(string description, int availableSeats, 
         string from, string to, DateTime departureTime, string? stops, User driver)
     {

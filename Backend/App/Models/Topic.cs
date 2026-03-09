@@ -44,6 +44,8 @@ public class Topic
 
     public ICollection<Vote> Votes { get; set; } = [];
 
+    public ICollection<TopicComment> Comments { get; set; } = [];
+
     public static Topic Create(string title, int presentationTimeInMinutes, string description, TopicCategory category, string? material, User user)
     {
         var model = new Topic { Title = title, Description = description, PresentationTimeInMinutes = presentationTimeInMinutes, Category = category, Material = material, User = user };

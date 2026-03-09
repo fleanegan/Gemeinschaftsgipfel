@@ -5,6 +5,7 @@ using Gemeinschaftsgipfel.Repositories;
 using Gemeinschaftsgipfel.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace Tests.Services;
@@ -301,6 +302,47 @@ public class RideShareServiceTest
     }
 
     [Fact]
+    public async Task Test_removing_ride_share_THEN_comments_are_cascaded()
+    {
+        const string driverUserName = "driver";
+        const string commenterUserName1 = "commenter1";
+        const string commenterUserName2 = "commenter2";
+        var instance = await CreateInstance([driverUserName, commenterUserName1, commenterUserName2]);
+        var rideShareDto = new RideShareCreationDto(
+            3, "Location A", "Location B", DateTime.Now.AddDays(1), "Test Ride", null);
+        var rideShare = await instance.Service.AddRideShare(rideShareDto, driverUserName);
+        var (comment1, comment2) = await CreateCommentsForRideShare(instance, rideShare, commenterUserName1, commenterUserName2);
+
+        await instance.Service.RemoveRideShare(rideShare.Id, driverUserName);
+
+        var remainingComments = await instance.DbContext.RideShareComments
+            .Where(c => c.Id == comment1.Id || c.Id == comment2.Id)
+            .ToListAsync();
+        Assert.Empty(remainingComments);
+    }
+
+    [Fact]
+    public async Task Test_removing_ride_share_THEN_reservations_are_cascaded()
+    {
+        const string driverUserName = "driver";
+        const string passenger1UserName = "passenger1";
+        const string passenger2UserName = "passenger2";
+        var instance = await CreateInstance([driverUserName, passenger1UserName, passenger2UserName]);
+        var rideShareDto = new RideShareCreationDto(
+            3, "Location A", "Location B", DateTime.Now.AddDays(1), "Test Ride", null);
+        var rideShare = await instance.Service.AddRideShare(rideShareDto, driverUserName);
+        await instance.Service.AddReservation(rideShare.Id, passenger1UserName);
+        await instance.Service.AddReservation(rideShare.Id, passenger2UserName);
+
+        await instance.Service.RemoveRideShare(rideShare.Id, driverUserName);
+
+        var remainingReservations = await instance.DbContext.RideShareReservations
+            .Where(r => r.RideShare.Id == rideShare.Id)
+            .ToListAsync();
+        Assert.Empty(remainingReservations);
+    }
+
+    [Fact]
     public async Task Test_canceling_ride_share_GIVEN_non_existing_ride_share_THEN_throw_error()
     {
         const string loggedInUserName = "loggedInUserName";
@@ -574,21 +616,17 @@ public class RideShareServiceTest
         var rideShareRepository = new RideShareRepository(dbContext);
         var reservationRepository = new RideShareReservationRepository(dbContext);
         var commentRepository = new RideShareCommentRepository(dbContext);
-        var rideShareService = await GetService(dbContext, availableUserNames, rideShareRepository, reservationRepository, commentRepository);
-        return new InstanceWrapper(rideShareRepository, commentRepository, rideShareService);
+        var userManager = await GetUserManager(dbContext, availableUserNames);
+        var rideShareService = new RideShareService(rideShareRepository, reservationRepository, commentRepository, userManager.Object);
+        return new InstanceWrapper(rideShareRepository, commentRepository, rideShareService, userManager, dbContext);
     }
 
-    private static async Task<RideShareService> GetService(
+    private static async Task<Mock<UserManager<User>>> GetUserManager(
         DatabaseContextApplication dbContext,
-        List<string> userNames,
-        RideShareRepository repository,
-        RideShareReservationRepository reservationRepository,
-        RideShareCommentRepository commentRepository)
+        List<string> userNames)
     {
         var userStore = new UserStore<User>(dbContext);
-        var userManager = await CannotInjectUserStoreDirectlySoWrappingInUserManager(userStore, userNames);
-        var service = new RideShareService(repository, reservationRepository, commentRepository, userManager.Object);
-        return service;
+        return await CannotInjectUserStoreDirectlySoWrappingInUserManager(userStore, userNames);
     }
 
     private static async Task<Mock<UserManager<User>>> CannotInjectUserStoreDirectlySoWrappingInUserManager(
@@ -606,11 +644,27 @@ public class RideShareServiceTest
     private class InstanceWrapper(
         RideShareRepository rideShareRepository,
         RideShareCommentRepository rideShareCommentRepository,
-        RideShareService rideShareService)
+        RideShareService rideShareService,
+        Mock<UserManager<User>> userManager,
+        DatabaseContextApplication dbContext)
     {
         public readonly RideShareRepository Repository = rideShareRepository;
         public readonly RideShareCommentRepository CommentRepository = rideShareCommentRepository;
         public readonly RideShareService Service = rideShareService;
+        public readonly Mock<UserManager<User>> UserManager = userManager;
+        public readonly DatabaseContextApplication DbContext = dbContext;
+    }
+
+    private static async Task<(RideShareComment, RideShareComment)> CreateCommentsForRideShare(
+        InstanceWrapper instance, RideShare rideShare, string userName1, string userName2)
+    {
+        var user1 = await instance.UserManager.Object.FindByNameAsync(userName1);
+        var user2 = await instance.UserManager.Object.FindByNameAsync(userName2);
+        var comment1 = await instance.CommentRepository.Save(
+            RideShareComment.Create("Comment 1", user1!, rideShare));
+        var comment2 = await instance.CommentRepository.Save(
+            RideShareComment.Create("Comment 2", user2!, rideShare));
+        return (comment1, comment2);
     }
 
     private static async Task<RideShareComment[]> FetchAllCommentsFromRepositoryForRideShare(InstanceWrapper instance, RideShare rideShare)
