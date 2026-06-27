@@ -1,7 +1,7 @@
 <template>
   <div class="topic">
     <h1>Ablaufplan</h1>
-    <img src="/schedule.svg" alt="helper" style="margin: 1rem;">
+    <img :src="'/schedule.svg'" alt="schedule" style="width: 100%; max-width: var(--breakpoint-tablet);">
   </div>
 </template>
 

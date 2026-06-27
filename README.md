@@ -40,7 +40,7 @@ Prepare running the app for the first time in dev mode
 - ```touch data/database.db```
 - ```dotnet ef database update``` This requires the dotnet-ef package to be installed:
 - ```dotnet tool install --global dotnet-ef --version <your_dotnet_version>```
-- ```cd Client && touch /schedule.svg```
+- ```cd ClientApp && touch ./public/schedule.svg```
 - ```cd Backend/App && dotnet run```
 
 
